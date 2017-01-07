@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Plainion.Windows</id>
+    <title>Plainion.Windows</title>
+    <version>@build.number@</version>
+    <authors>ronin4net</authors>
+    <owners>ronin4net</owners>
+    <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>
+    <projectUrl>https://github.com/ronin4net/Plainion/wiki/Plainion.Windows</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides extensions to WPF to simplify development of software engineering tools</description>
+    <releaseNotes>
+      @releaseNotes@
+    </releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <dependencies>
+      <dependency id="Plainion.Core" version="3.0.0.0" />
+      <dependency id="Expression.Blend.Sdk" version="1.0.2" />
+    </dependencies>
+  </metadata>
+  @files@
+</package>
