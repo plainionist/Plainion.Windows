@@ -10,17 +10,15 @@ namespace Plainion.Windows.Controls.Text
     {
         public DocumentNavigationPane()
         {
-            InitializeComponent();
-
             Root = new NavigationNode();
-            Root.IsDragAllowed = true;
-            Root.IsDropAllowed = true;
 
             CreateChildCommand = new DelegateCommand<NavigationNode>(OnCreateChild);
             DeleteCommand = new DelegateCommand<NavigationNode>(n => ((NavigationNode)n.Parent).Children.Remove(n));
 
             var dragDropBehavior = new DragDropBehavior(Root);
             DropCommand = new DelegateCommand<NodeDropRequest>(dragDropBehavior.ApplyDrop);
+
+            InitializeComponent();
         }
 
         private void OnCreateChild(NavigationNode parent)
@@ -28,10 +26,7 @@ namespace Plainion.Windows.Controls.Text
             var node = new NavigationNode
             {
                 Parent = parent,
-                Id = Guid.NewGuid().ToString(),
                 Name = "<new>",
-                IsDragAllowed = parent != Root,
-                IsDropAllowed = parent == Root
             };
             parent.Children.Add(node);
 

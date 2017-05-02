@@ -29,9 +29,7 @@ namespace Plainion.Windows.Controls.Text
                 var processNode = new NavigationNode
                 {
                     Parent = root,
-                    Id = process.Id.ToString(),
-                    Name = process.ProcessName,
-                    IsDragAllowed = false
+                    Name = process.ProcessName
                 };
                 root.Children.Add(processNode);
 
@@ -40,9 +38,7 @@ namespace Plainion.Windows.Controls.Text
                     .Select(t => new NavigationNode
                     {
                         Parent = processNode,
-                        Id = t.Id.ToString(),
-                        Name = "unknown",
-                        IsDropAllowed = false
+                        Name = "unknown"
                     });
                 foreach(var child in children)
                 {

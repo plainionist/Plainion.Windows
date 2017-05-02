@@ -22,6 +22,7 @@
                        DropCommand="{Binding DropCommand, ElementName=_this, Mode=OneTime}">
             <tree:TreeEditor.NodeStyle>
                 <Style TargetType="{x:Type tree:NodeItem}" BasedOn="{StaticResource DefaultNodeStyle}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="Text" Value="{Binding Name, Mode=TwoWay}"/>
                 </Style>
