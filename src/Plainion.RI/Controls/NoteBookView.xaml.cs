@@ -6,9 +6,12 @@ namespace Plainion.RI.Controls
     [Export]
     public partial class NoteBookView : UserControl
     {
-        public NoteBookView()
+        [ImportingConstructor]
+        internal NoteBookView(NoteBookViewModel viewModel)
         {
             InitializeComponent();
+
+            DataContext = viewModel;
         }
     }
 }

@@ -5,7 +5,6 @@
 ## Types
 
 * [Document](Document.md)
-* [DocumentNavigationPane](DocumentNavigationPane.md)
 * [DocumentPath](DocumentPath.md)
 * [IDocumentStore](IDocumentStore.md)
 * [FileSystemDocumentStore](FileSystemDocumentStore.md)

@@ -4,9 +4,9 @@
 
 ## Types
 
-* [DragDropBehavior](DragDropBehavior.md)
-* [IDragDropSupport](IDragDropSupport.md)
 * [INode](INode.md)
+* [IDragDropSupport](IDragDropSupport.md)
+* [DragDropBehavior](DragDropBehavior.md)
 * [NodeDropRequest](NodeDropRequest.md)
 * [TreeEditor](TreeEditor.md)
 * [NodeItem](NodeItem.md)

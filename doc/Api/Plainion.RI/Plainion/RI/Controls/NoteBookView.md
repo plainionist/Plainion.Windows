@@ -8,11 +8,6 @@
 NoteBookView
 
 
-## Constructors
-
-### Constructor()
-
-
 ## Methods
 
 ### void InitializeComponent()

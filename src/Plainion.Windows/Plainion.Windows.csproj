@@ -51,6 +51,7 @@
     <Compile Include="Controls\Text\FileSystemDocumentStore.cs" />
     <Compile Include="Controls\Text\FlowDocumentVisitor.cs" />
     <Compile Include="Controls\Text\IDocumentStore.cs" />
+    <Compile Include="Controls\Text\NavigationNode.cs" />
     <Compile Include="Controls\Text\NoteBook.xaml.cs">
       <DependentUpon>NoteBook.xaml</DependentUpon>
     </Compile>
@@ -100,6 +101,8 @@
       <DependentUpon>CircularProgressIndicator.xaml</DependentUpon>
     </Compile>
     <Compile Include="MultiStyleExtension.cs" />
+    <Compile Include="Mvvm\BindableBase.cs" />
+    <Compile Include="Mvvm\DelegateCommand.cs" />
     <Compile Include="NotConverter.cs" />
     <Compile Include="OrConverter.cs" />
     <Compile Include="Interactivity\MultiSelectBehavior.cs" />

@@ -25,3 +25,4 @@
 * [Plainion.Windows.Controls](Controls/ReadMe.md)
 * [Plainion.Windows.Diagnostics](Diagnostics/ReadMe.md)
 * [Plainion.Windows.Interactivity](Interactivity/ReadMe.md)
+* [Plainion.Windows.Mvvm](Mvvm/ReadMe.md)
