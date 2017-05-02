@@ -13,7 +13,7 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         
-        <controls:DocumentNavigationPane Grid.Column="0"/>
+        <controls:DocumentNavigationPane Grid.Column="0" x:Name="myNavigation"/>
         
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
         

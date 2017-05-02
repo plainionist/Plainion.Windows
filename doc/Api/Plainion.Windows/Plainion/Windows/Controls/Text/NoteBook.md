@@ -8,9 +8,19 @@
 NoteBook
 
 
+## Fields
+
+### System.Windows.DependencyProperty DocumentStoreProperty
+
+
 ## Constructors
 
 ### Constructor()
+
+
+## Properties
+
+### Plainion.Windows.Controls.Text.IDocumentStore DocumentStore
 
 
 ## Methods

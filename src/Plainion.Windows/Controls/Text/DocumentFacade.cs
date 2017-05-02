@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
@@ -11,10 +13,10 @@ namespace Plainion.Windows.Controls.Text
         public static void TryMakeHyperlinks(TextRange range)
         {
             var navigator = range.Start;
-            while (navigator != null && navigator.CompareTo(range.End) <= 0)
+            while(navigator != null && navigator.CompareTo(range.End) <= 0)
             {
                 var wordRange = GetWordRange(navigator);
-                if (wordRange == null || wordRange.IsEmpty)
+                if(wordRange == null || wordRange.IsEmpty)
                 {
                     // No more words in the document.
                     break;
@@ -22,7 +24,7 @@ namespace Plainion.Windows.Controls.Text
 
                 string wordText = wordRange.Text;
                 var url = TryCreateUrl(wordText);
-                if ( url !=null &&
+                if(url != null &&
                     !IsInHyperlinkScope(wordRange.Start) &&
                     !IsInHyperlinkScope(wordRange.End))
                 {
@@ -56,13 +58,13 @@ namespace Plainion.Windows.Controls.Text
             // Go forward first, to find word end position.
             wordEndPosition = GetPositionAtWordBoundary(position, /*wordBreakDirection*/LogicalDirection.Forward);
 
-            if (wordEndPosition != null)
+            if(wordEndPosition != null)
             {
                 // Then travel backwards, to find word start position.
                 wordStartPosition = GetPositionAtWordBoundary(wordEndPosition, /*wordBreakDirection*/LogicalDirection.Backward);
             }
 
-            if (wordStartPosition != null && wordEndPosition != null)
+            if(wordStartPosition != null && wordEndPosition != null)
             {
                 wordRange = new TextRange(wordStartPosition, wordEndPosition);
             }
@@ -79,13 +81,13 @@ namespace Plainion.Windows.Controls.Text
         /// </summary>
         private static TextPointer GetPositionAtWordBoundary(TextPointer position, LogicalDirection wordBreakDirection)
         {
-            if (!position.IsAtInsertionPosition)
+            if(!position.IsAtInsertionPosition)
             {
                 position = position.GetInsertionPosition(wordBreakDirection);
             }
 
             TextPointer navigator = position;
-            while (navigator != null && !IsPositionNextToWordBreak(navigator, wordBreakDirection))
+            while(navigator != null && !IsPositionNextToWordBreak(navigator, wordBreakDirection))
             {
                 navigator = navigator.GetNextInsertionPosition(wordBreakDirection);
             }
@@ -100,12 +102,12 @@ namespace Plainion.Windows.Controls.Text
             bool isAtWordBoundary = false;
 
             // Skip over any formatting.
-            if (position.GetPointerContext(wordBreakDirection) != TextPointerContext.Text)
+            if(position.GetPointerContext(wordBreakDirection) != TextPointerContext.Text)
             {
                 position = position.GetInsertionPosition(wordBreakDirection);
             }
 
-            if (position.GetPointerContext(wordBreakDirection) == TextPointerContext.Text)
+            if(position.GetPointerContext(wordBreakDirection) == TextPointerContext.Text)
             {
                 LogicalDirection oppositeDirection = (wordBreakDirection == LogicalDirection.Forward) ?
                     LogicalDirection.Backward : LogicalDirection.Forward;
@@ -116,7 +118,7 @@ namespace Plainion.Windows.Controls.Text
                 position.GetTextInRun(wordBreakDirection, runBuffer, /*startIndex*/0, /*count*/1);
                 position.GetTextInRun(oppositeDirection, oppositeRunBuffer, /*startIndex*/0, /*count*/1);
 
-                if (runBuffer[0] == ' ' && !(oppositeRunBuffer[0] == ' '))
+                if(runBuffer[0] == ' ' && !(oppositeRunBuffer[0] == ' '))
                 {
                     isAtWordBoundary = true;
                 }
@@ -141,14 +143,14 @@ namespace Plainion.Windows.Controls.Text
         private static Hyperlink GetHyperlinkAncestor(TextPointer position)
         {
             var parent = position.Parent as Inline;
-            while (parent != null && !(parent is Hyperlink))
+            while(parent != null && !(parent is Hyperlink))
             {
                 parent = parent.Parent as Inline;
             }
 
             return parent as Hyperlink;
         }
-        
+
         private static void OnHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(e.Uri.AbsoluteUri);
@@ -157,14 +159,14 @@ namespace Plainion.Windows.Controls.Text
 
         private static Uri TryCreateUrl(string wordText)
         {
-            if (wordText.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+            if(wordText.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
                 wordText.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
                 wordText.StartsWith("ftp://", StringComparison.OrdinalIgnoreCase))
             {
                 return new Uri(wordText);
             }
 
-            if (wordText.StartsWith("www.", StringComparison.OrdinalIgnoreCase))
+            if(wordText.StartsWith("www.", StringComparison.OrdinalIgnoreCase))
             {
                 return new Uri("http://" + wordText);
             }
@@ -176,7 +178,7 @@ namespace Plainion.Windows.Controls.Text
         {
             var backspacePosition = start.GetNextInsertionPosition(LogicalDirection.Backward);
             Hyperlink hyperlink;
-            if (backspacePosition == null || !IsHyperlinkBoundaryCrossed(start, backspacePosition, out hyperlink))
+            if(backspacePosition == null || !IsHyperlinkBoundaryCrossed(start, backspacePosition, out hyperlink))
             {
                 return null;
             }
@@ -196,7 +198,7 @@ namespace Plainion.Windows.Controls.Text
             hyperlinkChildren.CopyTo(inlines, 0);
 
             // 2. Remove each child from parent hyperlink element and insert it after the hyperlink.
-            for (int i = inlines.Length - 1; i >= 0; i--)
+            for(int i = inlines.Length - 1; i >= 0; i--)
             {
                 hyperlinkChildren.Remove(inlines[i]);
                 hyperlink.SiblingInlines.InsertAfter(hyperlink, inlines[i]);
@@ -206,13 +208,13 @@ namespace Plainion.Windows.Controls.Text
             var localProperties = hyperlink.GetLocalValueEnumerator();
             var inlineRange = new TextRange(inlines[0].ContentStart, inlines[inlines.Length - 1].ContentEnd);
 
-            while (localProperties.MoveNext())
+            while(localProperties.MoveNext())
             {
                 var property = localProperties.Current;
                 var dp = property.Property;
                 object value = property.Value;
 
-                if (!dp.ReadOnly &&
+                if(!dp.ReadOnly &&
                     dp != Inline.TextDecorationsProperty && // Ignore hyperlink defaults.
                     dp != TextElement.ForegroundProperty &&
                     dp != BaseUriHelper.BaseUriProperty &&
@@ -238,7 +240,7 @@ namespace Plainion.Windows.Controls.Text
             return (caretPositionHyperlink == null && backspacePositionHyperlink != null) ||
                 (caretPositionHyperlink != null && backspacePositionHyperlink != null && caretPositionHyperlink != backspacePositionHyperlink);
         }
-        
+
         // Helper that returns true when passed property applies to Hyperlink only.
         private static bool IsHyperlinkProperty(DependencyProperty dp)
         {
@@ -247,6 +249,42 @@ namespace Plainion.Windows.Controls.Text
                 dp == Hyperlink.CommandTargetProperty ||
                 dp == Hyperlink.NavigateUriProperty ||
                 dp == Hyperlink.TargetNameProperty;
+        }
+
+        [Flags]
+        public enum FindFlags
+        {
+            MatchCase = 1,
+            FindInReverse = 2,
+            FindWholeWordsOnly = 4,
+            MatchAlefHamza = 0x20,
+            MatchDiacritics = 8,
+            MatchKashida = 0x10,
+            None = 0
+        }
+
+        private static MethodInfo myFindMethod = null;
+
+        // http://shevaspace.blogspot.de/2007/11/how-to-search-text-in-wpf-flowdocument.html
+        public static TextRange Search(TextPointer startPos, TextPointer endPos, string input, FindFlags flags, CultureInfo cultureInfo)
+        {
+            Contract.ReferenceEquals(startPos.CompareTo(endPos) < 0, "Start position has to be smaller than end position");
+
+            try
+            {
+                if(myFindMethod == null)
+                {
+                    myFindMethod = typeof(FrameworkElement).Assembly.GetType("System.Windows.Documents.TextFindEngine").
+                           GetMethod("Find", BindingFlags.Static | BindingFlags.Public);
+                }
+
+                var result = myFindMethod.Invoke(null, new Object[] { startPos, endPos, input, flags, CultureInfo.CurrentCulture });
+                return (TextRange)result;
+            }
+            catch(ApplicationException)
+            {
+                return null;
+            }
         }
     }
 }

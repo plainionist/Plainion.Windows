@@ -21,9 +21,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Plainion.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Plainion.Core.3.0.0.0\lib\NET45\Plainion.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Plainion.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Plainion.Core.3.1.0\lib\NET45\Plainion.Core.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -42,12 +42,15 @@
   <ItemGroup>
     <Compile Include="Controls\AdornedControl.cs" />
     <Compile Include="Controls\AdornerPlacement.cs" />
+    <Compile Include="Controls\Text\Document.cs" />
     <Compile Include="Controls\Text\DocumentFacade.cs" />
     <Compile Include="Controls\Text\DocumentNavigationPane.xaml.cs">
       <DependentUpon>DocumentNavigationPane.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Text\DocumentPath.cs" />
+    <Compile Include="Controls\Text\FileSystemDocumentStore.cs" />
     <Compile Include="Controls\Text\FlowDocumentVisitor.cs" />
-    <Compile Include="Controls\Text\IPageStorage.cs" />
+    <Compile Include="Controls\Text\IDocumentStore.cs" />
     <Compile Include="Controls\Text\NoteBook.xaml.cs">
       <DependentUpon>NoteBook.xaml</DependentUpon>
     </Compile>
