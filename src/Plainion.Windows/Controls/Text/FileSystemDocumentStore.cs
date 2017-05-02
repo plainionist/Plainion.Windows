@@ -100,5 +100,16 @@ namespace Plainion.Windows.Controls.Text
                 .Select(t => new Document(this, t.Item1, () => t.Item2))
                 .ToList();
         }
+
+        public IEnumerable<Document> All
+        {
+            get
+            {
+                //TODO: workaround - we should work with virtual FS and not with System.IO.Path
+                return myFS.Directory(Path.GetFullPath("/"))
+                    .EnumerateFiles("*", SearchOption.AllDirectories)
+                    .Select(f => new Document(this, DocumentPath.Parse(f.Path), () => ReadDocument(f)));
+            }
+        }
     }
 }

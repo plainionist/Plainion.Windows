@@ -24,26 +24,26 @@ namespace Plainion.Windows.Controls.Text
 
             root.Children.Clear();
 
-            foreach(var process in Process.GetProcesses())
+            foreach(var doc in self.DocumentStore.All)
             {
-                var processNode = new NavigationNode
+                var node = new NavigationNode
                 {
                     Parent = root,
-                    Name = process.ProcessName
+                    Name = doc.Path.AsPath
                 };
-                root.Children.Add(processNode);
+                root.Children.Add(node);
 
-                var children = process.Threads
-                    .OfType<ProcessThread>()
-                    .Select(t => new NavigationNode
-                    {
-                        Parent = processNode,
-                        Name = "unknown"
-                    });
-                foreach(var child in children)
-                {
-                    processNode.Children.Add(child);
-                }
+                //var children = doc.Threads
+                //    .OfType<ProcessThread>()
+                //    .Select(t => new NavigationNode
+                //    {
+                //        Parent = processNode,
+                //        Name = "unknown"
+                //    });
+                //foreach(var child in children)
+                //{
+                //    processNode.Children.Add(child);
+                //}
             }
         }
 

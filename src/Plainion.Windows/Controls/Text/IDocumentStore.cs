@@ -17,6 +17,11 @@ namespace Plainion.Windows.Controls.Text
         /// </summary>
         Document Move(Document source, DocumentPath target);
 
+        /// <summary>
+        /// Returns an iterator to all documents in the store.
+        /// </summary>
+        IEnumerable<Document> All { get; }
+
         IReadOnlyCollection<Document> Search(string text);
     }
 }

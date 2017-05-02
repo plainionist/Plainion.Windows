@@ -6,6 +6,13 @@
 **Assembly:** Plainion.Windows
 
 
+## Properties
+
+### System.Collections.Generic.IEnumerable`1[[Plainion.Windows.Controls.Text.Document, Plainion.Windows, Version=1.23.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de]] All
+
+Returns an iterator to all documents in the store.
+
+
 ## Methods
 
 ### Plainion.Windows.Controls.Text.Document Create(Plainion.Windows.Controls.Text.DocumentPath path)
