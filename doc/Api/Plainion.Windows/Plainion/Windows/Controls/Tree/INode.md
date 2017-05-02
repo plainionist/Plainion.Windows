@@ -14,7 +14,7 @@ Required interface of nodes in
 
 ### Plainion.Windows.Controls.Tree.INode Parent
 
-### System.Collections.Generic.IEnumerable`1[[Plainion.Windows.Controls.Tree.INode, Plainion.Windows, Version=1.22.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de]] Children
+### System.Collections.Generic.IEnumerable`1[[Plainion.Windows.Controls.Tree.INode, Plainion.Windows, Version=1.23.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de]] Children
 
 
 ## Methods
