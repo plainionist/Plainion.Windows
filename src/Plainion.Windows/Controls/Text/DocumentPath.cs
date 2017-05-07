@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Plainion.Windows.Controls.Text
 {
-    public class DocumentPath
+    public sealed class DocumentPath
     {
         public DocumentPath(IEnumerable<string> path)
         {

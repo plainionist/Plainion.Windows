@@ -21,10 +21,19 @@ namespace Plainion.Windows.Controls.Text
 
         public bool IsDropAllowed { get { return true; } }
 
+        public Document Document { get; set; }
+
         public string Name
         {
             get { return myName; }
-            set { SetProperty(ref myName, value); }
+            set
+            {
+                if(SetProperty(ref myName, value))
+                {
+                    // TODO: ?!? :(
+                    //Document.Path.Name = myName;
+                }
+            }
         }
 
         IEnumerable<INode> INode.Children

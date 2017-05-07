@@ -3,6 +3,9 @@
   - where do we persist this?
   - "All" property returns unclear order of documents
 
+- how to rename documents if DocumentPath is immutable?
+  - maybe the DocumentPath should NOT be the id?
+
 - DocumentNavigationPane
   - make tree
   - what happens if we select a folder?
@@ -11,6 +14,8 @@
   - fix handling of initial document in NodePad
     - initially there is one even if there is no documentstore added or is empty!
 
+- add a cache to the FileSystemDocumentStore to make impl simpler and
+  to ensure that we do not unnecessarily create IO
 
 - add buttons to DocumentNavigationPane for
   - add section to selected
@@ -19,6 +24,7 @@
 - search in document
 
 - search in all documents
+
 
 - DocumentNavigationPane
   - remove unnecessary padding left to every entry

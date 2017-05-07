@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 using Plainion.IO;
@@ -46,6 +47,64 @@ namespace Plainion.Windows.Controls.Text
             }
         }
 
+        private class DocumentSerializer
+        {
+            private const byte Version = 1;
+
+            public static void Write(Document document, IFile file)
+            {
+                using(var stream = file.Stream(FileAccess.Write))
+                {
+                    using(var writer = new BinaryWriter(stream, Encoding.Default, true))
+                    {
+                        writer.Write(Version);
+
+                        writer.Write(document.Position);     // position in folder
+                        writer.Write(DateTime.UtcNow.Ticks); // last modified
+                    }
+
+                    var range = new TextRange(document.Body.ContentStart, document.Body.ContentEnd);
+                    range.Save(stream, DataFormats.Rtf);
+                }
+            }
+
+            internal static Document Read(IFile file, DocumentPath path)
+            {
+                using(var stream = file.Stream(FileAccess.Read))
+                {
+                    using(var reader = new BinaryReader(stream, Encoding.Default, true))
+                    {
+                        var version = reader.ReadByte();
+
+                        Contract.Invariant(version == Version, "Version not supported: " + version);
+
+                        var position = reader.ReadDecimal();
+
+                        return new Document(path, () => ReadContent(file))
+                        {
+                            Position = position
+                        };
+                    }
+                }
+            }
+
+            private static FlowDocument ReadContent(IFile file)
+            {
+                var doc = new FlowDocument();
+
+                using(var stream = file.Stream(FileAccess.Read))
+                {
+                    // seek header
+                    stream.Seek(1 + sizeof(decimal) + sizeof(long), SeekOrigin.Begin);
+
+                    var range = new TextRange(doc.ContentStart, doc.ContentEnd);
+                    range.Load(stream, DataFormats.Rtf);
+                }
+
+                return doc;
+            }
+        }
+
         public FileSystemDocumentStore(IDirectory root)
         {
             Contract.RequiresNotNull(root, "root");
@@ -61,7 +120,7 @@ namespace Plainion.Windows.Controls.Text
 
             file.Create();
 
-            return new Document( path, () => new FlowDocument());
+            return new Document(path, () => new FlowDocument());
         }
 
         public Document Get(DocumentPath path)
@@ -70,20 +129,7 @@ namespace Plainion.Windows.Controls.Text
 
             Contract.Requires(file.Exists, "Document does not exist: " + path.AsPath);
 
-            return new Document( path, () => ReadDocument(file));
-        }
-
-        private FlowDocument ReadDocument(IFile file)
-        {
-            var doc = new FlowDocument();
-
-            using(var stream = file.Stream(FileAccess.Read))
-            {
-                var range = new TextRange(doc.ContentStart, doc.ContentEnd);
-                range.Load(stream, DataFormats.Rtf);
-            }
-
-            return doc;
+            return DocumentSerializer.Read(file, path);
         }
 
         public void Save(Document document)
@@ -95,11 +141,7 @@ namespace Plainion.Windows.Controls.Text
                 file.Create();
             }
 
-            using(var stream = file.Stream(FileAccess.Write))
-            {
-                var range = new TextRange(document.Body.ContentStart, document.Body.ContentEnd);
-                range.Save(stream, DataFormats.Rtf);
-            }
+            DocumentSerializer.Write(document, file);
         }
 
         public void Delete(Document document)
@@ -121,19 +163,8 @@ namespace Plainion.Windows.Controls.Text
             file.MoveTo(myRoot.GetDirectory(target));
 
             var body = source.Body;
-            return new Document( target, () => body);
+            return new Document(target, () => body);
         }
-
-        public IReadOnlyCollection<Document> Search(string text)
-        {
-            return myRoot
-                .All()
-                .Select(f => Tuple.Create(myRoot.GetDocumentPath(f), ReadDocument(f)))
-                .Where(t => DocumentFacade.Search(t.Item2.ContentStart, t.Item2.ContentEnd, text, DocumentFacade.FindFlags.None, CultureInfo.InvariantCulture) != null)
-                .Select(t => new Document( t.Item1, () => t.Item2))
-                .ToList();
-        }
-
 
         public IEnumerable<Document> All
         {
@@ -141,8 +172,17 @@ namespace Plainion.Windows.Controls.Text
             {
                 return myRoot
                     .All()
-                    .Select(f => new Document( myRoot.GetDocumentPath(f), () => ReadDocument(f)));
+                    .Select(f => DocumentSerializer.Read(f, myRoot.GetDocumentPath(f)));
             }
+        }
+
+        public IReadOnlyCollection<Document> Search(string text)
+        {
+            return myRoot
+                .All()
+                .Select(f => DocumentSerializer.Read(f, myRoot.GetDocumentPath(f)))
+                .Where(doc => DocumentFacade.Search(doc.Body.ContentStart, doc.Body.ContentEnd, text, DocumentFacade.FindFlags.None, CultureInfo.InvariantCulture) != null)
+                .ToList();
         }
     }
 }

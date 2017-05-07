@@ -29,7 +29,7 @@ namespace Plainion.Windows.Controls.Text
                 var node = new NavigationNode
                 {
                     Parent = root,
-                    Name = doc.Path.AsPath
+                    Document = doc
                 };
                 root.Children.Add(node);
             }
