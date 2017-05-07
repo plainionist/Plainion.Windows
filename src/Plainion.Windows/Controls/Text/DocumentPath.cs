@@ -22,9 +22,9 @@ namespace Plainion.Windows.Controls.Text
 
         public string AsPath { get; private set; }
 
-        public static DocumentPath Parse( string path )
+        public static DocumentPath Parse(string path)
         {
-            return new DocumentPath( path.Split( new[] { '/' }, StringSplitOptions.RemoveEmptyEntries ) );
+            return new DocumentPath(path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries));
         }
     }
 }

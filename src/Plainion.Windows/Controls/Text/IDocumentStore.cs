@@ -9,9 +9,9 @@ namespace Plainion.Windows.Controls.Text
         Document Get(DocumentPath path);
 
         void Save(Document document);
-        
+
         void Delete(Document document);
-        
+
         /// <summary>
         /// Returns a new document from new location. The given source document becomes invalid.
         /// </summary>

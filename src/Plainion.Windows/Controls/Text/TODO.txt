@@ -6,7 +6,7 @@
 - DocumentNavigationPane
   - make tree
   - what happens if we select a folder?
-    - by convention we show a document called "Index"
+    - show the first file in that folder
   - selection of document updates nodepad
   - fix handling of initial document in NodePad
     - initially there is one even if there is no documentstore added or is empty!
