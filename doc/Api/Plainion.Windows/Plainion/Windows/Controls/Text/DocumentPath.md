@@ -18,3 +18,8 @@
 ### System.String Name
 
 ### System.String AsPath
+
+
+## Methods
+
+### Plainion.Windows.Controls.Text.DocumentPath Parse(System.String path)

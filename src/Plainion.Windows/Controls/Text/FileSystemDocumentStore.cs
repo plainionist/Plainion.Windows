@@ -24,12 +24,12 @@ namespace Plainion.Windows.Controls.Text
 
             public IFile GetFile( DocumentPath path )
             {
-                return myRoot.File( path.AsPath );
+                return myRoot.File( path.AsPath.Substring( 1 ) );
             }
 
             public IDirectory GetDirectory( DocumentPath path )
             {
-                return myRoot.Directory( path.AsPath );
+                return myRoot.Directory( path.AsPath.Substring( 1 ) );
             }
 
             public DocumentPath GetDocumentPath( IFile file )
@@ -37,7 +37,7 @@ namespace Plainion.Windows.Controls.Text
                 var path = file.Path
                     .Substring( myRoot.Path.Length )
                     .Replace( '\\', '/' );
-                return new DocumentPath( path.Split( new[] { '/' }, StringSplitOptions.RemoveEmptyEntries ) );
+                return DocumentPath.Parse( path );
             }
 
             public IEnumerable<IFile> All()
@@ -141,7 +141,7 @@ namespace Plainion.Windows.Controls.Text
             {
                 return myRoot
                     .All()
-                    .Select( f => new Document( this, myRoot.GetDocumentPath(f), () => ReadDocument( f ) ) );
+                    .Select( f => new Document( this, myRoot.GetDocumentPath( f ), () => ReadDocument( f ) ) );
             }
         }
     }

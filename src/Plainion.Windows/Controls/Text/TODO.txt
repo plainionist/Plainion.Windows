@@ -1,13 +1,16 @@
 ﻿
-- DocumentPath
-  - always slashes starting with "/"
-  - dont show initial "/"
-  - make tree
+- the user should be able to define the order of the documents in the documentnavipane
+  - where do we persist this?
+  - "All" property returns unclear order of documents
 
 - DocumentNavigationPane
+  - make tree
+  - what happens if we select a folder?
+    - by convention we show a document called "Index"
   - selection of document updates nodepad
   - fix handling of initial document in NodePad
     - initially there is one even if there is no documentstore added or is empty!
+
 
 - add buttons to DocumentNavigationPane for
   - add section to selected
@@ -17,6 +20,8 @@
 
 - search in all documents
 
+- DocumentNavigationPane
+  - remove unnecessary padding left to every entry
 
 - for default impl have a look at
   - http://www.litedb.org/
