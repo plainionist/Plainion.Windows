@@ -11,6 +11,7 @@
 * [Folder](Folder.md)
 * [FolderId](FolderId.md)
 * [IDocumentStore](IDocumentStore.md)
+* [DocumentStore](DocumentStore.md)
 * [NoteBook](NoteBook.md)
 * [NotePad](NotePad.md)
 * [RichTextEditor](RichTextEditor.md)

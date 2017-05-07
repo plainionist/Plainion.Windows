@@ -7,12 +7,12 @@ namespace Plainion.Windows.Controls.Text
 {
     public class Folder : AbstractStoreItem<FolderId>
     {
-        private ObservableCollection<Guid> myDocuments;
+        private ObservableCollection<DocumentId> myDocuments;
         private ObservableCollection<Folder> myChildren;
 
         public Folder()
         {
-            myDocuments = new ObservableCollection<Guid>();
+            myDocuments = new ObservableCollection<DocumentId>();
             myDocuments.CollectionChanged += OnCollectionChanged;
 
             myChildren = new ObservableCollection<Folder>();
@@ -24,7 +24,7 @@ namespace Plainion.Windows.Controls.Text
             MarkAsModified();
         }
 
-        public IList<Guid> Documents { get { return myDocuments; } }
+        public IList<DocumentId> Documents { get { return myDocuments; } }
 
         public IList<Folder> Children { get { return myChildren; } }
     }
