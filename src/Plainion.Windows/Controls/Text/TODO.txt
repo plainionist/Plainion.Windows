@@ -1,6 +1,13 @@
 ﻿
+- DocumentPath
+  - always slashes starting with "/"
+  - dont show initial "/"
+  - make tree
 
-- make DocumentNavigationPane use IDocumentStore
+- DocumentNavigationPane
+  - selection of document updates nodepad
+  - fix handling of initial document in NodePad
+    - initially there is one even if there is no documentstore added or is empty!
 
 - add buttons to DocumentNavigationPane for
   - add section to selected
@@ -10,9 +17,6 @@
 
 - search in all documents
 
-
-- fix handling of initial document in NodePad
-  - initially there is one even if there is no documentstore added or is empty!
 
 - for default impl have a look at
   - http://www.litedb.org/

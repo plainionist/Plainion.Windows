@@ -21,13 +21,5 @@ namespace Plainion.Windows.Controls.Text
         public string Name { get; private set; }
 
         public string AsPath { get; private set; }
-
-        /// <summary>
-        /// Path separated by '/'
-        /// </summary>
-        public static DocumentPath Parse(string path)
-        {
-            return new DocumentPath(path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries));
-        }
     }
 }

@@ -10,11 +10,11 @@ namespace Plainion.RI.Controls
         public NoteBookViewModel()
         {
             var fs = new FileSystemImpl();
-            fs.File("/a/1").Create();
-            fs.File("/b/2/x").Create();
-            fs.File("/b/2/y").Create();
+            fs.File( "/x/a/1" ).Create();
+            fs.File( "/x/b/2/x" ).Create();
+            fs.File( "/x/b/2/y" ).Create();
 
-            DocumentStore = new FileSystemDocumentStore(fs);
+            DocumentStore = new FileSystemDocumentStore( fs.Directory( "/x" ) );
         }
 
         public IDocumentStore DocumentStore { get; private set; }

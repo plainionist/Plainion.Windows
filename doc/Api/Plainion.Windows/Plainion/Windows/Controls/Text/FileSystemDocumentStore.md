@@ -8,7 +8,7 @@
 
 ## Constructors
 
-### Constructor(Plainion.IO.IFileSystem fileSystem)
+### Constructor(Plainion.IO.IDirectory root)
 
 
 ## Properties

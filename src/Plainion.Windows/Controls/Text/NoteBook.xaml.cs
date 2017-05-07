@@ -32,18 +32,6 @@ namespace Plainion.Windows.Controls.Text
                     Name = doc.Path.AsPath
                 };
                 root.Children.Add(node);
-
-                //var children = doc.Threads
-                //    .OfType<ProcessThread>()
-                //    .Select(t => new NavigationNode
-                //    {
-                //        Parent = processNode,
-                //        Name = "unknown"
-                //    });
-                //foreach(var child in children)
-                //{
-                //    processNode.Children.Add(child);
-                //}
             }
         }
 
