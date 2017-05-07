@@ -1,14 +1,4 @@
 ﻿
-- the user should be able to define the order of the documents in the documentnavipane
-  - where do we persist this?
-  - "All" property returns unclear order of documents
-
-- how to rename documents if DocumentPath is immutable?
-  - maybe the DocumentPath should NOT be the id?
-
-- how to rename folders if DocumentPath is immutable?
-  - we would have to update all documents!!
-
 Document
 - Id : Guid // should we have custom class and leave it to impl of IDocumentStore whether it is Guid or long or ... ?
 - Title : string 
@@ -19,6 +9,7 @@ Document
 
 Index // stores locations of documents
 - Root : Node
+// add documents via path "/a/b/c[2]"
 
 Node
 - Title : string
@@ -33,6 +24,8 @@ FilesystemDocumentStore
 - store body in <doc id>.body
 // we could later have more files like that for performance ...
 
+
+// with the "index" idea we could also search below certain subtree ...
 
 - DocumentNavigationPane
   - make tree
