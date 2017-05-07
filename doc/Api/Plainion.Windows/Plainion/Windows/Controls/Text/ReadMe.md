@@ -4,10 +4,13 @@
 
 ## Types
 
+* [AbstractStoreItem](AbstractStoreItem.md)
+* [AbstractStoreItemId](AbstractStoreItemId.md)
 * [Document](Document.md)
-* [DocumentPath](DocumentPath.md)
+* [DocumentId](DocumentId.md)
+* [Folder](Folder.md)
+* [FolderId](FolderId.md)
 * [IDocumentStore](IDocumentStore.md)
-* [FileSystemDocumentStore](FileSystemDocumentStore.md)
 * [NoteBook](NoteBook.md)
 * [NotePad](NotePad.md)
 * [RichTextEditor](RichTextEditor.md)

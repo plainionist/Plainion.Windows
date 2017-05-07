@@ -1,20 +1,5 @@
 ﻿
-Document
-- Id : Guid // should we have custom class and leave it to impl of IDocumentStore whether it is Guid or long or ... ?
-- Title : string 
-- Body : FlowDocument
-- LastModified : DateTime
-- Created : DateTime
-- Tags
 
-Index // stores locations of documents
-- Root : Node
-// add documents via path "/a/b/c[2]"
-
-Node
-- Title : string
-- Documents : List<Guid> // order preserved!
-- Children : Node // sub-folders
 
 
 FilesystemDocumentStore

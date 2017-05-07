@@ -8,17 +8,11 @@
 
 ## Constructors
 
-### Constructor(Plainion.Windows.Controls.Text.DocumentPath path,System.Func`1[System.Windows.Documents.FlowDocument] reader)
+### Constructor(System.Func`1[System.Windows.Documents.FlowDocument] reader)
 
 
 ## Properties
 
-### Plainion.Windows.Controls.Text.DocumentPath Path
-
-### System.Boolean IsModified
-
-### System.Decimal Position
-
-Defines relative position to siblings. If multiple documents in the same folder have same position the order is undefined.
-
 ### System.Windows.Documents.FlowDocument Body
+
+### System.Collections.Generic.IList`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] Tags

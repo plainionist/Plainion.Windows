@@ -1,26 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Plainion.Windows.Controls.Text
 {
+    // TODO: add documents via path "/a/b/c[2]"
     public interface IDocumentStore
     {
-        Document Create(DocumentPath path);
-
-        Document Get(DocumentPath path);
+        Document Get(DocumentId id);
 
         void Save(Document document);
 
-        void Delete(Document document);
+        void Delete(DocumentId id);
 
-        /// <summary>
-        /// Returns a new document from new location. The given source document becomes invalid.
-        /// </summary>
-        Document Move(Document source, DocumentPath target);
-
-        /// <summary>
-        /// Returns an iterator to all documents in the store.
-        /// </summary>
-        IEnumerable<Document> All { get; }
+        Folder Root { get; }
 
         IReadOnlyCollection<Document> Search(string text);
     }

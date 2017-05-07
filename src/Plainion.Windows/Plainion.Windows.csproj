@@ -42,14 +42,18 @@
   <ItemGroup>
     <Compile Include="Controls\AdornedControl.cs" />
     <Compile Include="Controls\AdornerPlacement.cs" />
+    <Compile Include="Controls\Text\AbstractStoreItem.cs" />
+    <Compile Include="Controls\Text\AbstractStoreItemId.cs" />
     <Compile Include="Controls\Text\Document.cs" />
     <Compile Include="Controls\Text\DocumentFacade.cs" />
+    <Compile Include="Controls\Text\DocumentId.cs" />
     <Compile Include="Controls\Text\DocumentNavigationPane.xaml.cs">
       <DependentUpon>DocumentNavigationPane.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Text\DocumentPath.cs" />
     <Compile Include="Controls\Text\FileSystemDocumentStore.cs" />
     <Compile Include="Controls\Text\FlowDocumentVisitor.cs" />
+    <Compile Include="Controls\Text\Folder.cs" />
+    <Compile Include="Controls\Text\FolderId.cs" />
     <Compile Include="Controls\Text\IDocumentStore.cs" />
     <Compile Include="Controls\Text\NavigationNode.cs" />
     <Compile Include="Controls\Text\NoteBook.xaml.cs">

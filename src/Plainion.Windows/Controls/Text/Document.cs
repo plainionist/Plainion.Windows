@@ -1,46 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text
 {
-    public class Document
+    public class Document : AbstractStoreItem<DocumentId>
     {
         private Lazy<FlowDocument> myBody;
-        private decimal myPosition;
         private TextRange myBodyObserver;
+        private ObservableCollection<string> myTags;
 
-        public Document(DocumentPath path, Func<FlowDocument> reader)
+        public Document(Func<FlowDocument> reader)
         {
-            Contract.RequiresNotNull(path, "path");
             Contract.RequiresNotNull(reader, "reader");
 
-            Path = path;
             myBody = new Lazy<FlowDocument>(reader);
+
+            myTags = new ObservableCollection<string>();
+            myTags.CollectionChanged += OnTagsChanged;
         }
 
-        public DocumentPath Path { get; private set; }
-
-        public bool IsModified { get; set; }
-
-        /// <summary>
-        /// Defines relative position to siblings. If multiple documents in the same folder have same position
-        /// the order is undefined.
-        /// </summary>
-        public decimal Position
+        private void OnTagsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            get { return myPosition; }
-            set
-            {
-                if(myPosition == value)
-                {
-                    return;
-                }
-
-                myPosition = value;
-
-                IsModified = true;
-            }
+            MarkAsModified();
         }
 
         public FlowDocument Body
@@ -58,9 +43,9 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnBodyChanged(object sender, EventArgs e)
         {
-            IsModified = true;
+            MarkAsModified();
         }
 
-        //public IList<string> Tags { get; private set; }
+        public IList<string> Tags { get { return myTags; } }
     }
 }

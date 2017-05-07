@@ -24,15 +24,15 @@ namespace Plainion.Windows.Controls.Text
 
             root.Children.Clear();
 
-            foreach(var doc in self.DocumentStore.All)
-            {
-                var node = new NavigationNode
-                {
-                    Parent = root,
-                    Document = doc
-                };
-                root.Children.Add(node);
-            }
+            //foreach(var doc in self.DocumentStore.All)
+            //{
+            //    var node = new NavigationNode
+            //    {
+            //        Parent = root,
+            //        Document = doc
+            //    };
+            //    root.Children.Add(node);
+            //}
         }
 
         public IDocumentStore DocumentStore
