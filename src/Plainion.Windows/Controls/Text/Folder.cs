@@ -11,20 +11,13 @@ namespace Plainion.Windows.Controls.Text
         private ObservableCollection<DocumentId> myDocuments;
         private ObservableCollection<Folder> myChildren;
 
-        public Folder(IEnumerable<DocumentId> documents)
-            : this(documents, Enumerable.Empty<Folder>())
+        public Folder()
         {
-        }
-
-        public Folder(IEnumerable<DocumentId> documents, IEnumerable<Folder> children)
-        {
-            myDocuments = new ObservableCollection<DocumentId>(documents);
+            myDocuments = new ObservableCollection<DocumentId>();
             WeakEventManager<ObservableCollection<DocumentId>, NotifyCollectionChangedEventArgs>.AddHandler(myDocuments, "CollectionChanged", OnCollectionChanged);
 
-            myChildren = new ObservableCollection<Folder>(children);
+            myChildren = new ObservableCollection<Folder>();
             WeakEventManager<ObservableCollection<Folder>, NotifyCollectionChangedEventArgs>.AddHandler(myChildren, "CollectionChanged", OnCollectionChanged);
-
-            Snapshot = new FolderSnapshot(this);
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -41,28 +34,5 @@ namespace Plainion.Windows.Controls.Text
         /// Order is preserved
         /// </summary>
         public IList<Folder> Children { get { return myChildren; } }
-
-        internal FolderSnapshot Snapshot { get; private set; }
-
-        protected internal override void MarkAsSaved()
-        {
-            base.MarkAsSaved();
-
-            Snapshot = new FolderSnapshot(this);
-        }
-    }
-
-    // snapshot from folder from last saved state
-    internal class FolderSnapshot
-    {
-        public FolderSnapshot(Folder folder)
-        {
-            Documents = folder.Documents.ToList();
-            Children = folder.Children.ToList();
-        }
-
-        public IReadOnlyCollection<DocumentId> Documents { get; private set; }
-
-        public IReadOnlyCollection<Folder> Children { get; private set; }
     }
 }

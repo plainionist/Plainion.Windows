@@ -26,6 +26,8 @@
 
 ### Plainion.Windows.Controls.Text.Document GetCore(Plainion.Windows.Controls.Text.DocumentId id)
 
+### Plainion.Windows.Controls.Text.Folder GetRootCore()
+
 ### void SaveCore(Plainion.Windows.Controls.Text.Folder folder)
 
 Only handle the folder itself (title, associated documents). Children will be handled separately.

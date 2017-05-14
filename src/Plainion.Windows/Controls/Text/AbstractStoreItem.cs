@@ -24,7 +24,7 @@ namespace Plainion.Windows.Controls.Text
 
         private bool SetProperty<T>(ref T storage, T value)
         {
-            if(object.Equals(storage, value))
+            if (object.Equals(storage, value))
             {
                 return false;
             }
@@ -42,7 +42,7 @@ namespace Plainion.Windows.Controls.Text
             LastModified = DateTime.UtcNow;
         }
 
-        internal protected virtual void MarkAsSaved()
+        internal void MarkAsSaved()
         {
             IsModified = false;
         }
