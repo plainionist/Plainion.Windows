@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Windows;
 
 namespace Plainion.Windows.Controls.Text
@@ -12,6 +11,12 @@ namespace Plainion.Windows.Controls.Text
         private ObservableCollection<Folder> myChildren;
 
         public Folder()
+            : this(new StoreItemMetaInfo<FolderId>())
+        {
+        }
+
+        public Folder(StoreItemMetaInfo<FolderId> meta)
+            : base(meta)
         {
             myDocuments = new ObservableCollection<DocumentId>();
             WeakEventManager<ObservableCollection<DocumentId>, NotifyCollectionChangedEventArgs>.AddHandler(myDocuments, "CollectionChanged", OnCollectionChanged);

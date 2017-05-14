@@ -14,6 +14,15 @@ namespace Plainion.Windows.Controls.Text
         private ObservableCollection<string> myTags;
 
         public Document(Func<FlowDocument> reader)
+            : this(new StoreItemMetaInfo<DocumentId>(), reader)
+        {
+        }
+
+        /// <summary>
+        /// Used recreate an existing document from store.
+        /// </summary>
+        public Document(StoreItemMetaInfo<DocumentId> meta, Func<FlowDocument> reader)
+            : base(meta)
         {
             Contract.RequiresNotNull(reader, "reader");
 

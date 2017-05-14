@@ -10,6 +10,8 @@
 
 ### Constructor(System.Func`1[System.Windows.Documents.FlowDocument] reader)
 
+### Constructor(Plainion.Windows.Controls.Text.StoreItemMetaInfo`1[Plainion.Windows.Controls.Text.DocumentId] meta,System.Func`1[System.Windows.Documents.FlowDocument] reader)
+
 
 ## Properties
 

@@ -6,12 +6,11 @@ namespace Plainion.Windows.Controls.Text
     {
         private string myTitle;
 
-        protected AbstractStoreItem()
+        protected AbstractStoreItem(StoreItemMetaInfo<TId> meta)
         {
-            Id = new TId();
-
-            Created = DateTime.UtcNow;
-            LastModified = DateTime.UtcNow;
+            Id = meta.Id;
+            Created = meta.Created;
+            LastModified = meta.LastModified;
         }
 
         public TId Id { get; private set; }

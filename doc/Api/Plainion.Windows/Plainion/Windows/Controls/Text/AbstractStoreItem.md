@@ -8,7 +8,7 @@
 
 ## Constructors
 
-### Constructor()
+### Constructor(Plainion.Windows.Controls.Text.StoreItemMetaInfo`1[TId] meta)
 
 
 ## Properties
