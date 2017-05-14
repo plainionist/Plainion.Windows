@@ -14,7 +14,7 @@ namespace Plainion.Windows.Controls.Text
         }
 
         public static readonly DependencyProperty DocumentStoreProperty = DependencyProperty.Register("DocumentStore",
-            typeof(IDocumentStore), typeof(NoteBook), new PropertyMetadata(null, OnDocumentStoreChanged));
+            typeof(DocumentStore), typeof(NoteBook), new PropertyMetadata(null, OnDocumentStoreChanged));
 
         private static void OnDocumentStoreChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -35,9 +35,9 @@ namespace Plainion.Windows.Controls.Text
             //}
         }
 
-        public IDocumentStore DocumentStore
+        public DocumentStore DocumentStore
         {
-            get { return (IDocumentStore)GetValue(DocumentStoreProperty); }
+            get { return (DocumentStore)GetValue(DocumentStoreProperty); }
             set { SetValue(DocumentStoreProperty, value); }
         }
     }

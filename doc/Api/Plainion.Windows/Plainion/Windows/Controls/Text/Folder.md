@@ -15,4 +15,6 @@
 
 ### System.Collections.Generic.IList`1[[Plainion.Windows.Controls.Text.DocumentId, Plainion.Windows, Version=1.23.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de]] Documents
 
+Order of documents is preserved
+
 ### System.Collections.Generic.IList`1[[Plainion.Windows.Controls.Text.Folder, Plainion.Windows, Version=1.23.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de]] Children

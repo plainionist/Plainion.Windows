@@ -20,7 +20,7 @@ NoteBook
 
 ## Properties
 
-### Plainion.Windows.Controls.Text.IDocumentStore DocumentStore
+### Plainion.Windows.Controls.Text.DocumentStore DocumentStore
 
 
 ## Methods

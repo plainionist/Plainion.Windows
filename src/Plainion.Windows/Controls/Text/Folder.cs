@@ -24,6 +24,9 @@ namespace Plainion.Windows.Controls.Text
             MarkAsModified();
         }
 
+        /// <summary>
+        /// Order of documents is preserved
+        /// </summary>
         public IList<DocumentId> Documents { get { return myDocuments; } }
 
         public IList<Folder> Children { get { return myChildren; } }

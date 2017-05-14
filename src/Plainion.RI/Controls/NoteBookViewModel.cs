@@ -21,6 +21,6 @@ namespace Plainion.RI.Controls
             //DocumentStore.Create(DocumentPath.Parse("/Developer documentation/HowTos/WebApi with F#"));
         }
 
-        public IDocumentStore DocumentStore { get; private set; }
+        public DocumentStore DocumentStore { get; private set; }
     }
 }
