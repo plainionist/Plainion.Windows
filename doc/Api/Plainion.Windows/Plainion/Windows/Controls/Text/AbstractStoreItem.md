@@ -27,3 +27,5 @@
 ## Methods
 
 ### void MarkAsModified()
+
+### void MarkAsSaved()

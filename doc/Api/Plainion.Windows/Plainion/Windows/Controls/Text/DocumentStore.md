@@ -22,10 +22,22 @@
 
 ### void SaveChanges()
 
-### void RejectChanges()
-
 ### System.Collections.Generic.IReadOnlyCollection`1[[Plainion.Windows.Controls.Text.Document, Plainion.Windows, Version=1.23.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de]] Search(System.String text)
 
-### void Save(Plainion.Windows.Controls.Text.Document document)
+### Plainion.Windows.Controls.Text.Document GetCore(Plainion.Windows.Controls.Text.DocumentId id)
 
-### void Delete(Plainion.Windows.Controls.Text.DocumentId id)
+### void SaveCore(Plainion.Windows.Controls.Text.Folder folder)
+
+Only handle the folder itself (title, associated documents). Children will be handled separately.
+
+### void SaveCore(Plainion.Windows.Controls.Text.Document document)
+
+Only handle the document. Related folder will be handled separately, if necessary.
+
+### void DeleteCore(Plainion.Windows.Controls.Text.DocumentId id)
+
+Only handle the document. Related folder will be handled separately.
+
+### void DeleteCore(Plainion.Windows.Controls.Text.FolderId id)
+
+Only handle the folder itself (title, associated documents). Children will be handled separately.

@@ -7,7 +7,7 @@ using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text
 {
-    public class Document : AbstractStoreItem<DocumentId>
+    public sealed class Document : AbstractStoreItem<DocumentId>
     {
         private Lazy<FlowDocument> myBody;
         private TextRange myBodyObserver;
@@ -32,7 +32,7 @@ namespace Plainion.Windows.Controls.Text
         {
             get
             {
-                if(myBodyObserver == null)
+                if (myBodyObserver == null)
                 {
                     myBodyObserver = new TextRange(myBody.Value.ContentStart, myBody.Value.ContentEnd);
                     WeakEventManager<TextRange, EventArgs>.AddHandler(myBodyObserver, "Changed", OnBodyChanged);

@@ -42,7 +42,12 @@ namespace Plainion.Windows.Controls.Text
             LastModified = DateTime.UtcNow;
         }
 
-        public bool IsModified { get; set; }
+        internal protected virtual void MarkAsSaved()
+        {
+            IsModified = false;
+        }
+
+        public bool IsModified { get; private set; }
 
         public DateTime Created { get; private set; }
 

@@ -2,7 +2,15 @@
 
 namespace Plainion.Windows.Controls.Text
 {
-    public class FolderId : AbstractStoreItemId
+    public sealed class FolderId : AbstractStoreItemId
     {
-    }
+        public FolderId()
+        {
+        }
+
+        internal FolderId(Guid id)
+            : base(id)
+        {
+        }
+ }
 }
