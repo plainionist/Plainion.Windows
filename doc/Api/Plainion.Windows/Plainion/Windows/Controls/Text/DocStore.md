@@ -1,5 +1,5 @@
 
-# Plainion.Windows.Controls.Text.DocumentStoreAPI
+# Plainion.Windows.Controls.Text.DocStore
 
 **Namespace:** Plainion.Windows.Controls.Text
 

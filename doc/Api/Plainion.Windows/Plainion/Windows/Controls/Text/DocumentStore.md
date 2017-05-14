@@ -28,10 +28,6 @@
 
 ### Plainion.Windows.Controls.Text.Folder GetRootCore()
 
-### void SaveCore(Plainion.Windows.Controls.Text.Folder folder)
-
-Only handle the folder itself (title, associated documents). Children will be handled separately.
-
 ### void SaveCore(Plainion.Windows.Controls.Text.Document document)
 
 Only handle the document. Related folder will be handled separately, if necessary.
@@ -40,6 +36,6 @@ Only handle the document. Related folder will be handled separately, if necessar
 
 Only handle the document. Related folder will be handled separately.
 
-### void DeleteCore(Plainion.Windows.Controls.Text.FolderId id)
+### void SaveRootCore()
 
-Only handle the folder itself (title, associated documents). Children will be handled separately.
+Called during SaveChanges() if at least one folder has changed. Full folder hierarchy has to be saved with this single call.

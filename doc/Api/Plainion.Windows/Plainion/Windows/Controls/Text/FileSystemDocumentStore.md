@@ -19,10 +19,8 @@
 
 ### Plainion.Windows.Controls.Text.Folder GetRootCore()
 
-### void SaveCore(Plainion.Windows.Controls.Text.Folder folder)
+### void SaveRootCore()
 
 ### void SaveCore(Plainion.Windows.Controls.Text.Document document)
 
 ### void DeleteCore(Plainion.Windows.Controls.Text.DocumentId id)
-
-### void DeleteCore(Plainion.Windows.Controls.Text.FolderId id)

@@ -44,6 +44,7 @@
     <Compile Include="Controls\AdornerPlacement.cs" />
     <Compile Include="Controls\Text\AbstractStoreItem.cs" />
     <Compile Include="Controls\Text\AbstractStoreItemId.cs" />
+    <Compile Include="Controls\Text\DocStore.cs" />
     <Compile Include="Controls\Text\Document.cs" />
     <Compile Include="Controls\Text\DocumentFacade.cs" />
     <Compile Include="Controls\Text\DocumentId.cs" />
