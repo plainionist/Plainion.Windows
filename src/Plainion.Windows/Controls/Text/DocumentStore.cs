@@ -33,7 +33,7 @@ namespace Plainion.Windows.Controls.Text
             {
                 if (myRoot == null)
                 {
-                    myRoot = GetRootCore();
+                    myRoot = GetRoot();
 
                     mySnapshot = new Snapshot(myRoot);
                 }
@@ -51,13 +51,13 @@ namespace Plainion.Windows.Controls.Text
             var documentsToDelete = mySnapshot.Documents.Except(documents);
 
             // delete folders and documents
-            documentsToDelete.ForEach(DeleteCore);
+            documentsToDelete.ForEach(Delete);
 
             // save modified folders and documents
-            myDocuments.Values.Where(doc => doc.IsModified).ForEach(SaveCore);
+            myDocuments.Values.Where(doc => doc.IsModified).ForEach(Save);
             if (folders.Any(f => f.IsModified))
             {
-                SaveRootCore();
+                SaveRoot();
             }
 
             // update the document cache
@@ -73,24 +73,24 @@ namespace Plainion.Windows.Controls.Text
 
         public abstract IReadOnlyCollection<Document> Search(string text);
 
-        protected abstract Document GetCore(DocumentId id);
-
-        protected abstract Folder GetRootCore();
-
-        /// <summary>
-        /// Only handle the document. Related folder will be handled separately, if necessary.
-        /// </summary>
-        protected abstract void SaveCore(Document document);
-
-        /// <summary>
-        /// Only handle the document. Related folder will be handled separately.
-        /// </summary>
-        protected abstract void DeleteCore(DocumentId id);
+        protected abstract Folder GetRoot();
 
         /// <summary>
         /// Called during SaveChanges() if at least one folder has changed.
         /// Full folder hierarchy has to be saved with this single call.
         /// </summary>
-        protected abstract void SaveRootCore();
+        protected abstract void SaveRoot();
+
+        protected abstract Document GetCore(DocumentId id);
+
+        /// <summary>
+        /// Only handle the document. Related folder will be handled separately, if necessary.
+        /// </summary>
+        protected abstract void Save(Document document);
+
+        /// <summary>
+        /// Only handle the document. Related folder will be handled separately.
+        /// </summary>
+        protected abstract void Delete(DocumentId id);
     }
 }

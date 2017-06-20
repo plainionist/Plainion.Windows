@@ -24,18 +24,18 @@
 
 ### System.Collections.Generic.IReadOnlyCollection`1[[Plainion.Windows.Controls.Text.Document, Plainion.Windows, Version=1.23.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de]] Search(System.String text)
 
+### Plainion.Windows.Controls.Text.Folder GetRoot()
+
+### void SaveRoot()
+
+Called during SaveChanges() if at least one folder has changed. Full folder hierarchy has to be saved with this single call.
+
 ### Plainion.Windows.Controls.Text.Document GetCore(Plainion.Windows.Controls.Text.DocumentId id)
 
-### Plainion.Windows.Controls.Text.Folder GetRootCore()
-
-### void SaveCore(Plainion.Windows.Controls.Text.Document document)
+### void Save(Plainion.Windows.Controls.Text.Document document)
 
 Only handle the document. Related folder will be handled separately, if necessary.
 
-### void DeleteCore(Plainion.Windows.Controls.Text.DocumentId id)
+### void Delete(Plainion.Windows.Controls.Text.DocumentId id)
 
 Only handle the document. Related folder will be handled separately.
-
-### void SaveRootCore()
-
-Called during SaveChanges() if at least one folder has changed. Full folder hierarchy has to be saved with this single call.

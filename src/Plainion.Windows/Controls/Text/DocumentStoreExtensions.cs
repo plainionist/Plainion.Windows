@@ -5,8 +5,11 @@ using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text
 {
-    public static class DocStore
+    public static class DocumentStoreExtensions
     {
+        /// <summary>
+        /// Returns the folder containing the given document.
+        /// </summary>
         public static Folder Folder(this DocumentStore self, DocumentId id)
         {
             Contract.RequiresNotNull(self, "self");
@@ -15,6 +18,9 @@ namespace Plainion.Windows.Controls.Text
             return self.Root.Folder(id);
         }
 
+        /// <summary>
+        /// Returns the folder containing the given document.
+        /// </summary>
         public static Folder Folder(this Folder self, DocumentId id)
         {
             Contract.RequiresNotNull(self, "self");

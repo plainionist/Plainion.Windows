@@ -1,5 +1,5 @@
 
-# Plainion.Windows.Controls.Text.DocStore
+# Plainion.Windows.Controls.Text.DocumentStoreExtensions
 
 **Namespace:** Plainion.Windows.Controls.Text
 
@@ -10,7 +10,11 @@
 
 ### Plainion.Windows.Controls.Text.Folder Folder(Plainion.Windows.Controls.Text.DocumentStore self,Plainion.Windows.Controls.Text.DocumentId id)
 
+Returns the folder containing the given document.
+
 ### Plainion.Windows.Controls.Text.Folder Folder(Plainion.Windows.Controls.Text.Folder self,Plainion.Windows.Controls.Text.DocumentId id)
+
+Returns the folder containing the given document.
 
 ### System.Collections.Generic.IEnumerable`1[[Plainion.Windows.Controls.Text.Folder, Plainion.Windows, Version=1.23.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de]] Enumerate(Plainion.Windows.Controls.Text.Folder self)
 

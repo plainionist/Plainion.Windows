@@ -104,17 +104,17 @@ namespace Plainion.Windows.Controls.Text
             return doc;
         }
 
-        protected override Folder GetRootCore()
+        protected override Folder GetRoot()
         {
             return myIndex.Root;
         }
 
-        protected override void SaveRootCore()
+        protected override void SaveRoot()
         {
             myIndex.Save();
         }
 
-        protected override void SaveCore(Document document)
+        protected override void Save(Document document)
         {
             using (var writer = new BinaryWriter(GetMetaFile(document.Id).Stream(FileAccess.Read)))
             {
@@ -147,7 +147,7 @@ namespace Plainion.Windows.Controls.Text
             return myRoot.File(id.Value + ".meta");
         }
 
-        protected override void DeleteCore(DocumentId id)
+        protected override void Delete(DocumentId id)
         {
             GetBodyFile(id).Delete();
             GetMetaFile(id).Delete();
