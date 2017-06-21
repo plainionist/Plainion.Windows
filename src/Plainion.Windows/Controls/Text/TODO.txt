@@ -1,13 +1,8 @@
 ﻿
 
+implement index.load and .save
 
-
-FilesystemDocumentStore
-- save all in one folder
-- store index in dedicated file
-- store metadata in <doc id>.meta
-- store body in <doc id>.body
-// we could later have more files like that for performance ...
+try out in RI
 
 
 // with the "index" idea we could also search below certain subtree ...
