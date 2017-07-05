@@ -39,14 +39,65 @@ namespace Plainion.Windows.Controls.Text
                 return Root.Enumerate().SelectMany(f => f.Documents);
             }
 
-            private Folder Load()
-            {
-                throw new NotImplementedException();
-            }
-
             public void Save()
             {
-                throw new NotImplementedException();
+                using (var writer = new BinaryWriter(myFile.Stream(FileAccess.Write)))
+                {
+                    Save(writer, Root);
+                }
+            }
+
+            private void Save(BinaryWriter writer, Folder node)
+            {
+                writer.Write(node.Id.Value.ToString());
+                writer.Write(node.Created.Ticks);
+                writer.Write(node.LastModified.Ticks);
+
+                writer.Write(node.Documents.Count);
+                foreach (var doc in node.Documents)
+                {
+                    writer.Write(doc.Value.ToString());
+                }
+
+                writer.Write(node.Children.Count);
+                foreach (var child in node.Children)
+                {
+                    Save(writer, node);
+                }
+            }
+
+            private Folder Load()
+            {
+                using (var reader = new BinaryReader(myFile.Stream(FileAccess.Read)))
+                {
+                    return Read(reader);
+                }
+            }
+
+            private Folder Read(BinaryReader reader)
+            {
+                var folderId = Guid.Parse(reader.ReadString());
+                var meta = new StoreItemMetaInfo<FolderId>(new FolderId(folderId));
+                meta.Created = new DateTime(reader.ReadInt64());
+                meta.LastModified = new DateTime(reader.ReadInt64());
+
+                var folder = new Folder(meta);
+
+                var docCount = reader.ReadInt32();
+                for (int i = 0; i < docCount;++i )
+                {
+                    var docId = Guid.Parse(reader.ReadString());
+                    folder.Documents.Add(new DocumentId(docId));
+                }
+
+                var childrenCount = reader.ReadInt32();
+                for (int i = 0; i < childrenCount; ++i)
+                {
+                    var child = Read(reader);
+                    folder.Children.Add(child);
+                }
+
+                return folder;
             }
         }
 
@@ -94,9 +145,6 @@ namespace Plainion.Windows.Controls.Text
 
             using (var stream = file.Stream(FileAccess.Read))
             {
-                // seek header
-                stream.Seek(1 + sizeof(decimal) + sizeof(long), SeekOrigin.Begin);
-
                 var range = new TextRange(doc.ContentStart, doc.ContentEnd);
                 range.Load(stream, DataFormats.Rtf);
             }
@@ -116,7 +164,7 @@ namespace Plainion.Windows.Controls.Text
 
         protected override void Save(Document document)
         {
-            using (var writer = new BinaryWriter(GetMetaFile(document.Id).Stream(FileAccess.Read)))
+            using (var writer = new BinaryWriter(GetMetaFile(document.Id).Stream(FileAccess.Write)))
             {
                 writer.Write(document.Created.Ticks);
                 writer.Write(document.LastModified.Ticks);

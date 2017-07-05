@@ -1,6 +1,6 @@
 ﻿
 
-implement index.load and .save
+
 
 try out in RI
 
@@ -37,4 +37,6 @@ try out in RI
     - we could use zip archive from .net 4.5
 	- or we just dont put it into a single file but into a folder (index file + one file per page)
 
+
+- write README.md
 
