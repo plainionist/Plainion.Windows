@@ -53,6 +53,7 @@ namespace Plainion.Windows.Controls.Text
                 writer.Write(node.Id.Value.ToString());
                 writer.Write(node.Created.Ticks);
                 writer.Write(node.LastModified.Ticks);
+                writer.Write(node.Title ?? string.Empty);
 
                 writer.Write(node.Documents.Count);
                 foreach(var doc in node.Documents)
@@ -63,7 +64,7 @@ namespace Plainion.Windows.Controls.Text
                 writer.Write(node.Children.Count);
                 foreach(var child in node.Children)
                 {
-                    Save(writer, node);
+                    Save(writer, child);
                 }
             }
 
@@ -83,6 +84,7 @@ namespace Plainion.Windows.Controls.Text
                 meta.LastModified = new DateTime(reader.ReadInt64());
 
                 var folder = new Folder(meta);
+                folder.Title = reader.ReadString();
 
                 var docCount = reader.ReadInt32();
                 for(int i = 0; i < docCount; ++i)
@@ -198,7 +200,10 @@ namespace Plainion.Windows.Controls.Text
             using(var stream = GetBodyFile(document.Id).Stream(FileAccess.Write))
             {
                 var range = new TextRange(document.Body.ContentStart, document.Body.ContentEnd);
-                range.Save(stream, DataFormats.Rtf);
+                if(!range.IsEmpty)
+                {
+                    range.Save(stream, DataFormats.Rtf);
+                }
             }
         }
 

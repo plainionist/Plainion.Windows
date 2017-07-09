@@ -1,8 +1,9 @@
 ﻿
 
+- implement selection in tree
+- check drag & drop in tree
 
 
-try out in RI
 
 
 // with the "index" idea we could also search below certain subtree ...
