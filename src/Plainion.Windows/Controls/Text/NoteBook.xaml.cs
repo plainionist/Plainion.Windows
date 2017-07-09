@@ -24,14 +24,28 @@ namespace Plainion.Windows.Controls.Text
 
             root.Children.Clear();
 
-            //foreach(var doc in self.DocumentStore.All)
+            AddFolder(root, self.DocumentStore.Root);
+        }
+
+        private static void AddFolder(NavigationNode node, Folder folder)
+        {
+            //foreach (var child in folder.Children)
             //{
-            //    var node = new NavigationNode
+            //    var childNode = new NavigationNode
             //    {
-            //        Parent = root,
-            //        Document = doc
+            //        Parent = node,
+            //        Folder = folder
             //    };
-            //    root.Children.Add(node);
+            //    node.Children.Add(childNode);
+            //    AddFolder(childNode, child);
+            //}
+            //foreach (var doc in folder.Documents)
+            //{
+            //    node.Children.Add(new NavigationNode
+            //    {
+            //        Parent = node,
+            //        Document = doc
+            //    });
             //}
         }
 

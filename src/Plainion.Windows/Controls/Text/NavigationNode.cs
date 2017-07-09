@@ -41,8 +41,10 @@ namespace Plainion.Windows.Controls.Text
             get { return Children; }
         }
 
+        // TODO: we need to sync to model
         public ObservableCollection<NavigationNode> Children { get; private set; }
 
+        // TODO: we need to sync to model
         public INode Parent { get; set; }
 
         public bool IsSelected
