@@ -12,6 +12,7 @@ namespace Plainion.RI.Controls
             var fs = new FileSystemImpl();
 
             DocumentStore = new FileSystemDocumentStore(fs.Directory("/x"));
+            DocumentStore.Initialize();
 
             DocumentStore.Create("/User documentation/Installation");
             DocumentStore.Create("/User documentation/Getting started");
@@ -21,6 +22,6 @@ namespace Plainion.RI.Controls
             DocumentStore.Create("/Developer documentation/HowTos/WebApi with F#");
         }
 
-        public DocumentStore DocumentStore { get; private set; }
+        public FileSystemDocumentStore DocumentStore { get; private set; }
     }
 }

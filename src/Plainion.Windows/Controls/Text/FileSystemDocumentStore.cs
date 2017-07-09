@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using Plainion.IO;
@@ -23,7 +24,12 @@ namespace Plainion.Windows.Controls.Text
             {
                 myStore = store;
                 myFile = file;
+            }
 
+            public Folder Root { get; private set; }
+
+            public void Initialize()
+            {
                 if(myFile.Exists)
                 {
                     Root = Load();
@@ -33,8 +39,6 @@ namespace Plainion.Windows.Controls.Text
                     Root = new Folder();
                 }
             }
-
-            public Folder Root { get; private set; }
 
             public void Save()
             {
@@ -103,12 +107,20 @@ namespace Plainion.Windows.Controls.Text
             Contract.RequiresNotNull(root, "root");
 
             myRoot = root;
+        }
 
-            myIndex = new Index(this, root.File("Index"));
+        // this design allows us to provide an async version later on if creation of index and loading
+        // document meta data takes to long 
+        public void Initialize()
+        {
+            myIndex = new Index(this, myRoot.File("Index"));
+            myIndex.Initialize();
         }
 
         public override IReadOnlyCollection<Document> Search(string text)
         {
+            Contract.Invariant(myIndex != null, "DocumentStore not initialized");
+
             return myIndex.Root.Enumerate()
                 .SelectMany(f => f.Documents)
                 .Where(doc => DocumentFacade.Search(doc.Body.ContentStart, doc.Body.ContentEnd, text, DocumentFacade.FindFlags.None, CultureInfo.InvariantCulture) != null)
@@ -117,6 +129,8 @@ namespace Plainion.Windows.Controls.Text
 
         protected override Document GetCore(DocumentId id)
         {
+            Contract.Invariant(myIndex != null, "DocumentStore not initialized");
+
             using(var reader = new BinaryReader(GetMetaFile(id).Stream(FileAccess.Read)))
             {
                 var meta = new StoreItemMetaInfo<DocumentId>(id);
@@ -151,16 +165,22 @@ namespace Plainion.Windows.Controls.Text
 
         protected override Folder GetRoot()
         {
+            Contract.Invariant(myIndex != null, "DocumentStore not initialized");
+
             return myIndex.Root;
         }
 
         protected override void SaveRoot()
         {
+            Contract.Invariant(myIndex != null, "DocumentStore not initialized");
+
             myIndex.Save();
         }
 
         protected override void Save(Document document)
         {
+            Contract.Invariant(myIndex != null, "DocumentStore not initialized");
+
             using(var writer = new BinaryWriter(GetMetaFile(document.Id).Stream(FileAccess.Write)))
             {
                 writer.Write(document.Created.Ticks);
@@ -194,6 +214,8 @@ namespace Plainion.Windows.Controls.Text
 
         protected override void Delete(DocumentId id)
         {
+            Contract.Invariant(myIndex != null, "DocumentStore not initialized");
+
             GetBodyFile(id).Delete();
             GetMetaFile(id).Delete();
         }
