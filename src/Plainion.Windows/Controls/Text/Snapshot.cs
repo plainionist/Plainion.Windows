@@ -10,7 +10,10 @@ namespace Plainion.Windows.Controls.Text
             var folders = root.Enumerate().ToList();
 
             Folders = folders.Select(f => f.Id).ToList();
-            Documents = folders.SelectMany(f => f.Documents).ToList();
+            Documents = folders
+                .SelectMany(f => f.Documents)
+                .Select(doc=>doc.Id)
+                .ToList();
         }
 
         public IReadOnlyCollection<FolderId> Folders { get; private set; }

@@ -16,13 +16,15 @@ namespace Plainion.Windows.Controls.Text
 
         private class Index
         {
+            private FileSystemDocumentStore myStore;
             private IFile myFile;
 
-            public Index(IFile file)
+            public Index(FileSystemDocumentStore store, IFile file)
             {
+                myStore = store;
                 myFile = file;
 
-                if (myFile.Exists)
+                if(myFile.Exists)
                 {
                     Root = Load();
                 }
@@ -34,14 +36,9 @@ namespace Plainion.Windows.Controls.Text
 
             public Folder Root { get; private set; }
 
-            public IEnumerable<DocumentId> EnumerateDocuments()
-            {
-                return Root.Enumerate().SelectMany(f => f.Documents);
-            }
-
             public void Save()
             {
-                using (var writer = new BinaryWriter(myFile.Stream(FileAccess.Write)))
+                using(var writer = new BinaryWriter(myFile.Stream(FileAccess.Write)))
                 {
                     Save(writer, Root);
                 }
@@ -54,13 +51,13 @@ namespace Plainion.Windows.Controls.Text
                 writer.Write(node.LastModified.Ticks);
 
                 writer.Write(node.Documents.Count);
-                foreach (var doc in node.Documents)
+                foreach(var doc in node.Documents)
                 {
-                    writer.Write(doc.Value.ToString());
+                    writer.Write(doc.Id.Value.ToString());
                 }
 
                 writer.Write(node.Children.Count);
-                foreach (var child in node.Children)
+                foreach(var child in node.Children)
                 {
                     Save(writer, node);
                 }
@@ -68,7 +65,7 @@ namespace Plainion.Windows.Controls.Text
 
             private Folder Load()
             {
-                using (var reader = new BinaryReader(myFile.Stream(FileAccess.Read)))
+                using(var reader = new BinaryReader(myFile.Stream(FileAccess.Read)))
                 {
                     return Read(reader);
                 }
@@ -84,14 +81,14 @@ namespace Plainion.Windows.Controls.Text
                 var folder = new Folder(meta);
 
                 var docCount = reader.ReadInt32();
-                for (int i = 0; i < docCount;++i )
+                for(int i = 0; i < docCount; ++i)
                 {
                     var docId = Guid.Parse(reader.ReadString());
-                    folder.Documents.Add(new DocumentId(docId));
+                    folder.Documents.Add(myStore.GetCore(new DocumentId(docId)));
                 }
 
                 var childrenCount = reader.ReadInt32();
-                for (int i = 0; i < childrenCount; ++i)
+                for(int i = 0; i < childrenCount; ++i)
                 {
                     var child = Read(reader);
                     folder.Children.Add(child);
@@ -107,20 +104,20 @@ namespace Plainion.Windows.Controls.Text
 
             myRoot = root;
 
-            myIndex = new Index(root.File("Index"));
+            myIndex = new Index(this, root.File("Index"));
         }
 
         public override IReadOnlyCollection<Document> Search(string text)
         {
-            return myIndex.EnumerateDocuments()
-                .Select(id => Get(id))
+            return myIndex.Root.Enumerate()
+                .SelectMany(f => f.Documents)
                 .Where(doc => DocumentFacade.Search(doc.Body.ContentStart, doc.Body.ContentEnd, text, DocumentFacade.FindFlags.None, CultureInfo.InvariantCulture) != null)
                 .ToList();
         }
 
         protected override Document GetCore(DocumentId id)
         {
-            using (var reader = new BinaryReader(GetMetaFile(id).Stream(FileAccess.Read)))
+            using(var reader = new BinaryReader(GetMetaFile(id).Stream(FileAccess.Read)))
             {
                 var meta = new StoreItemMetaInfo<DocumentId>(id);
                 meta.Created = new DateTime(reader.ReadInt64());
@@ -130,7 +127,7 @@ namespace Plainion.Windows.Controls.Text
                 doc.Title = reader.ReadString();
 
                 var count = reader.ReadInt32();
-                for (int i = 0; i < count; ++i)
+                for(int i = 0; i < count; ++i)
                 {
                     doc.Tags.Add(reader.ReadString());
                 }
@@ -143,7 +140,7 @@ namespace Plainion.Windows.Controls.Text
         {
             var doc = new FlowDocument();
 
-            using (var stream = file.Stream(FileAccess.Read))
+            using(var stream = file.Stream(FileAccess.Read))
             {
                 var range = new TextRange(doc.ContentStart, doc.ContentEnd);
                 range.Load(stream, DataFormats.Rtf);
@@ -164,7 +161,7 @@ namespace Plainion.Windows.Controls.Text
 
         protected override void Save(Document document)
         {
-            using (var writer = new BinaryWriter(GetMetaFile(document.Id).Stream(FileAccess.Write)))
+            using(var writer = new BinaryWriter(GetMetaFile(document.Id).Stream(FileAccess.Write)))
             {
                 writer.Write(document.Created.Ticks);
                 writer.Write(document.LastModified.Ticks);
@@ -172,13 +169,13 @@ namespace Plainion.Windows.Controls.Text
                 writer.Write(document.Title);
 
                 writer.Write(document.Tags.Count);
-                foreach (var tag in document.Tags)
+                foreach(var tag in document.Tags)
                 {
                     writer.Write(tag);
                 }
             }
 
-            using (var stream = GetBodyFile(document.Id).Stream(FileAccess.Write))
+            using(var stream = GetBodyFile(document.Id).Stream(FileAccess.Write))
             {
                 var range = new TextRange(document.Body.ContentStart, document.Body.ContentEnd);
                 range.Save(stream, DataFormats.Rtf);

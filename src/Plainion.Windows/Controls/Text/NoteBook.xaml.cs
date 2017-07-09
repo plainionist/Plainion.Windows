@@ -19,34 +19,7 @@ namespace Plainion.Windows.Controls.Text
         private static void OnDocumentStoreChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var self = (NoteBook)d;
-
-            var root = self.myNavigation.Root;
-
-            root.Children.Clear();
-
-            AddFolder(root, self.DocumentStore.Root);
-        }
-
-        private static void AddFolder(NavigationNode node, Folder folder)
-        {
-            //foreach (var child in folder.Children)
-            //{
-            //    var childNode = new NavigationNode
-            //    {
-            //        Parent = node,
-            //        Folder = folder
-            //    };
-            //    node.Children.Add(childNode);
-            //    AddFolder(childNode, child);
-            //}
-            //foreach (var doc in folder.Documents)
-            //{
-            //    node.Children.Add(new NavigationNode
-            //    {
-            //        Parent = node,
-            //        Document = doc
-            //    });
-            //}
+            self.myNavigation.DocumentStore = self.DocumentStore;
         }
 
         public DocumentStore DocumentStore

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Plainion.Windows.Controls.Tree;
 using Plainion.Windows.Mvvm;
 
@@ -8,6 +9,7 @@ namespace Plainion.Windows.Controls.Text
 {
     class NavigationNode : BindableBase, INode, IDragDropSupport
     {
+        private IStoreItem myModel;
         private string myName;
         private bool myIsSelected;
         private bool myIsExpanded;
@@ -15,25 +17,40 @@ namespace Plainion.Windows.Controls.Text
         public NavigationNode()
         {
             Children = new ObservableCollection<NavigationNode>();
+            CollectionChangedEventManager.AddHandler(Children, OnChildrenChanged);
+        }
+
+        private void OnChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            var document = myModel as Document;
+            if(document != null)
+            {
+
+            }
+
+            // TODO: update model
+            // also handle that this is a document and needs to get a folder
         }
 
         public bool IsDragAllowed { get { return true; } }
 
         public bool IsDropAllowed { get { return true; } }
 
-        public Document Document { get; set; }
+        public IStoreItem Model
+        {
+            get { return myModel; }
+            set
+            {
+                myModel = value;
+                Name = myModel.Title;
+                PropertyBinding.Bind(() => Model.Title, () => Name);
+            }
+        }
 
         public string Name
         {
             get { return myName; }
-            set
-            {
-                if(SetProperty(ref myName, value))
-                {
-                    // TODO: ?!? :(
-                    //Document.Path.Name = myName;
-                }
-            }
+            set { SetProperty(ref myName, value); }
         }
 
         IEnumerable<INode> INode.Children
@@ -41,10 +58,8 @@ namespace Plainion.Windows.Controls.Text
             get { return Children; }
         }
 
-        // TODO: we need to sync to model
         public ObservableCollection<NavigationNode> Children { get; private set; }
 
-        // TODO: we need to sync to model
         public INode Parent { get; set; }
 
         public bool IsSelected

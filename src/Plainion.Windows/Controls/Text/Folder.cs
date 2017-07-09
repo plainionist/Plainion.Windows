@@ -7,7 +7,7 @@ namespace Plainion.Windows.Controls.Text
 {
     public sealed class Folder : AbstractStoreItem<FolderId>
     {
-        private ObservableCollection<DocumentId> myDocuments;
+        private ObservableCollection<Document> myDocuments;
         private ObservableCollection<Folder> myChildren;
 
         public Folder()
@@ -18,11 +18,11 @@ namespace Plainion.Windows.Controls.Text
         public Folder(StoreItemMetaInfo<FolderId> meta)
             : base(meta)
         {
-            myDocuments = new ObservableCollection<DocumentId>();
-            WeakEventManager<ObservableCollection<DocumentId>, NotifyCollectionChangedEventArgs>.AddHandler(myDocuments, "CollectionChanged", OnCollectionChanged);
+            myDocuments = new ObservableCollection<Document>();
+            CollectionChangedEventManager.AddHandler(myDocuments, OnCollectionChanged);
 
             myChildren = new ObservableCollection<Folder>();
-            WeakEventManager<ObservableCollection<Folder>, NotifyCollectionChangedEventArgs>.AddHandler(myChildren, "CollectionChanged", OnCollectionChanged);
+            CollectionChangedEventManager.AddHandler(myChildren, OnCollectionChanged);
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -33,7 +33,7 @@ namespace Plainion.Windows.Controls.Text
         /// <summary>
         /// Order is preserved
         /// </summary>
-        public IList<DocumentId> Documents { get { return myDocuments; } }
+        public IList<Document> Documents { get { return myDocuments; } }
 
         /// <summary>
         /// Order is preserved

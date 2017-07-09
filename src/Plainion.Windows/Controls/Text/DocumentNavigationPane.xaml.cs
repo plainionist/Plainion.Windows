@@ -8,6 +8,8 @@ namespace Plainion.Windows.Controls.Text
 {
     partial class DocumentNavigationPane : UserControl
     {
+        private DocumentStore myDocumentStore;
+
         public DocumentNavigationPane()
         {
             Root = new NavigationNode();
@@ -26,16 +28,55 @@ namespace Plainion.Windows.Controls.Text
             var node = new NavigationNode
             {
                 Parent = parent,
-                Name = "<new>",
             };
+
+            // first add the new node - this will transform the nodes model into a folder if necessary
             parent.Children.Add(node);
+
+            // now we can safely cast to folder
+            node.Model = myDocumentStore.Create((Folder)parent.Model, "<new>");
 
             node.IsSelected = true;
             parent.IsExpanded = true;
         }
 
+        public DocumentStore DocumentStore
+        {
+            get { return myDocumentStore; }
+            set
+            {
+                myDocumentStore = value;
+
+                Root.Children.Clear();
+
+                AddFolder(Root, myDocumentStore.Root);
+            }
+        }
+
+        private void AddFolder(NavigationNode node, Folder folder)
+        {
+            foreach(var child in folder.Children)
+            {
+                var childNode = new NavigationNode
+                {
+                    Parent = node,
+                    Model = child
+                };
+                node.Children.Add(childNode);
+                AddFolder(childNode, child);
+            }
+            foreach(var doc in folder.Documents)
+            {
+                node.Children.Add(new NavigationNode
+                {
+                    Parent = node,
+                    Model = doc
+                });
+            }
+        }
+
         public NavigationNode Root { get; private set; }
-        
+
         public ICommand CreateChildCommand { get; private set; }
 
         public ICommand DeleteCommand { get; private set; }

@@ -1,8 +1,9 @@
 ﻿using System;
+using Plainion.Windows.Mvvm;
 
 namespace Plainion.Windows.Controls.Text
 {
-    public abstract class AbstractStoreItem<TId> where TId : AbstractStoreItemId, new()
+    public abstract class AbstractStoreItem<TId> : BindableBase, IStoreItem where TId : AbstractStoreItemId, new()
     {
         private string myTitle;
 
@@ -21,18 +22,13 @@ namespace Plainion.Windows.Controls.Text
             set { SetProperty(ref myTitle, value); }
         }
 
-        private bool SetProperty<T>(ref T storage, T value)
+        protected override bool SetProperty<T>(ref T storage, T value, string propertyName = null)
         {
-            if (object.Equals(storage, value))
-            {
-                return false;
-            }
-
-            storage = value;
+            var ret = base.SetProperty<T>(ref storage, value, propertyName);
 
             MarkAsModified();
 
-            return true;
+            return ret;
         }
 
         protected void MarkAsModified()

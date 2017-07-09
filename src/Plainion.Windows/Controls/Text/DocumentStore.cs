@@ -7,25 +7,7 @@ namespace Plainion.Windows.Controls.Text
     public abstract class DocumentStore
     {
         private Folder myRoot;
-        private Dictionary<Guid, Document> myDocuments;
         private Snapshot mySnapshot;
-
-        protected DocumentStore()
-        {
-            myDocuments = new Dictionary<Guid, Document>();
-        }
-
-        public Document Get(DocumentId id)
-        {
-            Document doc;
-            if (!myDocuments.TryGetValue(id.Value, out doc))
-            {
-                doc = GetCore(id);
-                myDocuments.Add(id.Value, doc);
-            }
-
-            return doc;
-        }
 
         public Folder Root
         {
@@ -48,24 +30,21 @@ namespace Plainion.Windows.Controls.Text
             var documents = folders.SelectMany(f => f.Documents).ToList();
 
             var foldersToDelete = mySnapshot.Folders.Except(folders.Select(f => f.Id));
-            var documentsToDelete = mySnapshot.Documents.Except(documents);
+            var documentsToDelete = mySnapshot.Documents.Except(documents.Select(doc=>doc.Id));
 
             // delete folders and documents
             documentsToDelete.ForEach(Delete);
 
             // save modified folders and documents
-            myDocuments.Values.Where(doc => doc.IsModified).ForEach(Save);
+            documents.Where(doc => doc.IsModified).ForEach(Save);
             if (folders.Any(f => f.IsModified))
             {
                 SaveRoot();
             }
 
-            // update the document cache
-            documentsToDelete.ForEach(id => myDocuments.Remove(id.Value));
-
             // mark folders and documents as saved
             folders.ForEach(f => f.MarkAsSaved());
-            myDocuments.Values.Where(doc => doc.IsModified).ForEach(doc => doc.MarkAsSaved());
+            documents.Where(doc => doc.IsModified).ForEach(doc => doc.MarkAsSaved());
 
             // create new snapshot
             mySnapshot = new Snapshot(myRoot);

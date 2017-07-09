@@ -26,7 +26,7 @@ namespace Plainion.Windows.Controls.Text
             Contract.RequiresNotNull(self, "self");
             Contract.RequiresNotNull(id, "id");
 
-            if (self.Documents.Any(x => x == id))
+            if (self.Documents.Any(doc => doc.Id == id))
             {
                 return self;
             }
@@ -55,6 +55,22 @@ namespace Plainion.Windows.Controls.Text
         }
 
         /// <summary>
+        /// Creates a new document under the given folder with the given title
+        /// </summary>
+        public static Document Create(this DocumentStore self, Folder folder, string title)
+        {
+            Contract.RequiresNotNull(self, "self");
+            Contract.RequiresNotNull(folder, "folder");
+
+            var document = new Document(() => new FlowDocument());
+            document.Title = title;
+
+            folder.Documents.Add(document);
+
+            return document;
+        }
+
+        /// <summary>
         /// Creates a new document at the given path. Path elements are separated with "/".
         /// The last path element is the title of the document.
         /// </summary>
@@ -74,24 +90,16 @@ namespace Plainion.Windows.Controls.Text
                 if (child == null)
                 {
                     child = new Folder();
+                    child.Title = element;
                     folder.Children.Add(child);
                 }
 
                 folder = child;
             }
 
-            var documentTitle = elements[elements.Length - 1];
+            var title = elements[elements.Length - 1];
 
-            Contract.Invariant(!folder.Documents
-                .Select(id => self.Get(id))
-                .Any(doc => doc.Title.Equals(documentTitle, StringComparison.OrdinalIgnoreCase)), "Document already exists");
-
-            var document = new Document(() => new FlowDocument());
-            document.Title = documentTitle;
-
-            folder.Documents.Add(document.Id);
-
-            return document;
+            return Create(self, folder, title);
         }
 
         internal static void ForEach<T>(this IEnumerable<T> self, Action<T> action)
