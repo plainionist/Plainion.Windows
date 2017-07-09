@@ -11,6 +11,29 @@ namespace Plainion.Windows.Controls.Text
         public NoteBook()
         {
             InitializeComponent();
+
+            myNavigation.SelectionChanged += OnSelectionChanged;
+        }
+
+        private void OnSelectionChanged(object sender, NavigationNode e)
+        {
+            var document = e.Model as Document;
+            if(document != null)
+            {
+                myNotePad.Document = document.Body;
+            }
+            else
+            {
+                var folder = (Folder)e.Model;
+                if(folder.Documents.Any())
+                {
+                    myNotePad.Document = folder.Documents.First().Body;
+                }
+                else
+                {
+                    myNotePad.Document = null;
+                }
+            }
         }
 
         public static readonly DependencyProperty DocumentStoreProperty = DependencyProperty.Register("DocumentStore",

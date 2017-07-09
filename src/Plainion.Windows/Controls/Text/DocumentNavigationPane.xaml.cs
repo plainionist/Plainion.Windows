@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Plainion.Windows.Controls.Tree;
@@ -25,10 +26,7 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnCreateChild(NavigationNode parent)
         {
-            var node = new NavigationNode
-            {
-                Parent = parent,
-            };
+            var node = CreateNode(parent, null);
 
             // first add the new node - this will transform the nodes model into a folder if necessary
             parent.Children.Add(node);
@@ -38,6 +36,27 @@ namespace Plainion.Windows.Controls.Text
 
             node.IsSelected = true;
             parent.IsExpanded = true;
+        }
+
+        private NavigationNode CreateNode(NavigationNode parent, IStoreItem model)
+        {
+            var node = new NavigationNode
+            {
+                Parent = parent,
+                Model = model
+            };
+
+            PropertyBinding.Observe(() => node.IsSelected, OnSelectionChanged);
+
+            return node;
+        }
+
+        private void OnSelectionChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if(SelectionChanged != null)
+            {
+                SelectionChanged(this, (NavigationNode)sender);
+            }
         }
 
         public DocumentStore DocumentStore
@@ -57,21 +76,13 @@ namespace Plainion.Windows.Controls.Text
         {
             foreach(var child in folder.Children)
             {
-                var childNode = new NavigationNode
-                {
-                    Parent = node,
-                    Model = child
-                };
+                var childNode = CreateNode(node, child);
                 node.Children.Add(childNode);
                 AddFolder(childNode, child);
             }
             foreach(var doc in folder.Documents)
             {
-                node.Children.Add(new NavigationNode
-                {
-                    Parent = node,
-                    Model = doc
-                });
+                node.Children.Add(CreateNode(node, doc));
             }
         }
 
@@ -82,5 +93,7 @@ namespace Plainion.Windows.Controls.Text
         public ICommand DeleteCommand { get; private set; }
 
         public ICommand DropCommand { get; private set; }
+
+        public event EventHandler<NavigationNode> SelectionChanged;
     }
 }

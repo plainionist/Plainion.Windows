@@ -17,6 +17,6 @@
         
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
         
-        <controls:NotePad Grid.Column="2"/>  
+        <controls:NotePad Grid.Column="2" x:Name="myNotePad"/>  
     </Grid>
 </UserControl>
