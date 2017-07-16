@@ -66,23 +66,30 @@ namespace Plainion.Windows.Controls.Text
             {
                 myDocumentStore = value;
 
-                Root.Children.Clear();
+                using (Root.DisableModelSync())
+                {
+                    Root.Model = myDocumentStore.Root;
+                    Root.Children.Clear();
 
-                AddFolder(Root, myDocumentStore.Root);
+                    AddFolder(Root, myDocumentStore.Root);
+                }
             }
         }
 
         private void AddFolder(NavigationNode node, Folder folder)
         {
-            foreach(var child in folder.Children)
+            using (node.DisableModelSync())
             {
-                var childNode = CreateNode(node, child);
-                node.Children.Add(childNode);
-                AddFolder(childNode, child);
-            }
-            foreach(var doc in folder.Documents)
-            {
-                node.Children.Add(CreateNode(node, doc));
+                foreach (var child in folder.Children)
+                {
+                    var childNode = CreateNode(node, child);
+                    node.Children.Add(childNode);
+                    AddFolder(childNode, child);
+                }
+                foreach (var doc in folder.Documents)
+                {
+                    node.Children.Add(CreateNode(node, doc));
+                }
             }
         }
 

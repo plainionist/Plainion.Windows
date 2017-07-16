@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using Plainion.Windows.Controls.Tree;
 using Plainion.Windows.Mvvm;
 
@@ -17,19 +18,124 @@ namespace Plainion.Windows.Controls.Text
         public NavigationNode()
         {
             Children = new ObservableCollection<NavigationNode>();
+        }
+
+        private void RegisterChangeHandler()
+        {
             CollectionChangedEventManager.AddHandler(Children, OnChildrenChanged);
+        }
+
+        private void UnregisterChangeHandler()
+        {
+            CollectionChangedEventManager.RemoveHandler(Children, OnChildrenChanged);
         }
 
         private void OnChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var document = myModel as Document;
-            if(document != null)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
+                Contract.Invariant(e.OldItems == null, "Existence of OldItems not expected");
+                AddNewItems(e.NewStartingIndex, e.NewItems.Cast<NavigationNode>());
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Move)
+            {
+                throw new NotImplementedException(e.Action.ToString());
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                Contract.Invariant(e.NewItems == null, "Existence of NewItems not expected");
+                RemoveOldItems(e.OldItems.Cast<NavigationNode>());
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Replace)
+            {
+                throw new NotImplementedException(e.Action.ToString());
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                if (e.NewItems != null)
+                {
+                    AddNewItems(e.NewStartingIndex, e.NewItems.Cast<NavigationNode>());
+                }
+                if (e.OldItems != null)
+                {
+                    RemoveOldItems(e.OldItems.Cast<NavigationNode>());
+                }
+            }
+            else
+            {
+                throw new NotSupportedException("Unknown action: " + e.Action);
+            }
+        }
 
+        private void AddNewItems(int startIndex, IEnumerable<NavigationNode> items)
+        {
+            var folder = myModel as Folder;
+            if (folder == null)
+            {
+                // convert to folder
+                folder = new Folder();
+                folder.Title = myModel.Title;
+
+                var child = new NavigationNode();
+                child.Model = Model;
+                child.Parent = this;
+
+                Model = folder;
+                Children.Add(child);
             }
 
-            // TODO: update model
-            // also handle that this is a document and needs to get a folder
+            foreach (var item in items)
+            {
+                var childFolder = item.Model as Folder;
+                if (childFolder != null)
+                {
+                    folder.Children.Insert(startIndex, childFolder);
+                }
+                else
+                {
+                    folder.Documents.Insert(startIndex, (Document)item.Model);
+                }
+                startIndex++;
+            }
+        }
+
+        private void RemoveOldItems(IEnumerable<NavigationNode> items)
+        {
+            var folder = (Folder)Model;
+            foreach (var item in items)
+            {
+                var childFolder = item.Model as Folder;
+                if (childFolder != null)
+                {
+                    folder.Children.Remove(childFolder);
+                }
+                else
+                {
+                    folder.Documents.Remove((Document)item.Model);
+                }
+            }
+        }
+
+        private class ModelUpdateGuard : IDisposable
+        {
+            private NavigationNode myOwner;
+
+            public ModelUpdateGuard(NavigationNode owner)
+            {
+                myOwner = owner;
+                myOwner.UnregisterChangeHandler();
+            }
+
+            public void Dispose()
+            {
+                myOwner.RegisterChangeHandler();
+                myOwner = null;
+            }
+        }
+
+        public IDisposable DisableModelSync()
+        {
+            return new ModelUpdateGuard(this);
         }
 
         public bool IsDragAllowed { get { return true; } }
@@ -76,7 +182,7 @@ namespace Plainion.Windows.Controls.Text
 
         bool INode.Matches(string pattern)
         {
-            if(pattern == "*")
+            if (pattern == "*")
             {
                 return Name != null;
             }
