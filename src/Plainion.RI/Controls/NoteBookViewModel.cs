@@ -2,12 +2,16 @@
 using System.Windows.Documents;
 using Plainion.IO.MemoryFS;
 using Plainion.Windows.Controls.Text;
+using Prism.Commands;
+using Prism.Mvvm;
 
 namespace Plainion.RI.Controls
 {
     [Export]
-    class NoteBookViewModel
+    class NoteBookViewModel : BindableBase
     {
+        private FileSystemDocumentStore myDocumentStore;
+
         public NoteBookViewModel()
         {
             var fs = new FileSystemImpl();
@@ -22,14 +26,24 @@ namespace Plainion.RI.Controls
             DocumentStore.Create("/Developer documentation/HowTos/MVC with F#").Body.AddText("MVC with F#");
             DocumentStore.Create("/Developer documentation/HowTos/WebApi with F#").Body.AddText("WebApi with F#");
 
-            // just to test that it works :)
-            DocumentStore.SaveChanges();
+            SaveCommand = new DelegateCommand(() =>
+            {
+                DocumentStore.SaveChanges();
 
-            DocumentStore = new FileSystemDocumentStore(fs.Directory("/x"));
-            DocumentStore.Initialize();
+                var store = new FileSystemDocumentStore(fs.Directory("/x"));
+                store.Initialize();
+
+                DocumentStore = store;
+            });
         }
 
-        public FileSystemDocumentStore DocumentStore { get; private set; }
+        public FileSystemDocumentStore DocumentStore
+        {
+            get { return myDocumentStore; }
+            private set { SetProperty(ref myDocumentStore, value); }
+        }
+
+        public DelegateCommand SaveCommand { get; private set; }
     }
 
     static class FlowDocumentExtensions
