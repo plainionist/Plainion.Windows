@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Windows;
 using Plainion.Windows.Controls.Tree;
 using Plainion.Windows.Mvvm;
 
@@ -18,6 +19,7 @@ namespace Plainion.Windows.Controls.Text
         public NavigationNode()
         {
             Children = new ObservableCollection<NavigationNode>();
+            RegisterChangeHandler();
         }
 
         private void RegisterChangeHandler()
@@ -72,16 +74,7 @@ namespace Plainion.Windows.Controls.Text
             var folder = myModel as Folder;
             if (folder == null)
             {
-                // convert to folder
-                folder = new Folder();
-                folder.Title = myModel.Title;
-
-                var child = new NavigationNode();
-                child.Model = Model;
-                child.Parent = this;
-
-                Model = folder;
-                Children.Add(child);
+                folder = ConvertToFolder((Document)Model);
             }
 
             foreach (var item in items)
@@ -97,6 +90,35 @@ namespace Plainion.Windows.Controls.Text
                 }
                 startIndex++;
             }
+        }
+
+        private Folder ConvertToFolder(Document model)
+        {
+            // convert model to folder
+            var folder = new Folder();
+            folder.Title = myModel.Title;
+
+            var parent = (Folder)((NavigationNode)Parent).Model;
+            parent.Documents.Remove(model);
+            parent.Children.Add(folder);
+
+            // add "old" document as first child
+            // we cannot modify the children collection from CollectionChanged event 
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                ((Folder)Model).Documents.Add(model);
+                
+                var child = new NavigationNode();
+                child.Model = model;
+                child.Parent = this;
+
+                Children.Insert(0, child);
+            }));
+
+            // last update my model reference
+            Model = folder;
+
+            return folder;
         }
 
         private void RemoveOldItems(IEnumerable<NavigationNode> items)
@@ -147,8 +169,15 @@ namespace Plainion.Windows.Controls.Text
             get { return myModel; }
             set
             {
+                if (myModel != null)
+                {
+                    //PropertyBinding.Unbind(() => Model.Title, () => Name);
+                }
+
                 myModel = value;
                 Name = myModel.Title;
+                
+                // TODO: return a key for unbind!!
                 PropertyBinding.Bind(() => Model.Title, () => Name);
             }
         }

@@ -27,7 +27,16 @@ namespace Plainion.Windows.Controls.Text
         private static void OnDocumentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var self = (NotePad)d;
-            self.myEditor.Document = self.Document;
+            if (self.Document == null)
+            {
+                self.myEditor.Document = new FlowDocument();
+                self.myEditor.IsReadOnly = true;
+            }
+            else
+            {
+                self.myEditor.Document = self.Document;
+                self.myEditor.IsReadOnly = false;
+            }
         }
 
         public FlowDocument Document
