@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using Plainion.Windows.Controls.Tree;
 using Plainion.Windows.Mvvm;
@@ -28,13 +29,10 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnCreateChild(NavigationNode parent)
         {
-            var node = myNodeFactory.Create(null,parent);
+            var document = new Document(() => new FlowDocument()) { Title = "<new>" };
+            var node = myNodeFactory.Create(document, parent);
 
-            // first add the new node - this will transform the nodes model into a folder if necessary
             parent.Children.Add(node);
-
-            // now we can safely cast to folder
-            node.Model = myDocumentStore.Create((Folder)parent.Model, "<new>");
 
             node.IsSelected = true;
             parent.IsExpanded = true;
@@ -42,7 +40,7 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnSelectionChanged(object sender, PropertyChangedEventArgs e)
         {
-            if(SelectionChanged != null)
+            if (SelectionChanged != null)
             {
                 SelectionChanged(this, (NavigationNode)sender);
             }

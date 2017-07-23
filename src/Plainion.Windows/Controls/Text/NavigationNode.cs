@@ -16,6 +16,8 @@ namespace Plainion.Windows.Controls.Text
         private string myName;
         private bool myIsSelected;
         private bool myIsExpanded;
+        private BindingId myModelBindingId;
+        private int myChildObservationCount;
 
         public NavigationNode(NavigationNodeFactory factory)
         {
@@ -27,12 +29,21 @@ namespace Plainion.Windows.Controls.Text
 
         private void RegisterChangeHandler()
         {
-            CollectionChangedEventManager.AddHandler(Children, OnChildrenChanged);
+            if (myChildObservationCount == 0)
+            {
+                CollectionChangedEventManager.AddHandler(Children, OnChildrenChanged);
+            }
+            
+            myChildObservationCount++;
         }
 
         private void UnregisterChangeHandler()
         {
-            CollectionChangedEventManager.RemoveHandler(Children, OnChildrenChanged);
+            if (myChildObservationCount == 1)
+            {
+                CollectionChangedEventManager.RemoveHandler(Children, OnChildrenChanged);
+            }
+            myChildObservationCount--;
         }
 
         private void OnChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -83,6 +94,7 @@ namespace Plainion.Windows.Controls.Text
 
             foreach (var item in items)
             {
+                Contract.RequiresNotNull(item.Model != null, "item.Model");
                 folder.Entries.Insert(startIndex, item.Model);
                 startIndex++;
             }
@@ -150,7 +162,6 @@ namespace Plainion.Windows.Controls.Text
 
         public bool IsDropAllowed { get { return true; } }
 
-        private BindingId myModelBindingId;
         public IStoreItem Model
         {
             get { return myModel; }
@@ -162,9 +173,13 @@ namespace Plainion.Windows.Controls.Text
                 }
 
                 myModel = value;
-                Name = myModel.Title;
 
-                myModelBindingId = PropertyBinding.Bind(() => Model.Title, () => Name);
+                if (myModel != null)
+                {
+                    Name = myModel.Title;
+
+                    myModelBindingId = PropertyBinding.Bind(() => Model.Title, () => Name);
+                }
             }
         }
 
