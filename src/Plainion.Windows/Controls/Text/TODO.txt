@@ -1,9 +1,4 @@
 ﻿
-- "new" throws
-
-- add buttons to DocumentNavigationPane for
-  - add section to selected
-  - remove selected section
 
 - search
   - in document
@@ -11,4 +6,6 @@
   - with the "index" idea we could also search below certain subtree ...
 
 - write README.md
+
+- write more tests
 
