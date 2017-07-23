@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Windows;
 
 namespace Plainion.Windows.Controls.Text
 {
     public sealed class Folder : AbstractStoreItem<FolderId>
     {
-        private ObservableCollection<Document> myDocuments;
-        private ObservableCollection<Folder> myChildren;
+        private ObservableCollection<IStoreItem> myEntries;
 
         public Folder()
             : this(new StoreItemMetaInfo<FolderId>())
@@ -18,11 +18,8 @@ namespace Plainion.Windows.Controls.Text
         public Folder(StoreItemMetaInfo<FolderId> meta)
             : base(meta)
         {
-            myDocuments = new ObservableCollection<Document>();
-            CollectionChangedEventManager.AddHandler(myDocuments, OnCollectionChanged);
-
-            myChildren = new ObservableCollection<Folder>();
-            CollectionChangedEventManager.AddHandler(myChildren, OnCollectionChanged);
+            myEntries = new ObservableCollection<IStoreItem>();
+            CollectionChangedEventManager.AddHandler(myEntries, OnCollectionChanged);
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -33,11 +30,11 @@ namespace Plainion.Windows.Controls.Text
         /// <summary>
         /// Order is preserved
         /// </summary>
-        public IList<Document> Documents { get { return myDocuments; } }
+        public IList<IStoreItem> Entries { get { return myEntries; } }
 
-        /// <summary>
-        /// Order is preserved
-        /// </summary>
-        public IList<Folder> Children { get { return myChildren; } }
+        public void MoveEntry(int oldIndex, int newIndex)
+        {
+            myEntries.Move(oldIndex, newIndex);
+        }
     }
 }

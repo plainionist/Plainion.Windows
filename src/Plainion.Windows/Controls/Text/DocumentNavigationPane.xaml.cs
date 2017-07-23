@@ -69,15 +69,16 @@ namespace Plainion.Windows.Controls.Text
         {
             using (node.DisableModelSync())
             {
-                foreach (var child in folder.Children)
+                foreach (var child in folder.Entries)
                 {
                     var childNode = myNodeFactory.Create(child, node);
                     node.Children.Add(childNode);
-                    AddFolder(childNode, child);
-                }
-                foreach (var doc in folder.Documents)
-                {
-                    node.Children.Add(myNodeFactory.Create(doc, node));
+
+                    var childFolder = child as Folder;
+                    if (childFolder != null)
+                    {
+                        AddFolder(childNode, childFolder);
+                    }
                 }
             }
         }

@@ -8,7 +8,7 @@ namespace Plainion.Windows.Controls.Text
         {
         }
 
-        internal DocumentId(Guid id)
+        public DocumentId(Guid id)
             : base(id)
         {
         }

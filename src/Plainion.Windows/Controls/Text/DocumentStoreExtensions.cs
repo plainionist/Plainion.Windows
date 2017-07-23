@@ -26,12 +26,12 @@ namespace Plainion.Windows.Controls.Text
             Contract.RequiresNotNull(self, "self");
             Contract.RequiresNotNull(id, "id");
 
-            if (self.Documents.Any(doc => doc.Id == id))
+            if (self.Entries.OfType<Document>().Any(doc => doc.Id == id))
             {
                 return self;
             }
 
-            foreach (var child in self.Children)
+            foreach (var child in self.Entries.OfType<Folder>())
             {
                 var found = child.Folder(id);
                 if (found != null)
@@ -42,13 +42,18 @@ namespace Plainion.Windows.Controls.Text
             return null;
         }
 
-        public static IEnumerable<Folder> Enumerate(this Folder self)
+        public static IEnumerable<IStoreItem> Enumerate(this Folder self)
         {
             Contract.RequiresNotNull(self, "self");
 
             yield return self;
 
-            foreach (var child in self.Children.SelectMany(c => c.Enumerate()))
+            foreach (var child in self.Entries.OfType<Folder>().SelectMany(c => c.Enumerate()))
+            {
+                yield return child;
+            }
+
+            foreach (var child in self.Entries.OfType<Document>())
             {
                 yield return child;
             }
@@ -65,7 +70,7 @@ namespace Plainion.Windows.Controls.Text
             var document = new Document(() => new FlowDocument());
             document.Title = title;
 
-            folder.Documents.Add(document);
+            folder.Entries.Add(document);
 
             return document;
         }
@@ -86,12 +91,12 @@ namespace Plainion.Windows.Controls.Text
             var folder = self.Root;
             foreach (var element in elements.Take(elements.Length - 1))
             {
-                var child = folder.Children.FirstOrDefault(f => f.Title.Equals(element, StringComparison.OrdinalIgnoreCase));
+                var child = folder.Entries.OfType<Folder>().FirstOrDefault(f => f.Title.Equals(element, StringComparison.OrdinalIgnoreCase));
                 if (child == null)
                 {
                     child = new Folder();
                     child.Title = element;
-                    folder.Children.Add(child);
+                    folder.Entries.Add(child);
                 }
 
                 folder = child;

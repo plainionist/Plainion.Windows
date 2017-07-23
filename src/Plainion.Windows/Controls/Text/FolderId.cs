@@ -8,7 +8,7 @@ namespace Plainion.Windows.Controls.Text
         {
         }
 
-        internal FolderId(Guid id)
+        public FolderId(Guid id)
             : base(id)
         {
         }

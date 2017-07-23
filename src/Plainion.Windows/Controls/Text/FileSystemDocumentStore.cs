@@ -30,7 +30,7 @@ namespace Plainion.Windows.Controls.Text
 
             public void Initialize()
             {
-                if(myFile.Exists)
+                if (myFile.Exists)
                 {
                     Root = Load();
                 }
@@ -42,7 +42,7 @@ namespace Plainion.Windows.Controls.Text
 
             public void Save()
             {
-                using(var writer = new BinaryWriter(myFile.Stream(FileAccess.Write)))
+                using (var writer = new BinaryWriter(myFile.Stream(FileAccess.Write)))
                 {
                     Save(writer, Root);
                 }
@@ -55,22 +55,26 @@ namespace Plainion.Windows.Controls.Text
                 writer.Write(node.LastModified.Ticks);
                 writer.Write(node.Title ?? string.Empty);
 
-                writer.Write(node.Documents.Count);
-                foreach(var doc in node.Documents)
+                writer.Write(node.Entries.Count);
+                foreach (var entry in node.Entries)
                 {
-                    writer.Write(doc.Id.Value.ToString());
-                }
-
-                writer.Write(node.Children.Count);
-                foreach(var child in node.Children)
-                {
-                    Save(writer, child);
+                    var folder = entry as Folder;
+                    if (folder == null)
+                    {
+                        writer.Write(false);
+                        writer.Write(((Document)entry).Id.Value.ToString());
+                    }
+                    else
+                    {
+                        writer.Write(true);
+                        Save(writer, folder);
+                    }
                 }
             }
 
             private Folder Load()
             {
-                using(var reader = new BinaryReader(myFile.Stream(FileAccess.Read)))
+                using (var reader = new BinaryReader(myFile.Stream(FileAccess.Read)))
                 {
                     return Read(reader);
                 }
@@ -86,18 +90,20 @@ namespace Plainion.Windows.Controls.Text
                 var folder = new Folder(meta);
                 folder.Title = reader.ReadString();
 
-                var docCount = reader.ReadInt32();
-                for(int i = 0; i < docCount; ++i)
+                var count = reader.ReadInt32();
+                for (int i = 0; i < count; ++i)
                 {
-                    var docId = Guid.Parse(reader.ReadString());
-                    folder.Documents.Add(myStore.GetCore(new DocumentId(docId)));
-                }
-
-                var childrenCount = reader.ReadInt32();
-                for(int i = 0; i < childrenCount; ++i)
-                {
-                    var child = Read(reader);
-                    folder.Children.Add(child);
+                    var isFolder = reader.ReadBoolean();
+                    if (isFolder)
+                    {
+                        var child = Read(reader);
+                        folder.Entries.Add(child);
+                    }
+                    else
+                    {
+                        var docId = Guid.Parse(reader.ReadString());
+                        folder.Entries.Add(myStore.GetCore(new DocumentId(docId)));
+                    }
                 }
 
                 return folder;
@@ -124,7 +130,7 @@ namespace Plainion.Windows.Controls.Text
             Contract.Invariant(myIndex != null, "DocumentStore not initialized");
 
             return myIndex.Root.Enumerate()
-                .SelectMany(f => f.Documents)
+                .OfType<Document>()
                 .Where(doc => DocumentFacade.Search(doc.Body.ContentStart, doc.Body.ContentEnd, text, DocumentFacade.FindFlags.None, CultureInfo.InvariantCulture) != null)
                 .ToList();
         }
@@ -133,7 +139,7 @@ namespace Plainion.Windows.Controls.Text
         {
             Contract.Invariant(myIndex != null, "DocumentStore not initialized");
 
-            using(var reader = new BinaryReader(GetMetaFile(id).Stream(FileAccess.Read)))
+            using (var reader = new BinaryReader(GetMetaFile(id).Stream(FileAccess.Read)))
             {
                 var meta = new StoreItemMetaInfo<DocumentId>(id);
                 meta.Created = new DateTime(reader.ReadInt64());
@@ -143,7 +149,7 @@ namespace Plainion.Windows.Controls.Text
                 doc.Title = reader.ReadString();
 
                 var count = reader.ReadInt32();
-                for(int i = 0; i < count; ++i)
+                for (int i = 0; i < count; ++i)
                 {
                     doc.Tags.Add(reader.ReadString());
                 }
@@ -156,7 +162,7 @@ namespace Plainion.Windows.Controls.Text
         {
             var doc = new FlowDocument();
 
-            using(var stream = file.Stream(FileAccess.Read))
+            using (var stream = file.Stream(FileAccess.Read))
             {
                 var range = new TextRange(doc.ContentStart, doc.ContentEnd);
                 range.Load(stream, DataFormats.Rtf);
@@ -183,7 +189,7 @@ namespace Plainion.Windows.Controls.Text
         {
             Contract.Invariant(myIndex != null, "DocumentStore not initialized");
 
-            using(var writer = new BinaryWriter(GetMetaFile(document.Id).Stream(FileAccess.Write)))
+            using (var writer = new BinaryWriter(GetMetaFile(document.Id).Stream(FileAccess.Write)))
             {
                 writer.Write(document.Created.Ticks);
                 writer.Write(document.LastModified.Ticks);
@@ -191,16 +197,16 @@ namespace Plainion.Windows.Controls.Text
                 writer.Write(document.Title);
 
                 writer.Write(document.Tags.Count);
-                foreach(var tag in document.Tags)
+                foreach (var tag in document.Tags)
                 {
                     writer.Write(tag);
                 }
             }
 
-            using(var stream = GetBodyFile(document.Id).Stream(FileAccess.Write))
+            using (var stream = GetBodyFile(document.Id).Stream(FileAccess.Write))
             {
                 var range = new TextRange(document.Body.ContentStart, document.Body.ContentEnd);
-                if(!range.IsEmpty)
+                if (!range.IsEmpty)
                 {
                     range.Save(stream, DataFormats.Rtf);
                 }

@@ -25,11 +25,11 @@ namespace Plainion.Windows.Controls.Text
 
         public void SaveChanges()
         {
-            // collect items to potentially delete 
-            var folders = Root.Enumerate().ToList();
-            var documents = folders.SelectMany(f => f.Documents).ToList();
+            // collect items to potentially delete
+            var entries = Root.Enumerate().ToList();
+            var folders = entries.OfType<Folder>().ToList();
+            var documents = entries.OfType<Document>().ToList();
 
-            var foldersToDelete = mySnapshot.Folders.Except(folders.Select(f => f.Id));
             var documentsToDelete = mySnapshot.Documents.Except(documents.Select(doc=>doc.Id));
 
             // delete folders and documents

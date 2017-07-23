@@ -17,7 +17,7 @@ namespace Plainion.Windows.Controls.Text
         private bool myIsSelected;
         private bool myIsExpanded;
 
-        public NavigationNode( NavigationNodeFactory factory)
+        public NavigationNode(NavigationNodeFactory factory)
         {
             myFactory = factory;
 
@@ -44,7 +44,8 @@ namespace Plainion.Windows.Controls.Text
             }
             else if (e.Action == NotifyCollectionChangedAction.Move)
             {
-                throw new NotImplementedException(e.Action.ToString());
+                var folder = (Folder)myModel;
+                folder.MoveEntry(e.OldStartingIndex, e.NewStartingIndex);
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
@@ -82,15 +83,7 @@ namespace Plainion.Windows.Controls.Text
 
             foreach (var item in items)
             {
-                var childFolder = item.Model as Folder;
-                if (childFolder != null)
-                {
-                    folder.Children.Insert(startIndex, childFolder);
-                }
-                else
-                {
-                    folder.Documents.Insert(startIndex, (Document)item.Model);
-                }
+                folder.Entries.Insert(startIndex, item.Model);
                 startIndex++;
             }
         }
@@ -102,14 +95,14 @@ namespace Plainion.Windows.Controls.Text
             folder.Title = myModel.Title;
 
             var parent = (Folder)((NavigationNode)Parent).Model;
-            parent.Documents.Remove(model);
-            parent.Children.Add(folder);
+            parent.Entries.Insert(parent.Entries.IndexOf(model), folder);
+            parent.Entries.Remove(model);
 
             // add "old" document as first child
             // we cannot modify the children collection from CollectionChanged event 
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                ((Folder)Model).Documents.Add(model);
+                ((Folder)Model).Entries.Add(model);
 
                 var child = myFactory.Create(model, this);
 
@@ -127,15 +120,7 @@ namespace Plainion.Windows.Controls.Text
             var folder = (Folder)Model;
             foreach (var item in items)
             {
-                var childFolder = item.Model as Folder;
-                if (childFolder != null)
-                {
-                    folder.Children.Remove(childFolder);
-                }
-                else
-                {
-                    folder.Documents.Remove((Document)item.Model);
-                }
+                folder.Entries.Remove(item.Model);
             }
         }
 

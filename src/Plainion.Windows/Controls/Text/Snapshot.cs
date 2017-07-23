@@ -7,16 +7,11 @@ namespace Plainion.Windows.Controls.Text
     {
         public Snapshot(Folder root)
         {
-            var folders = root.Enumerate().ToList();
-
-            Folders = folders.Select(f => f.Id).ToList();
-            Documents = folders
-                .SelectMany(f => f.Documents)
+            Documents = root.Enumerate()
+                .OfType<Document>()
                 .Select(doc=>doc.Id)
                 .ToList();
         }
-
-        public IReadOnlyCollection<FolderId> Folders { get; private set; }
 
         public IReadOnlyCollection<DocumentId> Documents { get; private set; }
     }

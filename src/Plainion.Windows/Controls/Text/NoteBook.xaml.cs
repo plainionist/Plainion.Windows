@@ -18,16 +18,17 @@ namespace Plainion.Windows.Controls.Text
         private void OnSelectionChanged(object sender, NavigationNode e)
         {
             var document = e.Model as Document;
-            if(document != null)
+            if (document != null)
             {
                 myNotePad.Document = document.Body;
             }
             else
             {
                 var folder = (Folder)e.Model;
-                if(folder.Documents.Any())
+                document = folder.Entries.OfType<Document>().FirstOrDefault();
+                if (document != null)
                 {
-                    myNotePad.Document = folder.Documents.First().Body;
+                    myNotePad.Document = document.Body;
                 }
                 else
                 {
