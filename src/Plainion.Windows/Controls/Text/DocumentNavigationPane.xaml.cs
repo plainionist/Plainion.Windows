@@ -9,11 +9,13 @@ namespace Plainion.Windows.Controls.Text
 {
     partial class DocumentNavigationPane : UserControl
     {
+        private NavigationNodeFactory myNodeFactory;
         private DocumentStore myDocumentStore;
 
         public DocumentNavigationPane()
         {
-            Root = new NavigationNode();
+            myNodeFactory = new NavigationNodeFactory(OnSelectionChanged);
+            Root = new NavigationNode(myNodeFactory);
 
             CreateChildCommand = new DelegateCommand<NavigationNode>(OnCreateChild);
             DeleteCommand = new DelegateCommand<NavigationNode>(n => ((NavigationNode)n.Parent).Children.Remove(n));
@@ -26,7 +28,7 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnCreateChild(NavigationNode parent)
         {
-            var node = CreateNode(parent, null);
+            var node = myNodeFactory.Create(null,parent);
 
             // first add the new node - this will transform the nodes model into a folder if necessary
             parent.Children.Add(node);
@@ -36,19 +38,6 @@ namespace Plainion.Windows.Controls.Text
 
             node.IsSelected = true;
             parent.IsExpanded = true;
-        }
-
-        private NavigationNode CreateNode(NavigationNode parent, IStoreItem model)
-        {
-            var node = new NavigationNode
-            {
-                Parent = parent,
-                Model = model
-            };
-
-            PropertyBinding.Observe(() => node.IsSelected, OnSelectionChanged);
-
-            return node;
         }
 
         private void OnSelectionChanged(object sender, PropertyChangedEventArgs e)
@@ -82,13 +71,13 @@ namespace Plainion.Windows.Controls.Text
             {
                 foreach (var child in folder.Children)
                 {
-                    var childNode = CreateNode(node, child);
+                    var childNode = myNodeFactory.Create(child, node);
                     node.Children.Add(childNode);
                     AddFolder(childNode, child);
                 }
                 foreach (var doc in folder.Documents)
                 {
-                    node.Children.Add(CreateNode(node, doc));
+                    node.Children.Add(myNodeFactory.Create(doc, node));
                 }
             }
         }

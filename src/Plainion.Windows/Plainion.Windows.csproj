@@ -57,6 +57,7 @@
     <Compile Include="Controls\Text\FolderId.cs" />
     <Compile Include="Controls\Text\DocumentStore.cs" />
     <Compile Include="Controls\Text\IStoreItem.cs" />
+    <Compile Include="Controls\Text\NavigationNodeFactory.cs" />
     <Compile Include="Controls\Text\StoreItemMetaInfo.cs" />
     <Compile Include="Controls\Text\NavigationNode.cs" />
     <Compile Include="Controls\Text\NoteBook.xaml.cs">

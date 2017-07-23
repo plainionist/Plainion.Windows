@@ -9,7 +9,7 @@ namespace Plainion.Windows.Tests
     [TestFixture]
     public class PropertyBindingTests
     {
-        [TestCase]
+        [Test]
         public void TwoWayBinding_ChangesOnEitherEndSyncedToTheOtherOne()
         {
             var vm1 = new ViewModel1();
@@ -24,7 +24,7 @@ namespace Plainion.Windows.Tests
             Assert.That( vm1.PrimaryValue, Is.EqualTo( 24 ) );
         }
 
-        [TestCase]
+        [Test]
         public void OneWayBinding_ChangesOnSourceSyncedToTarget()
         {
             var vm1 = new ViewModel1();
@@ -36,7 +36,7 @@ namespace Plainion.Windows.Tests
             Assert.That( vm2.SecondaryValue, Is.EqualTo( 42 ) );
         }
 
-        [TestCase]
+        [Test]
         public void OneWayBinding_ChangesOnTargetNotSyncedtoSource()
         {
             var vm1 = new ViewModel1();
@@ -48,7 +48,7 @@ namespace Plainion.Windows.Tests
             Assert.That( vm1.PrimaryValue, Is.Not.EqualTo( 42 ) );
         }
 
-        [TestCase]
+        [Test]
         public void OneWayToSourceBinding_ChangesOnSourceSyncedToTarget()
         {
             var vm1 = new ViewModel1();
@@ -60,7 +60,7 @@ namespace Plainion.Windows.Tests
             Assert.That( vm1.PrimaryValue, Is.EqualTo( 42 ) );
         }
 
-        [TestCase]
+        [Test]
         public void OneWayToSourceBinding_ChangesOnTargetNotSyncedtoSource()
         {
             var vm1 = new ViewModel1();
@@ -72,7 +72,7 @@ namespace Plainion.Windows.Tests
             Assert.That( vm2.SecondaryValue, Is.Not.EqualTo( 42 ) );
         }
 
-        [TestCase]
+        [Test]
         public void PropertyOwnersStillAlive_BindingsSurvivesGC()
         {
             var vm1 = new ViewModel1();
@@ -89,7 +89,7 @@ namespace Plainion.Windows.Tests
             }
         }
 
-        [TestCase]
+        [Test]
         public void PropertyOwnersMarkedForGC_BindingReleased()
         {
             WeakReference<ViewModel1> wr1 = null;
@@ -115,6 +115,23 @@ namespace Plainion.Windows.Tests
                 ViewModel2 vm2;
                 Assert.That( wr2.TryGetTarget( out vm2 ), Is.False );
             }
+        }
+
+        [Test]
+        public void Unbind_RemovesBindingAgain()
+        {
+            var vm1 = new ViewModel1();
+            var vm2 = new ViewModel2();
+
+            var id = PropertyBinding.Bind(() => vm1.PrimaryValue, () => vm2.SecondaryValue);
+
+            vm2.SecondaryValue = 42;
+            Assert.That(vm1.PrimaryValue, Is.EqualTo(42));
+
+            PropertyBinding.Unbind(id);
+
+            vm2.SecondaryValue = 2525;
+            Assert.That(vm1.PrimaryValue, Is.EqualTo(42));
         }
 
         private static volatile List<byte[]> x = new List<byte[]>();

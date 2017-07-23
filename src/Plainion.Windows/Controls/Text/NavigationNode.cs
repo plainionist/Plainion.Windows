@@ -11,13 +11,16 @@ namespace Plainion.Windows.Controls.Text
 {
     class NavigationNode : BindableBase, INode, IDragDropSupport
     {
+        private NavigationNodeFactory myFactory;
         private IStoreItem myModel;
         private string myName;
         private bool myIsSelected;
         private bool myIsExpanded;
 
-        public NavigationNode()
+        public NavigationNode( NavigationNodeFactory factory)
         {
+            myFactory = factory;
+
             Children = new ObservableCollection<NavigationNode>();
             RegisterChangeHandler();
         }
@@ -107,10 +110,8 @@ namespace Plainion.Windows.Controls.Text
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
                 ((Folder)Model).Documents.Add(model);
-                
-                var child = new NavigationNode();
-                child.Model = model;
-                child.Parent = this;
+
+                var child = myFactory.Create(model, this);
 
                 Children.Insert(0, child);
             }));
@@ -164,6 +165,7 @@ namespace Plainion.Windows.Controls.Text
 
         public bool IsDropAllowed { get { return true; } }
 
+        private BindingId myModelBindingId;
         public IStoreItem Model
         {
             get { return myModel; }
@@ -171,14 +173,13 @@ namespace Plainion.Windows.Controls.Text
             {
                 if (myModel != null)
                 {
-                    //PropertyBinding.Unbind(() => Model.Title, () => Name);
+                    PropertyBinding.Unbind(myModelBindingId);
                 }
 
                 myModel = value;
                 Name = myModel.Title;
-                
-                // TODO: return a key for unbind!!
-                PropertyBinding.Bind(() => Model.Title, () => Name);
+
+                myModelBindingId = PropertyBinding.Bind(() => Model.Title, () => Name);
             }
         }
 
