@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Plainion.Windows.Controls.Text
 {
@@ -92,6 +94,73 @@ namespace Plainion.Windows.Controls.Text
             myWordsAdded = false;
             mySelectionStartPosition = null;
             mySelectionEndPosition = null;
+        }
+
+        // https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo
+        public bool Search(string searchText, SearchMode mode)
+        {
+            TextRange searchRange;
+
+            if (mode == SearchMode.Next)
+            {
+                searchRange = new TextRange(Selection.Start.GetPositionAtOffset(1), Document.ContentEnd);
+            }
+            else if (mode == SearchMode.Previous)
+            {
+                searchRange = new TextRange(Document.ContentStart, Selection.Start);
+            }
+            else
+            {
+                searchRange = new TextRange(Document.ContentStart, Document.ContentEnd);
+            }
+
+            var foundRange = mode == SearchMode.Previous ? FindLastTextInRange(searchRange, searchText) : FindTextInRange(searchRange, searchText);
+            if (foundRange == null)
+            {
+                return false;
+            }
+
+            Selection.Select(foundRange.Start, foundRange.End);
+
+            return true;
+        }
+
+        private TextRange FindTextInRange(TextRange searchRange, string searchText)
+        {
+            int offset = searchRange.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
+            if (offset < 0)
+            {
+                return null;
+            }
+
+            for (var start = searchRange.Start.GetPositionAtOffset(offset); start != searchRange.End; start = start.GetPositionAtOffset(1))
+            {
+                var result = new TextRange(start, start.GetPositionAtOffset(searchText.Length));
+                if (result.Text == searchText)
+                {
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        private TextRange FindLastTextInRange(TextRange searchRange, string searchText)
+        {
+            int offset = searchRange.Text.LastIndexOf(searchText, StringComparison.OrdinalIgnoreCase);
+            if (offset < 0)
+            {
+                return null;
+            }
+
+            for (var start = searchRange.Start.GetPositionAtOffset(offset); start != searchRange.Start; start = start.GetPositionAtOffset(-1))
+            {
+                var result = new TextRange(start, start.GetPositionAtOffset(searchText.Length));
+                if (result.Text == searchText)
+                {
+                    return result;
+                }
+            }
+            return null;
         }
     }
 }

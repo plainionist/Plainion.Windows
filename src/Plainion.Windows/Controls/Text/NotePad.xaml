@@ -4,34 +4,52 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:l="clr-namespace:Plainion.Windows.Controls.Text"
+             xmlns:c="clr-namespace:Plainion.Windows.Controls"
              mc:Ignorable="d" 
+             x:Name="_this"
              d:DesignHeight="300" d:DesignWidth="500">
     <DockPanel LastChildFill="True">
-        <ToolBar DockPanel.Dock="Top">
-            <ToggleButton Command="EditingCommands.ToggleBold" Name="myBold" ToolTip="Bold">
-                <Image Source="/Plainion.Windows;Component/Resources/Bold.png" Width="17" Height="17"/>
-            </ToggleButton>
-            <ToggleButton Command="EditingCommands.ToggleItalic" Name="myItalic" ToolTip="Italic">
-                <Image Source="/Plainion.Windows;Component/Resources/Italic.png" Width="17" Height="17"/>
-            </ToggleButton>
-            <ToggleButton Command="EditingCommands.ToggleUnderline" Name="myUnderline" ToolTip="Underline">
-                <Image Source="/Plainion.Windows;Component/Resources/Underline.png" Width="17" Height="17"/>
-            </ToggleButton>
+        <Grid DockPanel.Dock="Top" Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ToolBar Grid.Column="0" Margin="0">
+                <ToggleButton Command="EditingCommands.ToggleBold" Name="myBold" ToolTip="Bold">
+                    <Image Source="/Plainion.Windows;Component/Resources/Bold.png" Width="17" Height="17"/>
+                </ToggleButton>
+                <ToggleButton Command="EditingCommands.ToggleItalic" Name="myItalic" ToolTip="Italic">
+                    <Image Source="/Plainion.Windows;Component/Resources/Italic.png" Width="17" Height="17"/>
+                </ToggleButton>
+                <ToggleButton Command="EditingCommands.ToggleUnderline" Name="myUnderline" ToolTip="Underline">
+                    <Image Source="/Plainion.Windows;Component/Resources/Underline.png" Width="17" Height="17"/>
+                </ToggleButton>
 
-            <Separator/>
+                <Separator/>
 
-            <ToggleButton Click="OnHeadlineClick" Name="myHeadline" Content="Headline" ToolTip="Headline"/>
+                <ToggleButton Click="OnHeadlineClick" Name="myHeadline" Content="Headline" ToolTip="Headline"/>
 
-            <Separator/>
+                <Separator/>
 
-            <ToggleButton Command="EditingCommands.ToggleBullets" ToolTip="Bullets">
-                <Image Source="/Plainion.Windows;Component/Resources/Bullets.png" Width="17" Height="17"/>
-            </ToggleButton>
-            <ToggleButton Command="EditingCommands.ToggleNumbering" ToolTip="Numbering">
-                <Image Source="/Plainion.Windows;Component/Resources/Numbering.png" Width="17" Height="17"/>
-            </ToggleButton>
-        </ToolBar>
+                <ToggleButton Command="EditingCommands.ToggleBullets" ToolTip="Bullets">
+                    <Image Source="/Plainion.Windows;Component/Resources/Bullets.png" Width="17" Height="17"/>
+                </ToggleButton>
+                <ToggleButton Command="EditingCommands.ToggleNumbering" ToolTip="Numbering">
+                    <Image Source="/Plainion.Windows;Component/Resources/Numbering.png" Width="17" Height="17"/>
+                </ToggleButton>
+            </ToolBar>
 
-        <l:RichTextEditor x:Name="myEditor"  SelectionChanged="OnSelectionChanged" Background="White"/>
+            <ToolBar Grid.Column="1" Margin="0">
+                <c:SearchTextBox x:Name="mySearchBox" Width="250" HorizontalAlignment="Stretch" SearchMode="Instant" Text="{Binding Path=SearchText, Mode=TwoWay, ElementName=_this}" SearchEventTimeDelay="0" 
+                                 LabelText="Search"/>
+            </ToolBar>
+        </Grid>
+        <l:RichTextEditor x:Name="myEditor"  SelectionChanged="OnSelectionChanged" Background="White">
+            <l:RichTextEditor.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </l:RichTextEditor.Resources>
+        </l:RichTextEditor>
     </DockPanel>
 </UserControl>

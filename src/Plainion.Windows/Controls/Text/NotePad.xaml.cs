@@ -1,17 +1,22 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Plainion.Windows.Controls.Text
 {
     public partial class NotePad : UserControl
     {
+        private Brush myOrigSelectionBrush;
+
         public NotePad()
         {
             InitializeComponent();
 
             Loaded += OnLoaded;
+
+            AddHandler(KeyDownEvent, new KeyEventHandler(OnKeyDown), handledEventsToo: false);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -71,6 +76,59 @@ namespace Plainion.Windows.Controls.Text
             {
                 myEditor.Selection.ApplyPropertyValue(Inline.FontSizeProperty, 13d);
                 myEditor.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+            }
+        }
+
+        public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register("SearchText",
+            typeof(string), typeof(NotePad), new PropertyMetadata(null, OnSearchTextChanged));
+
+        private static void OnSearchTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((NotePad)d).OnSearchTextChanged();
+        }
+
+        private void OnSearchTextChanged()
+        {
+            if (string.IsNullOrEmpty(SearchText))
+            {
+                myEditor.SelectionBrush = myOrigSelectionBrush;
+                myOrigSelectionBrush = null;
+            }
+            else
+            {
+                if (myOrigSelectionBrush == null)
+                {
+                    myOrigSelectionBrush = myEditor.SelectionBrush;
+                    myEditor.SelectionBrush = Brushes.Yellow;
+                }
+
+                myEditor.Search(SearchText, SearchMode.Initial);
+            }
+        }
+
+        public string SearchText
+        {
+            get { return (string)GetValue(SearchTextProperty); }
+            set { SetValue(SearchTextProperty, value); }
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F3)
+            {
+                if (Keyboard.Modifiers == ModifierKeys.Shift)
+                {
+                    myEditor.Search(SearchText, SearchMode.Previous);
+                }
+                else
+                {
+                    myEditor.Search(SearchText, SearchMode.Next);
+                }
+            }
+            else if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                mySearchBox.Focus();
+                mySearchBox.SelectAll();
             }
         }
     }

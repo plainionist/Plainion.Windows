@@ -141,6 +141,7 @@ namespace Plainion.Windows.Controls
             if ( HasText && SearchMode == SearchMode.Instant )
             {
                 this.Text = "";
+                RaiseSearchEvent();
             }
 
             if ( HasText && SearchMode == SearchMode.Delayed )
@@ -161,6 +162,7 @@ namespace Plainion.Windows.Controls
             if ( e.Key == Key.Escape && SearchMode == SearchMode.Instant )
             {
                 this.Text = "";
+                RaiseSearchEvent();
             }
             else if ( ( e.Key == Key.Return || e.Key == Key.Enter ) &&
                 SearchMode == SearchMode.Delayed )
