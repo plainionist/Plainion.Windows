@@ -114,7 +114,7 @@ namespace Plainion.Windows.Controls.Text
                 searchRange = new TextRange(Document.ContentStart, Document.ContentEnd);
             }
 
-            var foundRange = mode == SearchMode.Previous ? FindLastTextInRange(searchRange, searchText) : FindTextInRange(searchRange, searchText);
+            var foundRange = FindTextInRange(searchRange, searchText,mode);
             if (foundRange == null)
             {
                 return false;
@@ -125,34 +125,17 @@ namespace Plainion.Windows.Controls.Text
             return true;
         }
 
-        private TextRange FindTextInRange(TextRange searchRange, string searchText)
+        private TextRange FindTextInRange(TextRange searchRange, string searchText, SearchMode mode)
         {
-            int offset = searchRange.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
+            int offset = mode == SearchMode.Previous 
+                ? searchRange.Text.LastIndexOf(searchText, StringComparison.OrdinalIgnoreCase) 
+                : searchRange.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
             if (offset < 0)
             {
                 return null;
             }
 
             for (var start = searchRange.Start.GetPositionAtOffset(offset); start != searchRange.End; start = start.GetPositionAtOffset(1))
-            {
-                var result = new TextRange(start, start.GetPositionAtOffset(searchText.Length));
-                if (result.Text == searchText)
-                {
-                    return result;
-                }
-            }
-            return null;
-        }
-
-        private TextRange FindLastTextInRange(TextRange searchRange, string searchText)
-        {
-            int offset = searchRange.Text.LastIndexOf(searchText, StringComparison.OrdinalIgnoreCase);
-            if (offset < 0)
-            {
-                return null;
-            }
-
-            for (var start = searchRange.Start.GetPositionAtOffset(offset); start != searchRange.Start; start = start.GetPositionAtOffset(-1))
             {
                 var result = new TextRange(start, start.GetPositionAtOffset(searchText.Length));
                 if (result.Text == searchText)
