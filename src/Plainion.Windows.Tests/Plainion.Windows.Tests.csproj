@@ -31,6 +31,7 @@
     <Compile Include="Controls\Text\FakePresentationSource.cs" />
     <Compile Include="Controls\Text\FlowDocumentVisitorTests.cs" />
     <Compile Include="Controls\Text\NotePadTests.cs" />
+    <Compile Include="Controls\Text\RichTextEditorSpec.cs" />
     <Compile Include="Controls\Text\RichTextEditorTests.cs" />
     <Compile Include="Controls\Text\UIElementExtensions.cs" />
     <Compile Include="Fakes\Model.cs" />

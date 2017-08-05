@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -268,12 +266,6 @@ namespace Plainion.Windows.Controls.Text
             return resultTextPointer;
         }
 
-        /// <summary>
-        /// returns length of a text between two text pointers
-        /// </summary>
-        /// <param name="pointer1"></param>
-        /// <param name="pointer2"></param>
-        /// <returns></returns>
         int GetOffsetInTextLength(TextPointer pointer1, TextPointer pointer2)
         {
             if(pointer1 == null || pointer2 == null)
