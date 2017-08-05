@@ -6,17 +6,17 @@
              xmlns:controls="clr-namespace:Plainion.Windows.Controls.Text"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
-    <Grid>
+    <Grid Margin="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         
-        <controls:DocumentNavigationPane Grid.Column="0" x:Name="myNavigation"/>
+        <controls:DocumentNavigationPane Grid.Column="0" x:Name="myNavigation" Margin="0,5,0,0"/>
         
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
         
-        <controls:NotePad Grid.Column="2" x:Name="myNotePad"/>  
+        <controls:NotePad Grid.Column="2" x:Name="myNotePad" Margin="0"/>  
     </Grid>
 </UserControl>

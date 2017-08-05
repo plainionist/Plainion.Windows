@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:tree="clr-namespace:Plainion.Windows.Controls.Tree"
+             xmlns:ctrl="clr-namespace:Plainion.Windows.Controls"
              mc:Ignorable="d" 
              x:Name="_this"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -15,18 +16,72 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <tree:TreeEditor Root="{Binding Root, ElementName=_this, Mode=OneTime}" FilterLabel="Filter sections"
+    <TabControl Padding="0,3,0,0">
+        <TabControl.Resources>
+            <Style x:Key="{x:Type TabControl}" TargetType="{x:Type TabControl}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabControl">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border BorderThickness="0" Grid.Row="1">
+                                    <ContentPresenter ContentSource="SelectedContent" Margin="-1,1,0,0"/>
+                                </Border>
+                                <TabPanel Grid.Row="0" IsItemsHost="true"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="TabItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="LightGray" CornerRadius="2,2,0,0" Margin="0,0,2,0">
+                                <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="GhostWhite" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="False">
+                                    <Setter TargetName="Border" Property="Background" Value="Gainsboro" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </TabControl.Resources>
+        <TabItem Header="Documents">
+            <tree:TreeEditor Root="{Binding Root, ElementName=_this, Mode=OneTime}" FilterLabel="Filter by title"
                        CreateChildCommand="{Binding CreateChildCommand, ElementName=_this, Mode=OneTime}"
                        DeleteCommand="{Binding DeleteCommand, ElementName=_this, Mode=OneTime}"
                        DropCommand="{Binding DropCommand, ElementName=_this, Mode=OneTime}">
-            <tree:TreeEditor.NodeStyle>
-                <Style TargetType="{x:Type tree:NodeItem}" BasedOn="{StaticResource DefaultNodeStyle}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
-                    <Setter Property="Text" Value="{Binding Name, Mode=TwoWay}"/>
-                </Style>
-            </tree:TreeEditor.NodeStyle>
-        </tree:TreeEditor>
-    </Grid>
+                <tree:TreeEditor.NodeStyle>
+                    <Style TargetType="{x:Type tree:NodeItem}" BasedOn="{StaticResource DefaultNodeStyle}">
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                        <Setter Property="Text" Value="{Binding Name, Mode=TwoWay}"/>
+                    </Style>
+                </tree:TreeEditor.NodeStyle>
+            </tree:TreeEditor>
+        </TabItem>
+        <TabItem Header="Search">
+            <DockPanel LastChildFill="True">
+                <ctrl:SearchTextBox DockPanel.Dock="Top" SearchMode="Instant" Text="{Binding Path=SearchText, ElementName=_this, Mode=TwoWay}" SearchEventTimeDelay="0" 
+                                    LabelText="Search all documents"/>
+                <ListView Margin="0,3,0,0" x:Name="mySearchResults">
+                    
+                </ListView>
+            </DockPanel>
+        </TabItem>
+    </TabControl>
 </UserControl>
