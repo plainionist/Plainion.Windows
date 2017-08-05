@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using Plainion.Windows.Controls.Tree;
 using Plainion.Windows.Mvvm;
 
@@ -40,9 +44,14 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnSelectionChanged(object sender, PropertyChangedEventArgs e)
         {
+            OnSelectionChanged(((NavigationNode)sender).Model);
+        }
+
+        private void OnSelectionChanged(IStoreItem item)
+        {
             if (SelectionChanged != null)
             {
-                SelectionChanged(this, (NavigationNode)sender);
+                SelectionChanged(this, item);
             }
         }
 
@@ -89,6 +98,42 @@ namespace Plainion.Windows.Controls.Text
 
         public ICommand DropCommand { get; private set; }
 
-        public event EventHandler<NavigationNode> SelectionChanged;
+        public event EventHandler<IStoreItem> SelectionChanged;
+
+        public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register("SearchText",
+            typeof(string), typeof(DocumentNavigationPane), new PropertyMetadata(null, OnSearchTextChanged));
+
+        private static void OnSearchTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((DocumentNavigationPane)d).OnSearchTextChanged();
+        }
+
+        private void OnSearchTextChanged()
+        {
+            SearchResults = DocumentStore.Search(SearchText);
+        }
+
+        public string SearchText
+        {
+            get { return (string)GetValue(SearchTextProperty); }
+            set { SetValue(SearchTextProperty, value); }
+        }
+
+        public static readonly DependencyProperty SearchResultsProperty = DependencyProperty.Register("SearchResults", typeof(IEnumerable<Document>), typeof(DocumentNavigationPane));
+
+        public IEnumerable<Document> SearchResults
+        {
+            get { return (IEnumerable<Document>)GetValue(SearchResultsProperty); }
+            set { SetValue(SearchResultsProperty, value); }
+        }
+
+        private void OnSearchResultSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = e.AddedItems.OfType<Document>().FirstOrDefault();
+            if (item != null)
+            {
+                OnSelectionChanged(item);
+            }
+        }
     }
 }

@@ -99,6 +99,11 @@ namespace Plainion.Windows.Controls.Text
         // https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo
         public bool Search(string searchText, SearchMode mode)
         {
+            if (Document == null)
+            {
+                return false;
+            }
+
             TextRange searchRange;
 
             if (mode == SearchMode.Next)
@@ -135,10 +140,10 @@ namespace Plainion.Windows.Controls.Text
                 return null;
             }
 
-            for (var start = searchRange.Start.GetPositionAtOffset(offset); start != searchRange.End; start = start.GetPositionAtOffset(1))
+            for (var start = searchRange.Start.GetPositionAtOffset(offset); start.CompareTo(searchRange.End) < 0; start = start.GetPositionAtOffset(1))
             {
                 var result = new TextRange(start, start.GetPositionAtOffset(searchText.Length));
-                if (result.Text == searchText)
+                if (result.Text.Equals(searchText, StringComparison.OrdinalIgnoreCase))
                 {
                     return result;
                 }

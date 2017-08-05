@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
+using System;
 
 namespace Plainion.Windows.Controls.Text
 {
@@ -15,16 +16,16 @@ namespace Plainion.Windows.Controls.Text
             myNavigation.SelectionChanged += OnSelectionChanged;
         }
 
-        private void OnSelectionChanged(object sender, NavigationNode e)
+        private void OnSelectionChanged(object sender, IStoreItem item)
         {
-            var document = e.Model as Document;
+            var document = item as Document;
             if (document != null)
             {
                 myNotePad.Document = document.Body;
             }
             else
             {
-                var folder = (Folder)e.Model;
+                var folder = (Folder)item;
                 document = folder.Entries.OfType<Document>().FirstOrDefault();
                 if (document != null)
                 {
@@ -34,6 +35,12 @@ namespace Plainion.Windows.Controls.Text
                 {
                     myNotePad.Document = null;
                 }
+            }
+
+            if (!string.IsNullOrEmpty(myNavigation.SearchText))
+            {
+                //Application.Current.Dispatcher.BeginInvoke(new Action(() => { myNotePad.SearchText = myNavigation.SearchText; }));
+                myNotePad.SearchText = myNavigation.SearchText; 
             }
         }
 
