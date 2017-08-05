@@ -8,8 +8,6 @@ namespace Plainion.Windows.Controls.Text
 {
     public partial class NotePad : UserControl
     {
-        private Brush myOrigSelectionBrush;
-
         public NotePad()
         {
             InitializeComponent();
@@ -42,6 +40,8 @@ namespace Plainion.Windows.Controls.Text
                 self.myEditor.Document = self.Document;
                 self.myEditor.IsReadOnly = false;
             }
+
+            self.myEditor.ClearSearch();
         }
 
         public FlowDocument Document
@@ -91,18 +91,12 @@ namespace Plainion.Windows.Controls.Text
         {
             if (string.IsNullOrEmpty(SearchText))
             {
-                myEditor.SelectionBrush = myOrigSelectionBrush;
-                myOrigSelectionBrush = null;
-                SetValue(SearchSuccessfulProperty, true);
+                myEditor.ClearSearch();
+
+                SearchSuccessful = true;
             }
             else
             {
-                if (myOrigSelectionBrush == null)
-                {
-                    myOrigSelectionBrush = myEditor.SelectionBrush;
-                    myEditor.SelectionBrush = Brushes.Yellow;
-                }
-
                 SearchSuccessful = myEditor.Search(SearchText, SearchMode.Initial);
             }
         }
@@ -120,7 +114,7 @@ namespace Plainion.Windows.Controls.Text
             get { return (bool)GetValue(SearchSuccessfulProperty); }
             set { SetValue(SearchSuccessfulProperty, value); }
         }
-        
+
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F3)
