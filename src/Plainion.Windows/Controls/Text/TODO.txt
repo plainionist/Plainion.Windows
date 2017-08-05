@@ -1,11 +1,5 @@
 ﻿
 
-- search in all documents
-  - just att bottom of tree
-  - with selection in all docs?
-
-- write README.md
-
 - write some spec tests
   - load scenario
   - save scenario

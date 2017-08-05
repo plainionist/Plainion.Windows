@@ -186,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Controls\ReadMe.md" />
+    <None Include="Controls\Text\ReadMe.md" />
     <None Include="Controls\Tree\ReadMe.md" />
     <None Include="packages.config" />
     <None Include="ReadMe.md" />

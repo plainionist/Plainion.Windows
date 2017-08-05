@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Windows.Documents;
 using NUnit.Framework;
-using Plainion.Windows.Controls;
 using Plainion.Windows.Controls.Text;
 
 namespace Plainion.Windows.Tests.Controls.Text
