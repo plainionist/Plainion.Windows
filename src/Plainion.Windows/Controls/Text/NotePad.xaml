@@ -14,7 +14,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ToolBar Grid.Column="0" Margin="0">
+            <ToolBar Grid.Column="0" Margin="0" Background="WhiteSmoke">
                 <ToggleButton Command="EditingCommands.ToggleBold" Name="myBold" ToolTip="Bold">
                     <Image Source="/Plainion.Windows;Component/Resources/Bold.png" Width="17" Height="17"/>
                 </ToggleButton>
@@ -39,7 +39,7 @@
                 </ToggleButton>
             </ToolBar>
 
-            <ToolBar Grid.Column="1" Margin="0">
+            <ToolBar Grid.Column="1" Margin="0" Background="WhiteSmoke">
                 <c:SearchTextBox x:Name="mySearchBox" Width="250" HorizontalAlignment="Stretch" SearchMode="Instant" LabelText="Search"
                                  Text="{Binding Path=SearchText, Mode=TwoWay, ElementName=_this}" SearchEventTimeDelay="0">
                     <c:SearchTextBox.Style>
