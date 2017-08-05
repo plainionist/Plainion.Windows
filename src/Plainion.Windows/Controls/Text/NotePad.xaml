@@ -12,7 +12,7 @@
         <Grid DockPanel.Dock="Top" Margin="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <ToolBar Grid.Column="0" Margin="0">
                 <ToggleButton Command="EditingCommands.ToggleBold" Name="myBold" ToolTip="Bold">

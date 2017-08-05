@@ -1,14 +1,17 @@
 ﻿
 
-- search
-  - in document
-  - in all documents
-  - with the "index" idea we could also search below certain subtree ...
-  - https://stackoverflow.com/questions/22229741/wpf-richtextbox-application-find-text-spanning-multiple-runs
-  - https://stackoverflow.com/questions/8772308/method-to-search-through-a-richtextbox-and-highlight-all-instances-of-that-speci
-  - https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo
+- search in all documents
+  - just att bottom of tree
+  - with selection in all docs?
 
 - write README.md
 
-- write more tests
+- write some spec tests
+  - load scenario
+  - save scenario
+  - search
+  - reorg tree
 
+
+
+    

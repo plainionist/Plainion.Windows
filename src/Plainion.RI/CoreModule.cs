@@ -17,10 +17,10 @@ namespace Plainion.RI
         {
             RegionManager.RegisterViewWithRegion( RegionNames.Dialogs, typeof( SelectFolderDialogView ) );
 
-            RegionManager.RegisterViewWithRegion( RegionNames.Controls, typeof( EditableTextBlockView ) );
+            RegionManager.RegisterViewWithRegion(RegionNames.Controls, typeof(NoteBookView));
+            RegionManager.RegisterViewWithRegion(RegionNames.Controls, typeof(EditableTextBlockView));
             RegionManager.RegisterViewWithRegion( RegionNames.Controls, typeof( TreeEditorView ) );
             RegionManager.RegisterViewWithRegion( RegionNames.Controls, typeof( NotePadView ) );
-            RegionManager.RegisterViewWithRegion( RegionNames.Controls, typeof( NoteBookView ) );
         }
     }
 }
