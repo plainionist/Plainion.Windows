@@ -93,6 +93,7 @@ namespace Plainion.Windows.Controls.Text
             {
                 myEditor.SelectionBrush = myOrigSelectionBrush;
                 myOrigSelectionBrush = null;
+                SetValue(SearchSuccessfulProperty, true);
             }
             else
             {
@@ -102,7 +103,7 @@ namespace Plainion.Windows.Controls.Text
                     myEditor.SelectionBrush = Brushes.Yellow;
                 }
 
-                myEditor.Search(SearchText, SearchMode.Initial);
+                SearchSuccessful = myEditor.Search(SearchText, SearchMode.Initial);
             }
         }
 
@@ -112,6 +113,14 @@ namespace Plainion.Windows.Controls.Text
             set { SetValue(SearchTextProperty, value); }
         }
 
+        public static readonly DependencyProperty SearchSuccessfulProperty = DependencyProperty.Register("SearchSuccessful", typeof(bool), typeof(NotePad), new PropertyMetadata(true));
+
+        public bool SearchSuccessful
+        {
+            get { return (bool)GetValue(SearchSuccessfulProperty); }
+            set { SetValue(SearchSuccessfulProperty, value); }
+        }
+        
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F3)

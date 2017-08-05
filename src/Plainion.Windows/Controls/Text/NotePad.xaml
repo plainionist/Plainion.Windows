@@ -40,8 +40,22 @@
             </ToolBar>
 
             <ToolBar Grid.Column="1" Margin="0">
-                <c:SearchTextBox x:Name="mySearchBox" Width="250" HorizontalAlignment="Stretch" SearchMode="Instant" Text="{Binding Path=SearchText, Mode=TwoWay, ElementName=_this}" SearchEventTimeDelay="0" 
-                                 LabelText="Search"/>
+                <c:SearchTextBox x:Name="mySearchBox" Width="250" HorizontalAlignment="Stretch" SearchMode="Instant" LabelText="Search"
+                                 Text="{Binding Path=SearchText, Mode=TwoWay, ElementName=_this}" SearchEventTimeDelay="0">
+                    <c:SearchTextBox.Style>
+                        <Style TargetType="c:SearchTextBox">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SearchSuccessful, ElementName=_this}" Value="False">
+                                    <Setter Property="BorderBrush" Value="Red" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SearchSuccessful, ElementName=_this}" Value="True">
+                                    <Setter Property="BorderBrush" Value="Gainsboro" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </c:SearchTextBox.Style>
+
+                </c:SearchTextBox>
             </ToolBar>
         </Grid>
         <l:RichTextEditor x:Name="myEditor"  SelectionChanged="OnSelectionChanged" Background="White">
