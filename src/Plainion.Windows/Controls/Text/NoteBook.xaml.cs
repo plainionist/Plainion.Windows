@@ -39,9 +39,7 @@ namespace Plainion.Windows.Controls.Text
 
             if (!string.IsNullOrEmpty(myNavigation.SearchText))
             {
-                // we first need to clear it to trigger updates
-                myNotePad.SearchText = string.Empty;
-                myNotePad.SearchText = myNavigation.SearchText;
+                myNotePad.Search(myNavigation.SearchText, SearchMode.All);
             }
         }
 

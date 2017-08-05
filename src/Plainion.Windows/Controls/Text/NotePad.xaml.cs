@@ -30,7 +30,7 @@ namespace Plainion.Windows.Controls.Text
         private static void OnDocumentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var self = (NotePad)d;
-            if (self.Document == null)
+            if(self.Document == null)
             {
                 self.myEditor.Document = new FlowDocument();
                 self.myEditor.IsReadOnly = true;
@@ -67,7 +67,7 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnHeadlineClick(object sender, RoutedEventArgs e)
         {
-            if (myHeadline.IsChecked == true)
+            if(myHeadline.IsChecked == true)
             {
                 myEditor.Selection.ApplyPropertyValue(Inline.FontSizeProperty, 20d);
                 myEditor.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
@@ -89,7 +89,12 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnSearchTextChanged()
         {
-            if (string.IsNullOrEmpty(SearchText))
+            Search(SearchText, SearchMode.Initial);
+        }
+
+        public void Search(string text, SearchMode mode)
+        {
+            if(string.IsNullOrEmpty(text))
             {
                 myEditor.ClearSearch();
 
@@ -97,7 +102,7 @@ namespace Plainion.Windows.Controls.Text
             }
             else
             {
-                SearchSuccessful = myEditor.Search(SearchText, SearchMode.Initial);
+                SearchSuccessful = myEditor.Search(text, mode);
             }
         }
 
@@ -117,9 +122,9 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.F3)
+            if(e.Key == Key.F3)
             {
-                if (Keyboard.Modifiers == ModifierKeys.Shift)
+                if(Keyboard.Modifiers == ModifierKeys.Shift)
                 {
                     myEditor.Search(SearchText, SearchMode.Previous);
                 }
@@ -128,7 +133,7 @@ namespace Plainion.Windows.Controls.Text
                     myEditor.Search(SearchText, SearchMode.Next);
                 }
             }
-            else if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control)
+            else if(e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control)
             {
                 mySearchBox.Focus();
                 mySearchBox.SelectAll();

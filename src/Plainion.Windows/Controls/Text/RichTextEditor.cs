@@ -42,17 +42,17 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Back && e.Key != Key.Space && e.Key != Key.Return)
+            if(e.Key != Key.Back && e.Key != Key.Space && e.Key != Key.Return)
             {
                 return;
             }
 
-            if (!Selection.IsEmpty)
+            if(!Selection.IsEmpty)
             {
                 Selection.Text = string.Empty;
             }
 
-            if (e.Key == Key.Space || e.Key == Key.Return)
+            if(e.Key == Key.Space || e.Key == Key.Return)
             {
                 myWordsAdded = true;
                 mySelectionStartPosition = Selection.Start;
@@ -63,7 +63,7 @@ namespace Plainion.Windows.Controls.Text
             else // Key.Back
             {
                 var newCaretPosition = DocumentFacade.RemoveHyperlink(Selection.Start);
-                if (newCaretPosition != null)
+                if(newCaretPosition != null)
                 {
                     // Update selection, since we deleted Hyperlink element and caretPosition was at that Hyperlink's end boundary.
                     Selection.Select(newCaretPosition, newCaretPosition);
@@ -82,7 +82,7 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!myWordsAdded || Document == null)
+            if(!myWordsAdded || Document == null)
             {
                 return;
             }
@@ -101,18 +101,18 @@ namespace Plainion.Windows.Controls.Text
         // https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo
         public bool Search(string searchText, SearchMode mode)
         {
-            if (Document == null)
+            if(Document == null)
             {
                 return false;
             }
 
             TextRange searchRange;
 
-            if (mode == SearchMode.Next)
+            if(mode == SearchMode.Next)
             {
                 searchRange = new TextRange(Selection.Start.GetPositionAtOffset(1), Document.ContentEnd);
             }
-            else if (mode == SearchMode.Previous)
+            else if(mode == SearchMode.Previous)
             {
                 searchRange = new TextRange(Document.ContentStart, Selection.Start);
             }
@@ -121,18 +121,37 @@ namespace Plainion.Windows.Controls.Text
                 searchRange = new TextRange(Document.ContentStart, Document.ContentEnd);
             }
 
-            var foundRange = FindTextInRange(searchRange, searchText, mode);
-            if (foundRange == null)
+            ClearSearch();
+
+            var foundRange = FindAndHighlight(searchRange, searchText, mode);
+            if(foundRange == null)
             {
                 return false;
             }
 
-            ClearSearch();
+            if(mode == SearchMode.All)
+            {
+                while(foundRange != null)
+                {
+                    foundRange = FindAndHighlight(new TextRange(foundRange.End, Document.ContentEnd), searchText, mode);
+                }
+            }
+
+            return true;
+        }
+
+        private TextRange FindAndHighlight(TextRange searchRange, string searchText, SearchMode mode)
+        {
+            var foundRange = FindTextInRange(searchRange, searchText, mode);
+            if(foundRange == null)
+            {
+                return null;
+            }
 
             Selection.Select(foundRange.Start, foundRange.End);
             Selection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Yellow);
 
-            return true;
+            return foundRange;
         }
 
         private TextRange FindTextInRange(TextRange searchRange, string searchText, SearchMode mode)
@@ -140,7 +159,7 @@ namespace Plainion.Windows.Controls.Text
             int offset = mode == SearchMode.Previous
                 ? searchRange.Text.LastIndexOf(searchText, StringComparison.OrdinalIgnoreCase)
                 : searchRange.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
-            if (offset < 0)
+            if(offset < 0)
             {
                 return null;
             }
@@ -157,21 +176,21 @@ namespace Plainion.Windows.Controls.Text
             TextPointer binarySearchPoint2 = null;
 
             // setup arguments appropriately
-            if (direction == LogicalDirection.Forward)
+            if(direction == LogicalDirection.Forward)
             {
                 binarySearchPoint2 = Document.ContentEnd;
 
-                if (offset < 0)
+                if(offset < 0)
                 {
                     offset = Math.Abs(offset);
                 }
             }
 
-            if (direction == LogicalDirection.Backward)
+            if(direction == LogicalDirection.Backward)
             {
                 binarySearchPoint2 = Document.ContentStart;
 
-                if (offset > 0)
+                if(offset > 0)
                 {
                     offset = -offset;
                 }
@@ -189,22 +208,22 @@ namespace Plainion.Windows.Controls.Text
 
             // binary search loop
 
-            while (isFound == false)
+            while(isFound == false)
             {
-                if (Math.Abs(offset1) == Math.Abs(offset))
+                if(Math.Abs(offset1) == Math.Abs(offset))
                 {
                     isFound = true;
                     resultTextPointer = binarySearchPoint1;
                 }
                 else
-                    if (Math.Abs(offset2) == Math.Abs(offset))
+                    if(Math.Abs(offset2) == Math.Abs(offset))
                     {
                         isFound = true;
                         resultTextPointer = binarySearchPoint2;
                     }
                     else
                     {
-                        if (Math.Abs(offset) < Math.Abs(offset1))
+                        if(Math.Abs(offset) < Math.Abs(offset1))
                         {
                             // this is simple case when we search in the 1st half
                             binarySearchPoint2 = binarySearchPoint1;
@@ -221,7 +240,7 @@ namespace Plainion.Windows.Controls.Text
                             int rtfOffset1 = startingPoint.GetOffsetToPosition(binarySearchPoint1);
                             int rtfOffset2 = startingPoint.GetOffsetToPosition(binarySearchPoint2);
                             int rtfOffsetMiddle = (Math.Abs(rtfOffset1) + Math.Abs(rtfOffset2)) / 2;
-                            if (direction == LogicalDirection.Backward)
+                            if(direction == LogicalDirection.Backward)
                             {
                                 rtfOffsetMiddle = -rtfOffsetMiddle;
                             }
@@ -230,7 +249,7 @@ namespace Plainion.Windows.Controls.Text
                             int offsetMiddle = GetOffsetInTextLength(startingPoint, binarySearchPointMiddle);
 
                             // two cases possible
-                            if (Math.Abs(offset) < Math.Abs(offsetMiddle))
+                            if(Math.Abs(offset) < Math.Abs(offsetMiddle))
                             {
                                 // 3rd quarter of search domain
                                 binarySearchPoint2 = binarySearchPointMiddle;
@@ -257,7 +276,7 @@ namespace Plainion.Windows.Controls.Text
         /// <returns></returns>
         int GetOffsetInTextLength(TextPointer pointer1, TextPointer pointer2)
         {
-            if (pointer1 == null || pointer2 == null)
+            if(pointer1 == null || pointer2 == null)
                 return 0;
 
             TextRange tr = new TextRange(pointer1, pointer2);
