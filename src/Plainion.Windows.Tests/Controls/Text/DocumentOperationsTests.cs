@@ -6,14 +6,14 @@ using Plainion.Windows.Controls.Text;
 namespace Plainion.Windows.Tests.Controls.Text
 {
     [TestFixture]
-    class DocumentFacadeTests
+    class DocumentOperationsTests
     {
         [Test]
         public void TryMakeHyperlinks_AfterLink_HyperlinkInserted([Values("http://github.com/", "https://github.com/", "ftp://github.com/")]string url)
         {
             var document = new FlowDocument(new Paragraph(new Run("Some dummy " + url)));
 
-            DocumentFacade.TryMakeHyperlinks(new TextRange(document.ContentEnd, document.ContentEnd));
+            DocumentOperations.TryMakeHyperlinks(new TextRange(document.ContentEnd, document.ContentEnd));
 
             var visitor = new FlowDocumentVisitor(e => e is Hyperlink);
             visitor.Accept(document);

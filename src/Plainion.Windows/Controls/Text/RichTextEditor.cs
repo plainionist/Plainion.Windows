@@ -62,7 +62,7 @@ namespace Plainion.Windows.Controls.Text
             }
             else // Key.Back
             {
-                var newCaretPosition = DocumentFacade.RemoveHyperlink(Selection.Start);
+                var newCaretPosition = DocumentOperations.RemoveHyperlink(Selection.Start);
                 if(newCaretPosition != null)
                 {
                     // Update selection, since we deleted Hyperlink element and caretPosition was at that Hyperlink's end boundary.
@@ -89,7 +89,7 @@ namespace Plainion.Windows.Controls.Text
 
             TextChanged -= OnTextChanged;
 
-            DocumentFacade.TryMakeHyperlinks(new TextRange(mySelectionStartPosition, mySelectionEndPosition));
+            DocumentOperations.TryMakeHyperlinks(new TextRange(mySelectionStartPosition, mySelectionEndPosition));
 
             TextChanged += OnTextChanged;
 
@@ -108,7 +108,7 @@ namespace Plainion.Windows.Controls.Text
 
             ClearSearch();
 
-            var results = DocumentFacade.Search(Document, Selection.Start, searchText, mode).ToList();
+            var results = DocumentOperations.Search(Document, Selection.Start, searchText, mode).ToList();
 
             foreach (var result in results)
             {

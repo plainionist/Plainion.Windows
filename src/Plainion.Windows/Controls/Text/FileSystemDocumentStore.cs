@@ -131,7 +131,7 @@ namespace Plainion.Windows.Controls.Text
 
             return myIndex.Root.Enumerate()
                 .OfType<Document>()
-                .Where(doc => DocumentFacade.Search(doc.Body, doc.Body.ContentStart, text, SearchMode.Initial).Any())
+                .Where(doc => DocumentOperations.Search(doc.Body, doc.Body.ContentStart, text, SearchMode.Initial).Any())
                 .ToList();
         }
 

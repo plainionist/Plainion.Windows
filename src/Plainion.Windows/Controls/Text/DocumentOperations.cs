@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
 
 namespace Plainion.Windows.Controls.Text
 {
-    static class DocumentFacade
+    public static class DocumentOperations
     {
-        public static void TryMakeHyperlinks(TextRange range)
+        internal static void TryMakeHyperlinks(TextRange range)
         {
             var navigator = range.Start;
             while(navigator != null && navigator.CompareTo(range.End) <= 0)
@@ -175,7 +173,7 @@ namespace Plainion.Windows.Controls.Text
             return null;
         }
 
-        public static TextPointer RemoveHyperlink(TextPointer start)
+        internal static TextPointer RemoveHyperlink(TextPointer start)
         {
             var backspacePosition = start.GetNextInsertionPosition(LogicalDirection.Backward);
             Hyperlink hyperlink;

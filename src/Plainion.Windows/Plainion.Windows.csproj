@@ -46,7 +46,7 @@
     <Compile Include="Controls\Text\AbstractStoreItemId.cs" />
     <Compile Include="Controls\Text\DocumentStoreExtensions.cs" />
     <Compile Include="Controls\Text\Document.cs" />
-    <Compile Include="Controls\Text\DocumentFacade.cs" />
+    <Compile Include="Controls\Text\DocumentOperations.cs" />
     <Compile Include="Controls\Text\DocumentId.cs" />
     <Compile Include="Controls\Text\DocumentNavigationPane.xaml.cs">
       <DependentUpon>DocumentNavigationPane.xaml</DependentUpon>
