@@ -7,8 +7,8 @@ open Plainion.Windows.Controls.Text
 open Plainion.Windows.Specs.Controls.Text
 
 [<Apartment(ApartmentState.STA)>]
-[<TestFixture>]
-module ``Given text with multiple occurences`` =
+[<SpecAttribute>]
+module ``Given a RichtTextEditor with multiple occurences of a search text`` =
 
     let create() =
         let editor = new RichTextEditor()
@@ -48,8 +48,8 @@ module ``Given text with multiple occurences`` =
         editor.Document |> searchResults |> shouldMatch "f#" (at 1)
 
 [<Apartment(ApartmentState.STA)>]
-[<TestFixture>]
-module ``Given text with zero occurences`` =
+[<SpecAttribute>]
+module ``Given a RichtTextEditor with zero occurences of a search text`` =
 
     let create() =
         let editor = new RichTextEditor()

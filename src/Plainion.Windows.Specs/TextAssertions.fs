@@ -6,6 +6,9 @@ open System.Windows.Documents
 open NUnit.Framework
 open Plainion.Windows.Controls.Text
 
+type SpecAttribute() =
+    inherit TestFixtureAttribute()
+
 let equalsI (lhs:string) rhs = lhs.Equals(rhs, StringComparison.OrdinalIgnoreCase)
 
 let searchResults doc = 
