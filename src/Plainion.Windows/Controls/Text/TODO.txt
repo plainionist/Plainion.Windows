@@ -6,6 +6,11 @@
   - search
   - reorg tree
 
+- harmonize DocumentFacade.Search & RichtTextEditor.Search
+
+- move all document related logic out of WPF controls so that it can be tested easier
+
+
 
 
     

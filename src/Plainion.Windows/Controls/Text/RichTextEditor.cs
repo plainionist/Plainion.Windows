@@ -19,6 +19,8 @@ namespace Plainion.Windows.Controls.Text
     /// </remarks>
     public class RichTextEditor : RichTextBox
     {
+        internal static Brush SearchHighlightBrush = Brushes.Yellow;
+
         // True when word(s) are added to this RichTextBox.
         private bool myWordsAdded;
 
@@ -55,7 +57,6 @@ namespace Plainion.Windows.Controls.Text
                 myWordsAdded = true;
                 mySelectionStartPosition = Selection.Start;
                 mySelectionEndPosition = Selection.End.GetPositionAtOffset(0, LogicalDirection.Forward);
-
                 // Hyperlink detection will be done in OnTextChanged()
             }
             else // Key.Back
@@ -147,7 +148,7 @@ namespace Plainion.Windows.Controls.Text
             }
 
             Selection.Select(foundRange.Start, foundRange.End);
-            Selection.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Yellow);
+            Selection.ApplyPropertyValue(TextElement.BackgroundProperty, SearchHighlightBrush);
 
             return foundRange;
         }
