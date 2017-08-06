@@ -35,6 +35,7 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="TextAssertions.fs" />
     <Compile Include="RichTextEditorSpecs.fs" />
     <Content Include="packages.config" />
   </ItemGroup>

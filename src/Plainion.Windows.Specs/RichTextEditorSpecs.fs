@@ -1,70 +1,66 @@
 ﻿namespace Plainion.Windows.Specs.Controls.Text
 
-open System
+open System.Threading
 open System.Windows.Documents
 open NUnit.Framework
 open Plainion.Windows.Controls.Text
-open System.Threading
+open Plainion.Windows.Specs.Controls.Text
 
 [<Apartment(ApartmentState.STA)>]
 [<TestFixture>]
-module RichTextEditorSpecs =
+module ``Given text with multiple occurences`` =
 
-    let equalsI (lhs:string) rhs = lhs.Equals(rhs, StringComparison.OrdinalIgnoreCase)
-
-    let searchResults doc = 
-        let visitor = new FlowDocumentVisitor(fun e -> e.GetType() = typeof<Run>)
-        visitor.Accept(doc)
-
-        visitor.Results
-        |> Seq.cast<Run>
-        |> Seq.filter(fun e -> e.Background = RichTextEditor.SearchHighlightBrush)
-        |> List.ofSeq
-
-    let count n (results:Run list) =
-        Assert.That(results.Length, Is.EqualTo(n))
-
-    let at offset (results:Run list) =
-        let head = results |> Seq.head
-
-        let container = head.Parent :?> Block
-        Assert.That(container.ContentStart.GetOffsetToPosition(head.ContentStart), Is.EqualTo(offset))
-
-    let shouldMatch searchText f (results:Run list) =
-        Assert.That(results |> Seq.forall(fun x -> equalsI x.Text searchText), Is.True)
-        results |> f
-
-    [<Test>]
-    let ``When searching for all occurences Then all words should be highlighted``() =
+    let create() =
         let editor = new RichTextEditor()
         editor.Document <- new FlowDocument(new Paragraph(new Run("f# is concise. F# is functional. F# is great ;-)")))
+        editor
 
-        let result = editor.Search("f#", SearchMode.All)
-        Assert.That(result, Is.True)
+    [<Test>]
+    let ``<When> searching for all occurences <Then> all words should be highlighted``() =
+        let editor = create()
+
+        editor.Search("f#", SearchMode.All) |> succeeded
 
         editor.Document |> searchResults |> shouldMatch "f#" (count 3)
 
     [<Test>]
-    let ``When searching forward and backward Then correct offsets should be found``() =
-        let editor = new RichTextEditor()
-        editor.Document <- new FlowDocument(new Paragraph(new Run("f# is concise." + Environment.NewLine + "F# is functional. F# is great ;-)")))
+    let ``<When> searching forward and backward <Then> correct offsets should be found``() =
+        let editor = create()
 
-        Assert.That(editor.Search("f#", SearchMode.Initial), Is.True)
+        editor.Search("f#", SearchMode.Initial) |> succeeded
 
         editor.Document |> searchResults |> shouldMatch "f#" (at 1)
         
-        Assert.That(editor.Search("f#", SearchMode.Next), Is.True)
+        editor.Search("f#", SearchMode.Next) |> succeeded
 
-        editor.Document |> searchResults |> shouldMatch "f#" (at 19)
+        editor.Document |> searchResults |> shouldMatch "f#" (at 18)
 
-        Assert.That(editor.Search("f#", SearchMode.Next), Is.True)
+        editor.Search("f#", SearchMode.Next) |> succeeded
 
-        editor.Document |> searchResults |> shouldMatch "f#" (at 37)
+        editor.Document |> searchResults |> shouldMatch "f#" (at 36)
 
-        Assert.That(editor.Search("f#", SearchMode.Previous), Is.True)
+        editor.Search("f#", SearchMode.Previous) |> succeeded
 
-        editor.Document |> searchResults |> shouldMatch "f#" (at 19)
+        editor.Document |> searchResults |> shouldMatch "f#" (at 18)
 
-        Assert.That(editor.Search("f#", SearchMode.Previous), Is.True)
+        editor.Search("f#", SearchMode.Previous) |> succeeded
 
         editor.Document |> searchResults |> shouldMatch "f#" (at 1)
+
+[<Apartment(ApartmentState.STA)>]
+[<TestFixture>]
+module ``Given text with zero occurences`` =
+
+    let create() =
+        let editor = new RichTextEditor()
+        editor.Document <- new FlowDocument(new Paragraph(new Run("f# is concise. F# is functional. F# is great ;-)")))
+        editor
+
+    [<Test>]
+    let ``<When> searching <Then> nothing is found``() =
+        let editor = create()
+
+        editor.Search("java", SearchMode.Initial) |> failed
+
+        editor.Document |> searchResults |> shouldBeEmpty
+

@@ -3,7 +3,6 @@
 - write some spec tests
   - load scenario
   - save scenario
-  - search
   - reorg tree
 
 - harmonize DocumentFacade.Search & RichtTextEditor.Search
