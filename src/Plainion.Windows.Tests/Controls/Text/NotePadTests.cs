@@ -1,13 +1,13 @@
 ﻿
+using NUnit.Framework;
+using Plainion.Windows.Controls.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
 
-using NUnit.Framework;
-using Plainion.Windows.Controls.Text;
-
 namespace Plainion.Windows.Tests.Controls.Text
 {
-    [RequiresSTA]
+    [Apartment(ApartmentState.STA)]
     [TestFixture]
     class NotePadTests
     {
