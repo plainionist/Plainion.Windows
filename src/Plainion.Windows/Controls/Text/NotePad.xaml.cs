@@ -8,6 +8,8 @@ namespace Plainion.Windows.Controls.Text
 {
     public partial class NotePad : UserControl
     {
+        private bool mySearchTextChangeGuard;
+
         public NotePad()
         {
             InitializeComponent();
@@ -89,7 +91,10 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnSearchTextChanged()
         {
-            Search(SearchText, SearchMode.Initial);
+            if (!mySearchTextChangeGuard)
+            {
+                Search(SearchText, SearchMode.Initial);
+            }
         }
 
         public void Search(string text, SearchMode mode)
@@ -102,7 +107,12 @@ namespace Plainion.Windows.Controls.Text
             }
             else
             {
+                mySearchTextChangeGuard = true;
+
+                SearchText = text;
                 SearchSuccessful = myEditor.Search(text, mode);
+
+                mySearchTextChangeGuard = false;
             }
         }
 
