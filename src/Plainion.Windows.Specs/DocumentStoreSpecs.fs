@@ -1,7 +1,6 @@
 ﻿namespace Plainion.Windows.Specs.Controls.Text
 
 open System.Threading
-open System.Windows.Documents
 open NUnit.Framework
 open Plainion.Windows.Controls.Text
 open Plainion.Windows.Specs.Controls.Text
@@ -9,7 +8,7 @@ open System.IO
 open Plainion.IO.MemoryFS
 
 [<Apartment(ApartmentState.STA)>]
-[<SpecAttribute>]
+[<Spec>]
 module ``Given a DocumentStore`` =
 
     let create path =

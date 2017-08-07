@@ -1,13 +1,12 @@
 ﻿namespace Plainion.Windows.Specs.Controls.Text
 
 open System.Threading
-open System.Windows.Documents
 open NUnit.Framework
 open Plainion.Windows.Controls.Text
 open Plainion.Windows.Specs.Controls.Text
 
 [<Apartment(ApartmentState.STA)>]
-[<SpecAttribute>]
+[<Spec>]
 module ``Given a RichtTextEditor with multiple occurences of a search text`` =
 
     let create() =
@@ -48,7 +47,7 @@ module ``Given a RichtTextEditor with multiple occurences of a search text`` =
         editor.Document |> searchResults |> shouldMatch "f#" (at 1)
 
 [<Apartment(ApartmentState.STA)>]
-[<SpecAttribute>]
+[<Spec>]
 module ``Given a RichtTextEditor with zero occurences of a search text`` =
 
     let create() =
