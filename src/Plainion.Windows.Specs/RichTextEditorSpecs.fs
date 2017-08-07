@@ -12,7 +12,7 @@ module ``Given a RichtTextEditor with multiple occurences of a search text`` =
 
     let create() =
         let editor = new RichTextEditor()
-        editor.Document <- new FlowDocument(new Paragraph(new Run("f# is concise. F# is functional. F# is great ;-)")))
+        editor.Document <- newDocument "f# is concise. F# is functional. F# is great ;-)"
         editor
 
     [<Test>]
@@ -53,7 +53,7 @@ module ``Given a RichtTextEditor with zero occurences of a search text`` =
 
     let create() =
         let editor = new RichTextEditor()
-        editor.Document <- new FlowDocument(new Paragraph(new Run("f# is concise. F# is functional. F# is great ;-)")))
+        editor.Document <- newDocument "f# is concise. F# is functional. F# is great ;-)"
         editor
 
     [<Test>]

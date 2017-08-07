@@ -12,6 +12,11 @@ namespace Plainion.Windows.Controls.Text
             Id = meta.Id;
             Created = meta.Created;
             LastModified = meta.LastModified;
+
+            if (meta.IsNew)
+            {
+                IsModified = true;
+            }
         }
 
         public TId Id { get; private set; }

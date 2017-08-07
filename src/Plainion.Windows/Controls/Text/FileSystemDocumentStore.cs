@@ -81,9 +81,10 @@ namespace Plainion.Windows.Controls.Text
             private Folder Read(BinaryReader reader)
             {
                 var folderId = Guid.Parse(reader.ReadString());
-                var meta = new StoreItemMetaInfo<FolderId>(new FolderId(folderId));
-                meta.Created = new DateTime(reader.ReadInt64());
-                meta.LastModified = new DateTime(reader.ReadInt64());
+                var created = new DateTime(reader.ReadInt64());
+                var modified = new DateTime(reader.ReadInt64());
+
+                var meta = new StoreItemMetaInfo<FolderId>(new FolderId(folderId),created,modified);
 
                 var folder = new Folder(meta);
                 folder.Title = reader.ReadString();
@@ -139,9 +140,9 @@ namespace Plainion.Windows.Controls.Text
 
             using (var reader = new BinaryReader(GetMetaFile(id).Stream(FileAccess.Read)))
             {
-                var meta = new StoreItemMetaInfo<DocumentId>(id);
-                meta.Created = new DateTime(reader.ReadInt64());
-                meta.LastModified = new DateTime(reader.ReadInt64());
+                var created = new DateTime(reader.ReadInt64());
+                var modified = new DateTime(reader.ReadInt64());
+                var meta = new StoreItemMetaInfo<DocumentId>(id,created,modified);
 
                 var doc = new Document(meta, () => ReadContent(GetBodyFile(id)));
                 doc.Title = reader.ReadString();
@@ -192,7 +193,7 @@ namespace Plainion.Windows.Controls.Text
                 writer.Write(document.Created.Ticks);
                 writer.Write(document.LastModified.Ticks);
 
-                writer.Write(document.Title);
+                writer.Write(document.Title ?? string.Empty);
 
                 writer.Write(document.Tags.Count);
                 foreach (var tag in document.Tags)

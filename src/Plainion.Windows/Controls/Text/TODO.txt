@@ -1,9 +1,14 @@
 ﻿
 
 - write some spec tests
-  - load scenario
-  - save scenario
-  - reorg tree
+  - DocumentStore
+    - save changes 
+  - FileSystemDocumentStore
+    - load & save
+  - NoteBook
+    - load & save to check tree and document content
+    - drag and drop in navigator
+    - search all in navigator
 
 
     

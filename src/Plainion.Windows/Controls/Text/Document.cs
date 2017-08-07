@@ -18,9 +18,6 @@ namespace Plainion.Windows.Controls.Text
         {
         }
 
-        /// <summary>
-        /// Used recreate an existing document from store.
-        /// </summary>
         public Document(StoreItemMetaInfo<DocumentId> meta, Func<FlowDocument> reader)
             : base(meta)
         {

@@ -1,5 +1,5 @@
 ﻿[<AutoOpen>]
-module Plainion.Windows.Specs.Controls.Text.TextAssertions
+module Plainion.Windows.Specs.Controls.Text.DomainModel
 
 open System
 open System.Windows.Documents
@@ -42,4 +42,9 @@ let succeeded (x:bool) =
 let failed (x:bool) =
     Assert.That(x, Is.False)
 
+let newDocument text =
+    new FlowDocument(new Paragraph(new Run(text)))
+
+let addText text (doc:FlowDocument) =
+    doc.Blocks.Add(new Paragraph(new Run(text)))
 

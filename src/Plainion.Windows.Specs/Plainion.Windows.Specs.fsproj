@@ -35,8 +35,9 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="TextAssertions.fs" />
+    <Compile Include="DomainModel.fs" />
     <Compile Include="RichTextEditorSpecs.fs" />
+    <Compile Include="DocumentStoreSpecs.fs" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +48,9 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Plainion.Core">
+      <HintPath>..\..\packages\Plainion.Core.3.3.0\lib\NET45\Plainion.Core.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
