@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace Plainion.Windows.Controls.Text
 {
@@ -13,6 +14,9 @@ namespace Plainion.Windows.Controls.Text
         {
         }
 
+        /// <summary>
+        /// Used to restore a folder from persistance.
+        /// </summary>
         public Folder(StoreItemMetaInfo<FolderId> meta)
             : base(meta)
         {

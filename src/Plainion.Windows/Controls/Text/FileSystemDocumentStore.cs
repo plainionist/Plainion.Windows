@@ -84,28 +84,31 @@ namespace Plainion.Windows.Controls.Text
                 var created = new DateTime(reader.ReadInt64());
                 var modified = new DateTime(reader.ReadInt64());
 
-                var meta = new StoreItemMetaInfo<FolderId>(new FolderId(folderId),created,modified);
+                var meta = new StoreItemMetaInfo<FolderId>(new FolderId(folderId), created, modified);
 
                 var folder = new Folder(meta);
-                folder.Title = reader.ReadString();
-
-                var count = reader.ReadInt32();
-                for (int i = 0; i < count; ++i)
+                using (folder.SuppressChangeTracking())
                 {
-                    var isFolder = reader.ReadBoolean();
-                    if (isFolder)
-                    {
-                        var child = Read(reader);
-                        folder.Entries.Add(child);
-                    }
-                    else
-                    {
-                        var docId = Guid.Parse(reader.ReadString());
-                        folder.Entries.Add(myStore.GetCore(new DocumentId(docId)));
-                    }
-                }
+                    folder.Title = reader.ReadString();
 
-                return folder;
+                    var count = reader.ReadInt32();
+                    for (int i = 0; i < count; ++i)
+                    {
+                        var isFolder = reader.ReadBoolean();
+                        if (isFolder)
+                        {
+                            var child = Read(reader);
+                            folder.Entries.Add(child);
+                        }
+                        else
+                        {
+                            var docId = Guid.Parse(reader.ReadString());
+                            folder.Entries.Add(myStore.GetCore(new DocumentId(docId)));
+                        }
+                    }
+
+                    return folder;
+                }
             }
         }
 
@@ -142,18 +145,21 @@ namespace Plainion.Windows.Controls.Text
             {
                 var created = new DateTime(reader.ReadInt64());
                 var modified = new DateTime(reader.ReadInt64());
-                var meta = new StoreItemMetaInfo<DocumentId>(id,created,modified);
+                var meta = new StoreItemMetaInfo<DocumentId>(id, created, modified);
 
                 var doc = new Document(meta, () => ReadContent(GetBodyFile(id)));
-                doc.Title = reader.ReadString();
-
-                var count = reader.ReadInt32();
-                for (int i = 0; i < count; ++i)
+                using (doc.SuppressChangeTracking())
                 {
-                    doc.Tags.Add(reader.ReadString());
-                }
+                    doc.Title = reader.ReadString();
 
-                return doc;
+                    var count = reader.ReadInt32();
+                    for (int i = 0; i < count; ++i)
+                    {
+                        doc.Tags.Add(reader.ReadString());
+                    }
+
+                    return doc;
+                }
             }
         }
 

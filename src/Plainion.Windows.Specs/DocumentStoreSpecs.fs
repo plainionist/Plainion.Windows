@@ -12,31 +12,34 @@ open FsUnit
 [<Spec>]
 module ``Given a DocumentStore`` =
 
-    let create path =
-        let fs = new FileSystemImpl()
-        let store = new FileSystemDocumentStore(fs.Directory(path))
+    let create (fs:FileSystemImpl) = 
+        let store = new FileSystemDocumentStore(fs.Directory("/x"))
         store.Initialize()
-        fs,store
+        store
 
     [<Test>]
     let ``<When> adding documents <And> triggering save <Then> the new documents are saved``() =
-        let fs,store = create "/x"
-        store.Root.Entries.Add(new Document(fun () -> newDocument "test"))
+        let fs = new FileSystemImpl()
+        let store = create fs
 
+        let doc = store.Create("/doc1")
+        doc.Body |> addText "test1"
+
+        doc.IsModified |> should be True
         store.Root.IsModified |> should be True
 
         store.SaveChanges()
-        // TODO: check through serialization
-        // index file + meta and body file for one document
-        fs.Directory("/x").EnumerateFiles("*", SearchOption.AllDirectories) |> List.ofSeq |> should haveLength 3
+        let store = create fs
+
+        store.Root.IsModified |> should be False
+        store.Get("/doc1") |> should not' (be Null)
 
         store.Create("/sub/doc2").Body |> addText "test2"
 
-        store.Root.IsModified |> should be True
-
         store.SaveChanges()
+        let store = create fs
 
-        // index file + meta and body file for two documents
-        fs.Directory("/x").EnumerateFiles("*", SearchOption.AllDirectories) |> List.ofSeq |> should haveLength 5
+        store.Get("/doc1") |> should not' (be Null)
+        store.Get("/sub/doc2") |> should not' (be Null)
 
 

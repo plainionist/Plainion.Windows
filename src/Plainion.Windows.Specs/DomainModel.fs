@@ -47,4 +47,3 @@ let newDocument text =
 
 let addText text (doc:FlowDocument) =
     doc.Blocks.Add(new Paragraph(new Run(text)))
-
