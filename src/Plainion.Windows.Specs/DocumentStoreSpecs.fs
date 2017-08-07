@@ -42,4 +42,25 @@ module ``Given a DocumentStore`` =
         store.Get("/doc1") |> should not' (be Null)
         store.Get("/sub/doc2") |> should not' (be Null)
 
+    //[<Test>]
+    //let ``<When> changing documents <And> triggering save <Then> the modified documents are saved``() =
+    //    let fs = new FileSystemImpl()
+    //    let store = create fs
+
+    //    store.Create("/doc1").Body |> addText "test1"
+    //    store.Create("/sub/doc2").Body |> addText "test2"
+
+    //    store.SaveChanges()
+    //    let store = create fs
+
+    //    store.Get("/doc1").Body |> addText "MORE"
+    //    store.Get("/sub/doc2").Body |> addText "MUCH-MORE"
+        
+    //    store.SaveChanges()
+    //    let store = create fs
+
+    //    store.Get("/doc1").Body |> text |> should haveSubstring "MORE"
+    //    store.Get("/sub/doc2").Body |> text |> should haveSubstring "MUCH-MORE"
+        
+
 
