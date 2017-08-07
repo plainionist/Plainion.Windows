@@ -4,14 +4,13 @@ open System.Threading
 open NUnit.Framework
 open Plainion.Windows.Controls.Text
 open Plainion.Windows.Specs.Controls.Text
-open System.IO
 open System.Linq
 open Plainion.IO.MemoryFS
 open FsUnit
 
 [<Apartment(ApartmentState.STA)>]
 [<Spec>]
-module ``Given a DocumentStore`` =
+module ``Given any DocumentStore`` =
     open System
 
     let create (fs:FileSystemImpl) = 

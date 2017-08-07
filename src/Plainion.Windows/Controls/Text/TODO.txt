@@ -1,8 +1,6 @@
 ﻿
 
 - write some spec tests
-  - FileSystemDocumentStore
-    - load & save
   - NoteBook
     - load & save to check tree and document content
     - drag and drop in navigator
