@@ -1,9 +1,6 @@
 ﻿
 
 - write some spec tests
-  - DocumentStore
-    - modify content
-	- remove files
   - FileSystemDocumentStore
     - load & save
   - NoteBook
