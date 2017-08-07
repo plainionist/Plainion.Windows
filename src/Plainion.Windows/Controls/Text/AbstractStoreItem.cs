@@ -6,6 +6,7 @@ namespace Plainion.Windows.Controls.Text
     public abstract class AbstractStoreItem<TId> : BindableBase, IStoreItem where TId : AbstractStoreItemId, new()
     {
         private int mySuppressChangeTrackingGuards;
+        private bool myIsModified;
         private string myTitle;
 
         protected AbstractStoreItem(StoreItemMetaInfo<TId> meta)
@@ -16,7 +17,7 @@ namespace Plainion.Windows.Controls.Text
 
             if (meta.IsNew)
             {
-                IsModified = true;
+                myIsModified = true;
             }
         }
 
@@ -41,17 +42,22 @@ namespace Plainion.Windows.Controls.Text
         {
             if (mySuppressChangeTrackingGuards == 0)
             {
-                IsModified = true;
+                myIsModified = true;
                 LastModified = DateTime.UtcNow;
             }
         }
 
-        internal void MarkAsSaved()
+        internal virtual void MarkAsSaved()
         {
-            IsModified = false;
+            myIsModified = false;
         }
 
-        public bool IsModified { get; private set; }
+        public bool IsModified { get { return myIsModified || CheckModified(); } }
+
+        protected virtual bool CheckModified()
+        {
+            return false;
+        }
 
         public DateTime Created { get; private set; }
 

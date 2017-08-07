@@ -10,7 +10,7 @@ namespace Plainion.Windows.Controls.Text
     public sealed class Document : AbstractStoreItem<DocumentId>
     {
         private Lazy<FlowDocument> myBody;
-        private TextRange myBodyObserver;
+        private int myLastModifiedHashCode = -1;
         private ObservableCollection<string> myTags;
 
         public Document(Func<FlowDocument> reader)
@@ -38,18 +38,30 @@ namespace Plainion.Windows.Controls.Text
         {
             get
             {
-                if (myBodyObserver == null)
+                if (myLastModifiedHashCode != -1)
                 {
-                    myBodyObserver = new TextRange(myBody.Value.ContentStart, myBody.Value.ContentEnd);
-                    WeakEventManager<TextRange, EventArgs>.AddHandler(myBodyObserver, "Changed", OnBodyChanged);
+                    myLastModifiedHashCode = GetBodyHashCode();
                 }
                 return myBody.Value;
             }
         }
 
-        private void OnBodyChanged(object sender, EventArgs e)
+        private int GetBodyHashCode()
         {
-            MarkAsModified();
+            var range = new TextRange(myBody.Value.ContentStart, myBody.Value.ContentEnd);
+            return range.Text.GetHashCode();
+        }
+
+        protected override bool CheckModified()
+        {
+            return myLastModifiedHashCode != GetBodyHashCode();
+        }
+
+        internal override void MarkAsSaved()
+        {
+            base.MarkAsSaved();
+
+            myLastModifiedHashCode = GetBodyHashCode();
         }
 
         public IList<string> Tags { get { return myTags; } }
