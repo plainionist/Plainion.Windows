@@ -6,6 +6,7 @@ open Plainion.Windows.Controls.Text
 open Plainion.Windows.Specs.Controls.Text
 open System.IO
 open Plainion.IO.MemoryFS
+open FsUnit
 
 [<Apartment(ApartmentState.STA)>]
 [<Spec>]
@@ -22,20 +23,20 @@ module ``Given a DocumentStore`` =
         let fs,store = create "/x"
         store.Root.Entries.Add(new Document(fun () -> newDocument "test"))
 
-        store.Root.IsModified |> succeeded
+        store.Root.IsModified |> should be True
 
         store.SaveChanges()
         // TODO: check through serialization
         // index file + meta and body file for one document
-        Assert.That(fs.Directory("/x").EnumerateFiles("*", SearchOption.AllDirectories) |> Seq.length, Is.EqualTo(3))
+        fs.Directory("/x").EnumerateFiles("*", SearchOption.AllDirectories) |> List.ofSeq |> should haveLength 3
 
         store.Create("/sub/doc2").Body |> addText "test2"
 
-        store.Root.IsModified |> succeeded
+        store.Root.IsModified |> should be True
 
         store.SaveChanges()
 
         // index file + meta and body file for two documents
-        Assert.That(fs.Directory("/x").EnumerateFiles("*", SearchOption.AllDirectories) |> Seq.length, Is.EqualTo(5))
+        fs.Directory("/x").EnumerateFiles("*", SearchOption.AllDirectories) |> List.ofSeq |> should haveLength 5
 
 

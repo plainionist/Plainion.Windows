@@ -22,3 +22,5 @@
 /packages/NUnit.3.7.1
 /packages/System.ValueTuple.4.3.0
 .vs
+/packages/FSharp.Core.3.1.2.5
+/packages/FsUnit.3.0.0
