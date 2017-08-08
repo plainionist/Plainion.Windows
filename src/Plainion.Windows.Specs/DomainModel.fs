@@ -6,6 +6,7 @@ open System.Windows.Documents
 open NUnit.Framework
 open Plainion.Windows.Controls.Text
 open FsUnit
+open System.Windows.Threading
 
 type SpecAttribute() =
     inherit TestFixtureAttribute()
@@ -43,4 +44,14 @@ let addText text (doc:FlowDocument) =
 let text (doc:FlowDocument) =
     let range = new TextRange(doc.ContentStart, doc.ContentEnd)
     range.Text
+
+let DoEventsSync () =
+    let exitFrame (frame:obj) =
+        let dispatcherFrame = frame :?> DispatcherFrame
+        dispatcherFrame.Continue <- false
+        null :> obj
+
+    let frame = new DispatcherFrame()
+    Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, new DispatcherOperationCallback(exitFrame), frame) |> ignore
+    Dispatcher.PushFrame(frame)
 

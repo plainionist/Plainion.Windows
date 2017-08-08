@@ -1,9 +1,0 @@
-﻿
-
-- write some spec tests
-  - NoteBook
-    - drag and drop in navigator
-
-
-
-    

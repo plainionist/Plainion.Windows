@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace Plainion.Windows.Controls.Text
 {
@@ -10,6 +12,11 @@ namespace Plainion.Windows.Controls.Text
         public NavigationNodeFactory(EventHandler<PropertyChangedEventArgs> onSelectionChanged)
         {
             myOnSelectionChanged = onSelectionChanged;
+
+            if (Dispatcher == null)
+            {
+                Dispatcher = Application.Current != null ? Application.Current.Dispatcher : null;
+            }
         }
 
         internal NavigationNode Create(IStoreItem model, NavigationNode parent)
@@ -22,5 +29,8 @@ namespace Plainion.Windows.Controls.Text
 
             return node;
         }
+
+        // required for testing
+        internal static Dispatcher Dispatcher;
     }
 }

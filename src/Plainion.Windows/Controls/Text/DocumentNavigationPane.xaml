@@ -62,10 +62,11 @@
             </Style>
         </TabControl.Resources>
         <TabItem Header="Documents">
-            <tree:TreeEditor Root="{Binding Root, ElementName=_this, Mode=OneTime}" FilterLabel="Filter by title"
-                       CreateChildCommand="{Binding CreateChildCommand, ElementName=_this, Mode=OneTime}"
-                       DeleteCommand="{Binding DeleteCommand, ElementName=_this, Mode=OneTime}"
-                       DropCommand="{Binding DropCommand, ElementName=_this, Mode=OneTime}">
+            <tree:TreeEditor x:Name="myTreeEditor" 
+                             Root="{Binding Root, ElementName=_this, Mode=OneTime}" FilterLabel="Filter by title"
+                             CreateChildCommand="{Binding CreateChildCommand, ElementName=_this, Mode=OneTime}"
+                             DeleteCommand="{Binding DeleteCommand, ElementName=_this, Mode=OneTime}"
+                             DropCommand="{Binding DropCommand, ElementName=_this, Mode=OneTime}">
                 <tree:TreeEditor.NodeStyle>
                     <Style TargetType="{x:Type tree:NodeItem}" BasedOn="{StaticResource DefaultNodeStyle}">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>

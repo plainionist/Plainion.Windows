@@ -33,6 +33,10 @@ module ``Given an empty NoteBook`` =
 [<Apartment(ApartmentState.STA)>]
 [<Spec>]
 module ``Given a NoteBook with documents`` =
+    open Plainion.Windows.Controls.Tree
+    open Plainion.Windows.Interactivity.DragDrop
+    open System.Windows
+    open System.Windows.Threading
 
     [<Test>]
     let ``<When> deleting a navigation node <Then> DocumentStore is updated accordingly``() =
@@ -91,5 +95,58 @@ module ``Given a NoteBook with documents`` =
         searchResults |> should contain (store.Get("/d1"))
         searchResults |> should not' (contain (store.Get("/s1/d2")))
         searchResults |> should contain (store.Get("/s1/d3"))
+
+    [<Test>]
+    let ``<When> dropping a document on a folder <Then> document is moved to the folder``() =
+        let notebook = new NoteBook()
+
+        let fs = new FileSystemImpl()
+        let store = new FileSystemDocumentStore(fs.Directory("/x"))
+        store.Initialize()
+
+        store.Create("/d1") |> ignore
+        store.Create("/s1/d2") |> ignore
+
+        notebook.DocumentStore <- store
+
+        let request = new NodeDropRequest()
+        request.DroppedNode <- notebook.myNavigation.Root.Children.[0]
+        request.DropTarget <-  notebook.myNavigation.Root.Children.[1]
+        request.Location <- DropLocation.InPlace
+
+        notebook.myNavigation.DropCommand.Execute(request)
+
+        store.TryGet("/d1") |> should be Null
+        let s1 = store.Root.Entries.[0] :?> Folder
+        s1.Entries.[0].Title |> should equal "d2"
+        s1.Entries.[1].Title |> should equal "d1"
+
+    [<Test>]
+    let ``<When> dropping a document on a document <Then> target document is converted into folder and both documents are added``() =
+        NavigationNodeFactory.Dispatcher <- Dispatcher.CurrentDispatcher
+        let notebook = new NoteBook()
+
+        let fs = new FileSystemImpl()
+        let store = new FileSystemDocumentStore(fs.Directory("/x"))
+        store.Initialize()
+
+        store.Create("/d1") |> ignore
+        store.Create("/d2") |> ignore
+
+        notebook.DocumentStore <- store
+
+        let request = new NodeDropRequest()
+        request.DroppedNode <- notebook.myNavigation.Root.Children.[0]
+        request.DropTarget <-  notebook.myNavigation.Root.Children.[1]
+        request.Location <- DropLocation.InPlace
+
+        notebook.myNavigation.DropCommand.Execute(request)
+        DoEventsSync()
+
+        store.TryGet("/d1") |> should be Null
+        let d2 = store.Root.Entries.[0] :?> Folder
+        d2.Entries.[0].Title |> should equal "d2"
+        d2.Entries.[1].Title |> should equal "d1"
+
 
 

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
+using System.Windows.Threading;
 using Plainion.Windows.Controls.Tree;
 using Plainion.Windows.Mvvm;
 
@@ -33,7 +34,7 @@ namespace Plainion.Windows.Controls.Text
             {
                 CollectionChangedEventManager.AddHandler(Children, OnChildrenChanged);
             }
-            
+
             myChildObservationCount++;
         }
 
@@ -112,7 +113,7 @@ namespace Plainion.Windows.Controls.Text
 
             // add "old" document as first child
             // we cannot modify the children collection from CollectionChanged event 
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            NavigationNodeFactory.Dispatcher.BeginInvoke(new Action(() =>
             {
                 ((Folder)Model).Entries.Add(model);
 
