@@ -2,9 +2,8 @@
 
 - write some spec tests
   - NoteBook
-    - load & save to check tree and document content
     - drag and drop in navigator
-    - search all in navigator
+
 
 
     

@@ -38,6 +38,7 @@
     <Compile Include="DomainModel.fs" />
     <Compile Include="RichTextEditorSpecs.fs" />
     <Compile Include="DocumentStoreSpecs.fs" />
+    <Compile Include="NoteBookSpecs.fs" />
     <Content Include="packages.config" />
     <Content Include="app.config" />
   </ItemGroup>

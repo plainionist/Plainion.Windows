@@ -76,11 +76,11 @@ namespace Plainion.Windows.Controls.Text
         }
 
         /// <summary>
-        /// Returns the at the given path. Path elements are separated with "/".
+        /// Returns the document at the given path. Path elements are separated with "/".
         /// The last path element is the title of the document.
         /// </summary>
-        /// <exception cref="ArgumentException">If there is no document at that path</exception>
-        public static Document Get(this DocumentStore self, string path)
+        /// <returns>the document if found, null otherwise</returns>
+        public static Document TryGet(this DocumentStore self, string path)
         {
             Contract.RequiresNotNull(self, "self");
             Contract.RequiresNotNullNotEmpty(path, "path");
@@ -93,14 +93,33 @@ namespace Plainion.Windows.Controls.Text
             foreach (var element in elements.Take(elements.Length - 1))
             {
                 var child = folder.Entries.OfType<Folder>().FirstOrDefault(f => f.Title.Equals(element, StringComparison.OrdinalIgnoreCase));
-                Contract.RequiresNotNull(child, "Path not found: " + element);
+                if (child == null)
+                {
+                    return null;
+                }
 
                 folder = child;
             }
 
             var title = elements[elements.Length - 1];
             var document = folder.Entries.OfType<Document>().SingleOrDefault(d => d.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
-            Contract.RequiresNotNull(document, "Document not found: " + title);
+            if (document == null)
+            {
+                return null;
+            }
+
+            return document;
+        }
+
+        /// <summary>
+        /// Returns the document at the given path. Path elements are separated with "/".
+        /// The last path element is the title of the document.
+        /// </summary>
+        /// <exception cref="ArgumentException">If there is no document at that path</exception>
+        public static Document Get(this DocumentStore self, string path)
+        {
+            var document = TryGet(self, path);
+            Contract.RequiresNotNull(document, "document not found at: " + path);
 
             return document;
         }
