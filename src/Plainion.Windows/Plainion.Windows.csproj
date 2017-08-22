@@ -112,6 +112,7 @@
     <Compile Include="MultiStyleExtension.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\DelegateCommand.cs" />
+    <Compile Include="Mvvm\IPrintRequestAware.cs" />
     <Compile Include="NotConverter.cs" />
     <Compile Include="OrConverter.cs" />
     <Compile Include="Interactivity\MultiSelectBehavior.cs" />

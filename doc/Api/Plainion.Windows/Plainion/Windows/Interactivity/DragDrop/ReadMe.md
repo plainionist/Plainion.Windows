@@ -4,9 +4,9 @@
 
 ## Types
 
-* [IDropable](IDropable.md)
-* [IDragable](IDragable.md)
 * [DropLocation](DropLocation.md)
 * [FrameworkElementDropBehavior](FrameworkElementDropBehavior.md)
 * [FrameworkElementDragBehavior](FrameworkElementDragBehavior.md)
 * [DropSortableItemsBehavior](DropSortableItemsBehavior.md)
+* [IDragable](IDragable.md)
+* [IDropable](IDropable.md)

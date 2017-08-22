@@ -15,7 +15,7 @@
 
 ## Properties
 
-### System.Collections.Generic.IList`1[[Plainion.Windows.Controls.Text.IStoreItem, Plainion.Windows, Version=2.1.0.0, Culture=neutral, PublicKeyToken=null]] Entries
+### System.Collections.Generic.IList`1[[Plainion.Windows.Controls.Text.IStoreItem, Plainion.Windows, Version=2.2.0.0, Culture=neutral, PublicKeyToken=null]] Entries
 
 Order is preserved
 
