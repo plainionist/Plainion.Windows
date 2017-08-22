@@ -1,4 +1,4 @@
-## 1.23.0 - unreleased
+## 2.0.0 - unreleased
 
 - Mvvm.DelegateCommand, Mvvm.BindableBase added to avoid referencing Prism library for small projects
 - PropertyBinding.Unbind added

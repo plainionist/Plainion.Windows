@@ -7,6 +7,7 @@ open PlainionCI
 
 Target "CreatePackage" (fun _ ->
     !! ( outputPath </> "*.*Tests.*" )
+    ++ ( outputPath </> "*.Specs.*" )
     ++ ( outputPath </> "*nunit*" )
     ++ ( outputPath </> "TestResult.xml" )
     ++ ( outputPath </> "Plainion.RI.*" )
