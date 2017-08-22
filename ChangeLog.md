@@ -1,4 +1,4 @@
-## 2.0.0 - 2017-08-22
+## 2.1.0 - 2017-08-22
 
 - Mvvm.DelegateCommand: non generic version released
 
