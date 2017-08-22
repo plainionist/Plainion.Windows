@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Plainion.Windows.Interactivity.DragDrop;
+using Plainion.Windows.Mvvm;
 
 namespace Plainion.Windows.Controls.Tree
 {

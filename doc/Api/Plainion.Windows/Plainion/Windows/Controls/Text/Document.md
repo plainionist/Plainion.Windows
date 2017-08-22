@@ -18,3 +18,8 @@
 ### System.Windows.Documents.FlowDocument Body
 
 ### System.Collections.Generic.IList`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] Tags
+
+
+## Methods
+
+### System.Boolean CheckModified()

@@ -18,11 +18,9 @@
 
 ## Methods
 
-### Plainion.Windows.Controls.Text.Document Get(Plainion.Windows.Controls.Text.DocumentId id)
-
 ### void SaveChanges()
 
-### System.Collections.Generic.IReadOnlyCollection`1[[Plainion.Windows.Controls.Text.Document, Plainion.Windows, Version=1.23.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de]] Search(System.String text)
+### System.Collections.Generic.IReadOnlyCollection`1[[Plainion.Windows.Controls.Text.Document, Plainion.Windows, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null]] Search(System.String text)
 
 ### Plainion.Windows.Controls.Text.Folder GetRoot()
 

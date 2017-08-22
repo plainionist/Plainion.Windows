@@ -26,4 +26,12 @@
 
 ## Methods
 
+### System.Boolean SetProperty(T& storage,T value,System.String propertyName)
+
 ### void MarkAsModified()
+
+### System.Boolean CheckModified()
+
+### System.IDisposable SuppressChangeTracking()
+
+Used during deserialization to suppress change tracking.

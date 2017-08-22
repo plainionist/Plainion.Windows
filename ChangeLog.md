@@ -1,5 +1,9 @@
 ## 2.0.0 - 2017-08-22
 
+- Mvvm.DelegateCommand: non generic version released
+
+## 2.0.0 - 2017-08-22
+
 - Mvvm.DelegateCommand, Mvvm.BindableBase added to avoid referencing Prism library for small projects
 - PropertyBinding.Unbind added
 - Search functionality added to RichTextEditor & NotePad
