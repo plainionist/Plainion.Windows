@@ -70,9 +70,9 @@ Provides basic and generic Drag&Drop support compatible with MVVM pattern.
 - FrameworkElementDragBehavior and FrameworkElementDropBehavior are used in the Xaml to wire up with Windows Drag&Drop events
 
 
-## Prism.RI
+## Plainion.RI
 
-Use the reference implementation (Prism.RI.exe) to play around with the extensions provided by 
+Use the reference implementation (Plainion.RI.exe) to play around with the extensions provided by 
 this library.
 
 ![](doc/Screenshots/RI.png)
