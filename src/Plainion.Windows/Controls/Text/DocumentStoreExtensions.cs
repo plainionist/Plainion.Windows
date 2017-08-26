@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace Plainion.Windows.Controls.Text
 {
@@ -60,6 +61,21 @@ namespace Plainion.Windows.Controls.Text
         }
 
         /// <summary>
+        /// Creates a new document with default settings.
+        /// </summary>
+        public static Document CreateDocument(string title)
+        {
+            var document = new Document(() => new FlowDocument()
+            {
+                FontFamily = new FontFamily("Arial"),
+                FontSize = 13d
+            });
+            document.Title = title;
+
+            return document;
+        }
+
+        /// <summary>
         /// Creates a new document under the given folder with the given title
         /// </summary>
         public static Document Create(this DocumentStore self, Folder folder, string title)
@@ -67,8 +83,7 @@ namespace Plainion.Windows.Controls.Text
             Contract.RequiresNotNull(self, "self");
             Contract.RequiresNotNull(folder, "folder");
 
-            var document = new Document(() => new FlowDocument());
-            document.Title = title;
+            var document = CreateDocument(title);
 
             folder.Entries.Add(document);
 

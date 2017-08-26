@@ -32,7 +32,7 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnCreateChild(NavigationNode parent)
         {
-            var document = new Document(() => new FlowDocument()) { Title = "<new>" };
+            var document = DocumentStoreExtensions.CreateDocument( "<new>" );
             var node = myNodeFactory.Create(document, parent);
 
             parent.Children.Add(node);

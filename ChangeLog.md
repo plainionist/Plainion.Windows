@@ -1,3 +1,10 @@
+## 2.3.0 - 2017-08-26
+
+- Plainion.Core updated
+- Notebook: first document selected on startup
+- DocumentStore: default font changed to Arial, size = 13
+- Notebook: is readonly if no document is available initially
+
 ## 2.2.0 - 2017-08-22
 
 - Mvvm.IPrintRequestAware: added from Plainion.Prism

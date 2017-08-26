@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -14,13 +15,14 @@ namespace Plainion.Windows.Controls.Text
         {
             InitializeComponent();
 
-            Loaded += OnLoaded;
-
             AddHandler(KeyDownEvent, new KeyEventHandler(OnKeyDown), handledEventsToo: false);
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        protected override void OnInitialized(EventArgs e)
         {
+            base.OnInitialized(e);
+
+            // Initialize default document from RichTextEditor
             Document = myEditor.Document;
             Document.FontFamily = new FontFamily("Arial");
             Document.FontSize = 13d;

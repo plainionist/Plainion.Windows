@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text
 {
@@ -10,29 +11,19 @@ namespace Plainion.Windows.Controls.Text
         {
             InitializeComponent();
 
+            Loaded += OnLoaded;
             myNavigation.SelectionChanged += OnSelectionChanged;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            // To initialize everything correctly esp. when DocumentStore is null initially
+            OnDocumentStoreChanged();
         }
 
         private void OnSelectionChanged(object sender, IStoreItem item)
         {
-            var document = item as Document;
-            if (document != null)
-            {
-                myNotePad.Document = document.Body;
-            }
-            else
-            {
-                var folder = (Folder)item;
-                document = folder.Entries.OfType<Document>().FirstOrDefault();
-                if (document != null)
-                {
-                    myNotePad.Document = document.Body;
-                }
-                else
-                {
-                    myNotePad.Document = null;
-                }
-            }
+            myNotePad.Document = GetFlowDocument(item);
 
             if (!string.IsNullOrEmpty(myNavigation.SearchText))
             {
@@ -40,13 +31,49 @@ namespace Plainion.Windows.Controls.Text
             }
         }
 
+        private FlowDocument GetFlowDocument(IStoreItem item)
+        {
+            if (item == null)
+            {
+                return null;
+            }
+
+            var document = item as Document;
+            if (document != null)
+            {
+                return document.Body;
+            }
+
+            var folder = (Folder)item;
+            document = folder.Entries.OfType<Document>().FirstOrDefault();
+            if (document != null)
+            {
+                return document.Body;
+            }
+
+            return null;
+        }
+
         public static readonly DependencyProperty DocumentStoreProperty = DependencyProperty.Register("DocumentStore",
             typeof(DocumentStore), typeof(NoteBook), new PropertyMetadata(null, OnDocumentStoreChanged));
 
         private static void OnDocumentStoreChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var self = (NoteBook)d;
-            self.myNavigation.DocumentStore = self.DocumentStore;
+            ((NoteBook)d).OnDocumentStoreChanged();
+        }
+
+        private void OnDocumentStoreChanged()
+        {
+            myNavigation.DocumentStore = DocumentStore;
+
+            if (DocumentStore == null)
+            {
+                OnSelectionChanged(this, null);
+            }
+            else
+            {
+                OnSelectionChanged(this, DocumentStore.Root.Entries.FirstOrDefault());
+            }
         }
 
         public DocumentStore DocumentStore
