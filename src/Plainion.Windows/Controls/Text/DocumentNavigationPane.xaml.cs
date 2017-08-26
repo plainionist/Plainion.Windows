@@ -37,8 +37,8 @@ namespace Plainion.Windows.Controls.Text
 
             parent.Children.Add(node);
 
-            node.IsSelected = true;
             parent.IsExpanded = true;
+            node.IsSelected = true;
         }
 
         private void OnSelectionChanged(object sender, PropertyChangedEventArgs e)

@@ -1,5 +1,9 @@
 ## 2.3.0 - 2017-08-26
 
+- Fixed DataContext handling in TreeEditor which occationally occured
+
+## 2.3.0 - 2017-08-26
+
 - Plainion.Core updated
 - Notebook: first document selected on startup
 - DocumentStore: default font changed to Arial, size = 13

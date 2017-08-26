@@ -37,12 +37,12 @@ namespace Plainion.Windows.Controls.Tree
             return GetOrCreate(DataContext);
         }
 
-        public NodeState GetOrCreate( object dataContext )
+        public NodeState GetOrCreate(INode dataContext)
         {
             NodeState state;
             if (!myStates.TryGetValue(dataContext, out state))
             {
-                state = new NodeState((INode)dataContext, this);
+                state = new NodeState(dataContext, this);
                 myStates[dataContext] = state;
             }
             return state;
