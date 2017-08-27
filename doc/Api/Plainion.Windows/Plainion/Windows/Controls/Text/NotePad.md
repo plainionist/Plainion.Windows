@@ -33,6 +33,8 @@ NotePad
 
 ## Methods
 
+### void OnInitialized(System.EventArgs e)
+
 ### void Search(System.String text,Plainion.Windows.Controls.Text.SearchMode mode)
 
 ### void InitializeComponent()
