@@ -1,4 +1,4 @@
-## 2.3.0 - 2017-08-27
+## 2.4.0 - 2017-08-27
 
 - Fixed DataContext handling in TreeEditor which occationally occured
 - NoteBook: fixed selection of newly created document

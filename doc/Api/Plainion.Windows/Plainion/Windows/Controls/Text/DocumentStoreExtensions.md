@@ -16,7 +16,7 @@ Returns the folder containing the given document.
 
 Returns the folder containing the given document.
 
-### System.Collections.Generic.IEnumerable`1[[Plainion.Windows.Controls.Text.IStoreItem, Plainion.Windows, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null]] Enumerate(Plainion.Windows.Controls.Text.Folder self)
+### System.Collections.Generic.IEnumerable`1[[Plainion.Windows.Controls.Text.IStoreItem, Plainion.Windows, Version=2.4.0.0, Culture=neutral, PublicKeyToken=null]] Enumerate(Plainion.Windows.Controls.Text.Folder self)
 
 ### Plainion.Windows.Controls.Text.Document CreateDocument(System.String title)
 
