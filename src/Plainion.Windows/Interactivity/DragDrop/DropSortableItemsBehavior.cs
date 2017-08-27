@@ -31,12 +31,15 @@ namespace Plainion.Windows.Interactivity.DragDrop
             base.OnDetaching();
         }
 
-        private void OnDrop( object sender, DragEventArgs e )
+        private void OnDrop(object sender, DragEventArgs e)
         {
-            if( myDataFormat != null && e.Data.GetDataPresent( myDataFormat ) )
+            if (myDataFormat != null && e.Data.GetDataPresent(myDataFormat))
             {
                 var target = AssociatedObject as IDropable ?? AssociatedObject.DataContext as IDropable;
-                target.Drop( e.Data.GetData( myDataFormat ), ( DropLocation )e.Data.GetData( typeof( DropLocation ) ) );
+                if (target != null)
+                {
+                    target.Drop(e.Data.GetData(myDataFormat), (DropLocation)e.Data.GetData(typeof(DropLocation)));
+                }
             }
 
             myAdorner.Remove();
@@ -44,43 +47,43 @@ namespace Plainion.Windows.Interactivity.DragDrop
             e.Handled = true;
         }
 
-        private void OnDragLeave( object sender, DragEventArgs e )
+        private void OnDragLeave(object sender, DragEventArgs e)
         {
             myAdorner.Remove();
 
             e.Handled = true;
         }
 
-        private void OnDragOver( object sender, DragEventArgs e )
+        private void OnDragOver(object sender, DragEventArgs e)
         {
             e.Effects = DragDropEffects.None;
 
-            if( myDataFormat != null && e.Data.GetDataPresent( myDataFormat ) )
+            if (myDataFormat != null && e.Data.GetDataPresent(myDataFormat))
             {
-                var location = GetDropLocation( e );
+                var location = GetDropLocation(e);
 
                 var target = AssociatedObject as IDropable ?? AssociatedObject.DataContext as IDropable;
-                if( target.IsDropAllowed( e.Data.GetData( myDataFormat ), location ) )
+                if (target.IsDropAllowed(e.Data.GetData(myDataFormat), location))
                 {
                     e.Effects = DragDropEffects.Move;
-                    e.Data.SetData( typeof( DropLocation ), location );
+                    e.Data.SetData(typeof(DropLocation), location);
 
-                    myAdorner.Update( location );
+                    myAdorner.Update(location);
                 }
             }
 
             e.Handled = true;
         }
 
-        private DropLocation GetDropLocation( DragEventArgs e )
+        private DropLocation GetDropLocation(DragEventArgs e)
         {
-            var pos = e.GetPosition( AssociatedObject );
+            var pos = e.GetPosition(AssociatedObject);
 
-            if( pos.Y < AssociatedObject.ActualHeight * 0.2 )
+            if (pos.Y < AssociatedObject.ActualHeight * 0.2)
             {
                 return DropLocation.Before;
             }
-            else if( pos.Y > AssociatedObject.ActualHeight * 0.8 )
+            else if (pos.Y > AssociatedObject.ActualHeight * 0.8)
             {
                 return DropLocation.After;
             }
@@ -90,18 +93,18 @@ namespace Plainion.Windows.Interactivity.DragDrop
             }
         }
 
-        private void OnDragEnter( object sender, DragEventArgs e )
+        private void OnDragEnter(object sender, DragEventArgs e)
         {
             //if the DataContext implements IDropable, record the data type that can be dropped
-            if( myDataFormat == null )
+            if (myDataFormat == null)
             {
                 var dropObject = AssociatedObject.DataContext as IDropable;
-                if( dropObject != null )
+                if (dropObject != null)
                 {
                     myDataFormat = dropObject.DataFormat;
                 }
 
-                myAdorner = new DropSortableItemsAdorner( AssociatedObject );
+                myAdorner = new DropSortableItemsAdorner(AssociatedObject);
             }
 
             e.Handled = true;

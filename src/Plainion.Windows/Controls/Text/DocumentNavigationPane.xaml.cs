@@ -32,18 +32,23 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnCreateChild(NavigationNode parent)
         {
-            var document = DocumentStoreExtensions.CreateDocument( "<new>" );
+            var document = DocumentStoreExtensions.CreateDocument("<new>");
             var node = myNodeFactory.Create(document, parent);
 
             parent.Children.Add(node);
 
             parent.IsExpanded = true;
+
             node.IsSelected = true;
         }
 
         private void OnSelectionChanged(object sender, PropertyChangedEventArgs e)
         {
-            OnSelectionChanged(((NavigationNode)sender).Model);
+            var node = (NavigationNode)sender;
+            if (node.IsSelected)
+            {
+                OnSelectionChanged(node.Model);
+            }
         }
 
         private void OnSelectionChanged(IStoreItem item)
@@ -97,6 +102,9 @@ namespace Plainion.Windows.Controls.Text
 
         public ICommand DropCommand { get; private set; }
 
+        /// <summary>
+        /// Notifies the selected item.
+        /// </summary>
         public event EventHandler<IStoreItem> SelectionChanged;
 
         public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register("SearchText",
