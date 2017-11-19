@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Plainion.Windows.Controls.Text.AutoCorrection;
 
 namespace Plainion.Windows.Controls.Text
 {
@@ -150,6 +151,21 @@ namespace Plainion.Windows.Controls.Text
                 mySearchBox.Focus();
                 mySearchBox.SelectAll();
             }
+        }
+
+        public static readonly DependencyProperty AutoCorrectionProperty = DependencyProperty.Register("AutoCorrection",
+          typeof(AutoCorrectionTable), typeof(NotePad), new PropertyMetadata(new AutoCorrectionTable(), OnAutoCorrectionChanged));
+
+        private static void OnAutoCorrectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (NotePad)d;
+            self.myEditor.AutoCorrection = self.AutoCorrection;
+        }
+
+        public AutoCorrectionTable AutoCorrection
+        {
+            get { return (AutoCorrectionTable)GetValue(AutoCorrectionProperty); }
+            set { SetValue(AutoCorrectionProperty, value); }
         }
     }
 }

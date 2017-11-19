@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -20,13 +21,10 @@ namespace Plainion.Windows.Controls.Text
         private bool myWordsAdded;
 
         // TextPointers that track the range covering content where words are added.
-        private TextPointer mySelectionStartPosition;
-        private TextPointer mySelectionEndPosition;
+        private int mySelectionStartPosition;
 
         public RichTextEditor()
         {
-            AutoCorrection = new AutoCorrectionTable();
-
             AddHandler(KeyDownEvent, new KeyEventHandler(OnKeyDown), handledEventsToo: true);
 
             TextChanged += OnTextChanged;
@@ -37,7 +35,14 @@ namespace Plainion.Windows.Controls.Text
             IsDocumentEnabled = true;
         }
 
-        public AutoCorrectionTable AutoCorrection { get; private set; }
+        public static readonly DependencyProperty AutoCorrectionProperty = DependencyProperty.Register("AutoCorrection",
+            typeof(AutoCorrectionTable), typeof(RichTextEditor), new PropertyMetadata(new AutoCorrectionTable()));
+
+        public AutoCorrectionTable AutoCorrection
+        {
+            get { return (AutoCorrectionTable)GetValue(AutoCorrectionProperty); }
+            set { SetValue(AutoCorrectionProperty, value); }
+        }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
@@ -54,9 +59,8 @@ namespace Plainion.Windows.Controls.Text
             if(e.Key == Key.Space || e.Key == Key.Return)
             {
                 myWordsAdded = true;
-                mySelectionStartPosition = Selection.Start;
-                mySelectionEndPosition = Selection.End.GetPositionAtOffset(0, LogicalDirection.Forward);
-                
+                mySelectionStartPosition = Document.ContentStart.GetOffsetToPosition(Selection.Start);
+
                 // auto correction detection will be done in OnTextChanged()
             }
             else // Key.Back
@@ -73,8 +77,7 @@ namespace Plainion.Windows.Controls.Text
         private void OnPasted(object sender, DataObjectPastingEventArgs e)
         {
             myWordsAdded = true;
-            mySelectionStartPosition = Selection.Start;
-            mySelectionEndPosition = Selection.IsEmpty ? Selection.End.GetPositionAtOffset(0, LogicalDirection.Forward) : Selection.End;
+            mySelectionStartPosition = Document.ContentStart.GetOffsetToPosition(CaretPosition);
 
             // auto correction detection will be done in OnTextChanged()
         }
@@ -88,13 +91,11 @@ namespace Plainion.Windows.Controls.Text
 
             TextChanged -= OnTextChanged;
 
-            AutoCorrection.Apply(new TextRange(mySelectionStartPosition, mySelectionEndPosition));
+            AutoCorrection.Apply(new TextRange(Document.ContentStart.GetPositionAtOffset(mySelectionStartPosition), CaretPosition));
 
             TextChanged += OnTextChanged;
 
             myWordsAdded = false;
-            mySelectionStartPosition = null;
-            mySelectionEndPosition = null;
         }
 
         public bool Search(string searchText, SearchMode mode)

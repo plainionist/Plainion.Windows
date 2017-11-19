@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using Plainion.Windows.Controls.Text.AutoCorrection;
 
 namespace Plainion.Windows.Controls.Text
 {
@@ -80,6 +81,21 @@ namespace Plainion.Windows.Controls.Text
         {
             get { return (DocumentStore)GetValue(DocumentStoreProperty); }
             set { SetValue(DocumentStoreProperty, value); }
+        }
+
+        public static readonly DependencyProperty AutoCorrectionProperty = DependencyProperty.Register("AutoCorrection",
+          typeof(AutoCorrectionTable), typeof(NoteBook), new PropertyMetadata(new AutoCorrectionTable(), OnAutoCorrectionChanged));
+
+        private static void OnAutoCorrectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (NoteBook)d;
+            self.myNotePad.AutoCorrection = self.AutoCorrection;
+        }
+
+        public AutoCorrectionTable AutoCorrection
+        {
+            get { return (AutoCorrectionTable)GetValue(AutoCorrectionProperty); }
+            set { SetValue(AutoCorrectionProperty, value); }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Windows.Documents;
 using Plainion.IO.MemoryFS;
 using Plainion.Windows.Controls.Text;
+using Plainion.Windows.Controls.Text.AutoCorrection;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -14,6 +15,9 @@ namespace Plainion.RI.Controls
 
         public NoteBookViewModel()
         {
+            AutoCorrection = new AutoCorrectionTable();
+            AutoCorrection.Corrections.Add(new ArrowCorrection());
+
             var fs = new FileSystemImpl();
 
             DocumentStore = new FileSystemDocumentStore(fs.Directory("/x"));
@@ -44,6 +48,8 @@ namespace Plainion.RI.Controls
         }
 
         public DelegateCommand SaveCommand { get; private set; }
+
+        public AutoCorrectionTable AutoCorrection { get; private set; }
     }
 
     static class FlowDocumentExtensions

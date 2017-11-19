@@ -16,7 +16,7 @@
         <controls:DocumentNavigationPane Grid.Column="0" x:Name="myNavigation" Margin="0,5,0,0"/>
         
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
-        
-        <controls:NotePad Grid.Column="2" x:Name="myNotePad" Margin="0"/>  
+
+        <controls:NotePad Grid.Column="2" x:Name="myNotePad" Margin="0" AutoCorrection="{Binding AutoCorrection,ElementName=_this}"/>  
     </Grid>
 </UserControl>

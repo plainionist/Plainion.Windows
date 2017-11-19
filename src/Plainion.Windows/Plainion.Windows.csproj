@@ -46,6 +46,7 @@
     <Compile Include="Controls\Text\AutoCorrection\AutoCorrectionTable.cs" />
     <Compile Include="Controls\Text\AutoCorrection\ClickableHyperlink.cs" />
     <Compile Include="Controls\Text\AutoCorrection\IAutoCorrection.cs" />
+    <Compile Include="Controls\Text\AutoCorrection\MarkupHeadline.cs" />
     <Compile Include="Controls\Text\DocumentStoreExtensions.cs" />
     <Compile Include="Controls\Text\Document.cs" />
     <Compile Include="Controls\Text\DocumentOperations.cs" />

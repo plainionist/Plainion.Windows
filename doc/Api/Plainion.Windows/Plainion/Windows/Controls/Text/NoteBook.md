@@ -12,6 +12,8 @@ NoteBook
 
 ### System.Windows.DependencyProperty DocumentStoreProperty
 
+### System.Windows.DependencyProperty AutoCorrectionProperty
+
 
 ## Constructors
 
@@ -21,6 +23,8 @@ NoteBook
 ## Properties
 
 ### Plainion.Windows.Controls.Text.DocumentStore DocumentStore
+
+### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionTable AutoCorrection
 
 
 ## Methods

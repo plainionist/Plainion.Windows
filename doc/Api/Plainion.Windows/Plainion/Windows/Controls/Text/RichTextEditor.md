@@ -8,6 +8,11 @@
 Extends RichtTextBox by auto-completion. See "AutoCorrection" namespace for more details
 
 
+## Fields
+
+### System.Windows.DependencyProperty AutoCorrectionProperty
+
+
 ## Constructors
 
 ### Constructor()

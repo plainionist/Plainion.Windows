@@ -16,6 +16,8 @@ NotePad
 
 ### System.Windows.DependencyProperty SearchSuccessfulProperty
 
+### System.Windows.DependencyProperty AutoCorrectionProperty
+
 
 ## Constructors
 
@@ -29,6 +31,8 @@ NotePad
 ### System.String SearchText
 
 ### System.Boolean SearchSuccessful
+
+### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionTable AutoCorrection
 
 
 ## Methods

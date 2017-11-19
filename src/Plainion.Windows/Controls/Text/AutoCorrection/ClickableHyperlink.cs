@@ -6,43 +6,31 @@ using System.Windows.Navigation;
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
+    /// <summary>
+    /// Converts URLs into clickable hyperlinks
+    /// </summary>
     /// <remarks>
     /// Initial verison inspired by:
     /// http://blogs.msdn.com/b/prajakta/archive/2006/10/17/autp-detecting-hyperlinks-in-richtextbox-part-i.aspx
     /// http://blogs.msdn.com/b/prajakta/archive/2006/11/28/auto-detecting-hyperlinks-in-richtextbox-part-ii.aspx
     /// </remarks>
-    class ClickableHyperlink : IAutoCorrection
+    public class ClickableHyperlink : IAutoCorrection
     {
         public bool TryApply(TextRange range)
         {
             bool ret = false;
 
-            var navigator = range.Start;
-            while (navigator != null && navigator.CompareTo(range.End) <= 0)
+            foreach (var wordRange in DocumentOperations.GetWords(range))
             {
-                var wordRange = DocumentOperations.GetWordRange(navigator);
-                if (wordRange == null || wordRange.IsEmpty)
-                {
-                    // No more words in the document.
-                    break;
-                }
-
                 string wordText = wordRange.Text;
                 var url = TryCreateUrl(wordText);
-                if (url != null &&
-                    !IsInHyperlinkScope(wordRange.Start) &&
-                    !IsInHyperlinkScope(wordRange.End))
+                if (url != null && !IsInHyperlinkScope(wordRange.Start) && !IsInHyperlinkScope(wordRange.End))
                 {
                     var hyperlink = new Hyperlink(wordRange.Start, wordRange.End);
                     hyperlink.NavigateUri = url;
                     WeakEventManager<Hyperlink, RequestNavigateEventArgs>.AddHandler(hyperlink, "RequestNavigate", OnHyperlinkRequestNavigate);
 
-                    navigator = hyperlink.ElementEnd.GetNextInsertionPosition(LogicalDirection.Forward);
                     ret = true;
-                }
-                else
-                {
-                    navigator = wordRange.End.GetNextInsertionPosition(LogicalDirection.Forward);
                 }
             }
 
@@ -73,19 +61,26 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
         private static Uri TryCreateUrl(string wordText)
         {
-            if (wordText.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                wordText.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
-                wordText.StartsWith("ftp://", StringComparison.OrdinalIgnoreCase))
+            try
             {
-                return new Uri(wordText);
-            }
+                if (wordText.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                    wordText.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+                    wordText.StartsWith("ftp://", StringComparison.OrdinalIgnoreCase))
+                {
+                    return new Uri(wordText);
+                }
 
-            if (wordText.StartsWith("www.", StringComparison.OrdinalIgnoreCase))
+                if (wordText.StartsWith("www.", StringComparison.OrdinalIgnoreCase))
+                {
+                    return new Uri("http://" + wordText);
+                }
+
+                return null;
+            }
+            catch
             {
-                return new Uri("http://" + wordText);
+                return null;
             }
-
-            return null;
         }
 
         public TextPointer TryUndo(TextPointer start)

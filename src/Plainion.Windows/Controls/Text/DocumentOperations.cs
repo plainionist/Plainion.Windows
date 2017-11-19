@@ -12,9 +12,9 @@ namespace Plainion.Windows.Controls.Text
         /// <remarks>
         /// If this TextPointer is within a word or at start of word, the containing word range is returned.
         /// If this TextPointer is between two words, the following word range is returned.
-        /// If this TextPointer is at trailing word boundary, the following word range is returned.
+        /// If this TextPointer is at trailing word boundary, the preceding word range is returned.
         /// </remarks>
-        public static TextRange GetWordRange(TextPointer position)
+        public static TextRange GetWord(TextPointer position)
         {
             TextRange wordRange = null;
             TextPointer wordStartPosition = null;
@@ -23,13 +23,13 @@ namespace Plainion.Windows.Controls.Text
             // Go forward first, to find word end position.
             wordEndPosition = GetPositionAtWordBoundary(position, /*wordBreakDirection*/LogicalDirection.Forward);
 
-            if(wordEndPosition != null)
+            if (wordEndPosition != null)
             {
                 // Then travel backwards, to find word start position.
                 wordStartPosition = GetPositionAtWordBoundary(wordEndPosition, /*wordBreakDirection*/LogicalDirection.Backward);
             }
 
-            if(wordStartPosition != null && wordEndPosition != null)
+            if (wordStartPosition != null && wordEndPosition != null)
             {
                 wordRange = new TextRange(wordStartPosition, wordEndPosition);
             }
@@ -46,13 +46,13 @@ namespace Plainion.Windows.Controls.Text
         /// </summary>
         private static TextPointer GetPositionAtWordBoundary(TextPointer position, LogicalDirection wordBreakDirection)
         {
-            if(!position.IsAtInsertionPosition)
+            if (!position.IsAtInsertionPosition)
             {
                 position = position.GetInsertionPosition(wordBreakDirection);
             }
 
             TextPointer navigator = position;
-            while(navigator != null && !IsPositionNextToWordBreak(navigator, wordBreakDirection))
+            while (navigator != null && !IsPositionNextToWordBreak(navigator, wordBreakDirection))
             {
                 navigator = navigator.GetNextInsertionPosition(wordBreakDirection);
             }
@@ -67,12 +67,12 @@ namespace Plainion.Windows.Controls.Text
             bool isAtWordBoundary = false;
 
             // Skip over any formatting.
-            if(position.GetPointerContext(wordBreakDirection) != TextPointerContext.Text)
+            if (position.GetPointerContext(wordBreakDirection) != TextPointerContext.Text)
             {
                 position = position.GetInsertionPosition(wordBreakDirection);
             }
 
-            if(position.GetPointerContext(wordBreakDirection) == TextPointerContext.Text)
+            if (position.GetPointerContext(wordBreakDirection) == TextPointerContext.Text)
             {
                 LogicalDirection oppositeDirection = (wordBreakDirection == LogicalDirection.Forward) ?
                     LogicalDirection.Backward : LogicalDirection.Forward;
@@ -83,7 +83,7 @@ namespace Plainion.Windows.Controls.Text
                 position.GetTextInRun(wordBreakDirection, runBuffer, /*startIndex*/0, /*count*/1);
                 position.GetTextInRun(oppositeDirection, oppositeRunBuffer, /*startIndex*/0, /*count*/1);
 
-                if(runBuffer[0] == ' ' && !(oppositeRunBuffer[0] == ' '))
+                if (runBuffer[0] == ' ' && !(oppositeRunBuffer[0] == ' '))
                 {
                     isAtWordBoundary = true;
                 }
@@ -98,8 +98,29 @@ namespace Plainion.Windows.Controls.Text
             return isAtWordBoundary;
         }
 
+        /// <summary>
+        /// Returns all words within given range
+        /// </summary>
+        public static IEnumerable<TextRange> GetWords(TextRange range)
+        {
+            var navigator = range.Start;
+            while (navigator != null && navigator.CompareTo(range.End) <= 0)
+            {
+                var wordRange = GetWord(navigator);
+                if (wordRange == null || wordRange.IsEmpty)
+                {
+                    // No more words in the document.
+                    yield break;
+                }
+
+                yield return wordRange;
+
+                navigator = wordRange.End.GetNextInsertionPosition(LogicalDirection.Forward);
+            }
+        }
+
         // https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo
-        public static IEnumerable<TextRange> Search(FlowDocument document,TextPointer currentPosition, string searchText, SearchMode mode)
+        public static IEnumerable<TextRange> Search(FlowDocument document, TextPointer currentPosition, string searchText, SearchMode mode)
         {
             Contract.RequiresNotNull(document, "document");
 
@@ -130,7 +151,7 @@ namespace Plainion.Windows.Controls.Text
             {
                 while (result != null)
                 {
-                    result = Search(document,new TextRange(result.End, document.ContentEnd), searchText, direction);
+                    result = Search(document, new TextRange(result.End, document.ContentEnd), searchText, direction);
                     if (result != null)
                     {
                         yield return result;

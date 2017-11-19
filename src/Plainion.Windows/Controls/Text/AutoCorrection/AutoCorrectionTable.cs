@@ -5,17 +5,18 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
     public class AutoCorrectionTable
     {
-        private List<IAutoCorrection> myCorrections;
-
         public AutoCorrectionTable()
         {
-            myCorrections = new List<IAutoCorrection>();
-            myCorrections.Add(new ClickableHyperlink());
+            Corrections = new List<IAutoCorrection>();
+            Corrections.Add(new ClickableHyperlink());
+            Corrections.Add(new MarkupHeadline());
         }
+
+        public IList<IAutoCorrection> Corrections { get; private set; }
 
         public void Apply(TextRange range)
         {
-            foreach (var correction in myCorrections)
+            foreach (var correction in Corrections)
             {
                 if (correction.TryApply(range))
                 {
@@ -26,7 +27,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
         public TextPointer Undo(TextPointer start)
         {
-            foreach (var correction in myCorrections)
+            foreach (var correction in Corrections)
             {
                 var newCaretPosition = correction.TryUndo(start);
                 if (newCaretPosition != null)
