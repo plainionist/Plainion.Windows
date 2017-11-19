@@ -1,3 +1,8 @@
+## 2.5.0 - 2017-11-19
+
+- DocumentStore: default font changed to Calibri, size = 11pt
+- AutoCorrection refactored to support multiple auto-corrections
+
 ## 2.4.0 - 2017-08-27
 
 - Fixed DataContext handling in TreeEditor which occationally occured

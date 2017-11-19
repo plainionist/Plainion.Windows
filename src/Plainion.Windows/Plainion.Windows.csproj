@@ -43,6 +43,9 @@
     <Compile Include="Controls\AdornerPlacement.cs" />
     <Compile Include="Controls\Text\AbstractStoreItem.cs" />
     <Compile Include="Controls\Text\AbstractStoreItemId.cs" />
+    <Compile Include="Controls\Text\AutoCorrection\AutoCorrectionTable.cs" />
+    <Compile Include="Controls\Text\AutoCorrection\ClickableHyperlink.cs" />
+    <Compile Include="Controls\Text\AutoCorrection\IAutoCorrection.cs" />
     <Compile Include="Controls\Text\DocumentStoreExtensions.cs" />
     <Compile Include="Controls\Text\Document.cs" />
     <Compile Include="Controls\Text\DocumentOperations.cs" />
@@ -72,6 +75,7 @@
     <Compile Include="BindingProxy.cs" />
     <Compile Include="BoolToVisibilityConverter.cs" />
     <Compile Include="Controls\Text\Snapshot.cs" />
+    <Compile Include="Controls\Text\TextStyles.cs" />
     <Compile Include="Controls\Tree\DataContextProperty.cs" />
     <Compile Include="Controls\Tree\DragDropBehavior.cs" />
     <Compile Include="Controls\Tree\ExtendedTreeView.cs" />

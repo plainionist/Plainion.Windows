@@ -1,45 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Navigation;
 
 namespace Plainion.Windows.Controls.Text
 {
     public static class DocumentOperations
     {
-        internal static void TryMakeHyperlinks(TextRange range)
-        {
-            var navigator = range.Start;
-            while(navigator != null && navigator.CompareTo(range.End) <= 0)
-            {
-                var wordRange = GetWordRange(navigator);
-                if(wordRange == null || wordRange.IsEmpty)
-                {
-                    // No more words in the document.
-                    break;
-                }
-
-                string wordText = wordRange.Text;
-                var url = TryCreateUrl(wordText);
-                if(url != null &&
-                    !IsInHyperlinkScope(wordRange.Start) &&
-                    !IsInHyperlinkScope(wordRange.End))
-                {
-                    var hyperlink = new Hyperlink(wordRange.Start, wordRange.End);
-                    hyperlink.NavigateUri = url;
-                    WeakEventManager<Hyperlink, RequestNavigateEventArgs>.AddHandler(hyperlink, "RequestNavigate", OnHyperlinkRequestNavigate);
-
-                    navigator = hyperlink.ElementEnd.GetNextInsertionPosition(LogicalDirection.Forward);
-                }
-                else
-                {
-                    navigator = wordRange.End.GetNextInsertionPosition(LogicalDirection.Forward);
-                }
-            }
-        }
-
         /// <summary>
         /// Returns a TextRange covering a word containing or following this TextPointer.
         /// </summary>
@@ -48,7 +14,7 @@ namespace Plainion.Windows.Controls.Text
         /// If this TextPointer is between two words, the following word range is returned.
         /// If this TextPointer is at trailing word boundary, the following word range is returned.
         /// </remarks>
-        private static TextRange GetWordRange(TextPointer position)
+        public static TextRange GetWordRange(TextPointer position)
         {
             TextRange wordRange = null;
             TextPointer wordStartPosition = null;
@@ -130,124 +96,6 @@ namespace Plainion.Windows.Controls.Text
             }
 
             return isAtWordBoundary;
-        }
-
-        // Helper that returns true when passed TextPointer is within the scope of a Hyperlink element.
-        private static bool IsInHyperlinkScope(TextPointer position)
-        {
-            return GetHyperlinkAncestor(position) != null;
-        }
-
-        // Helper that returns a Hyperlink ancestor of passed TextPointer.
-        private static Hyperlink GetHyperlinkAncestor(TextPointer position)
-        {
-            var parent = position.Parent as Inline;
-            while(parent != null && !(parent is Hyperlink))
-            {
-                parent = parent.Parent as Inline;
-            }
-
-            return parent as Hyperlink;
-        }
-
-        private static void OnHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            Process.Start(e.Uri.AbsoluteUri);
-            e.Handled = true;
-        }
-
-        private static Uri TryCreateUrl(string wordText)
-        {
-            if(wordText.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                wordText.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
-                wordText.StartsWith("ftp://", StringComparison.OrdinalIgnoreCase))
-            {
-                return new Uri(wordText);
-            }
-
-            if(wordText.StartsWith("www.", StringComparison.OrdinalIgnoreCase))
-            {
-                return new Uri("http://" + wordText);
-            }
-
-            return null;
-        }
-
-        internal static TextPointer RemoveHyperlink(TextPointer start)
-        {
-            var backspacePosition = start.GetNextInsertionPosition(LogicalDirection.Backward);
-            Hyperlink hyperlink;
-            if(backspacePosition == null || !IsHyperlinkBoundaryCrossed(start, backspacePosition, out hyperlink))
-            {
-                return null;
-            }
-
-            // Remember caretPosition with forward gravity. This is necessary since we are going to delete 
-            // the hyperlink element preceeding caretPosition and after deletion current caretPosition 
-            // (with backward gravity) will follow content preceeding the hyperlink. 
-            // We want to remember content following the hyperlink to set new caret position at.
-
-            var newCaretPosition = start.GetPositionAtOffset(0, LogicalDirection.Forward);
-
-            // Deleting the hyperlink is done using logic below.
-
-            // 1. Copy its children Inline to a temporary array.
-            var hyperlinkChildren = hyperlink.Inlines;
-            var inlines = new Inline[hyperlinkChildren.Count];
-            hyperlinkChildren.CopyTo(inlines, 0);
-
-            // 2. Remove each child from parent hyperlink element and insert it after the hyperlink.
-            for(int i = inlines.Length - 1; i >= 0; i--)
-            {
-                hyperlinkChildren.Remove(inlines[i]);
-                hyperlink.SiblingInlines.InsertAfter(hyperlink, inlines[i]);
-            }
-
-            // 3. Apply hyperlink's local formatting properties to inlines (which are now outside hyperlink scope).
-            var localProperties = hyperlink.GetLocalValueEnumerator();
-            var inlineRange = new TextRange(inlines[0].ContentStart, inlines[inlines.Length - 1].ContentEnd);
-
-            while(localProperties.MoveNext())
-            {
-                var property = localProperties.Current;
-                var dp = property.Property;
-                object value = property.Value;
-
-                if(!dp.ReadOnly &&
-                    dp != Inline.TextDecorationsProperty && // Ignore hyperlink defaults.
-                    dp != TextElement.ForegroundProperty &&
-                    dp != BaseUriHelper.BaseUriProperty &&
-                    !IsHyperlinkProperty(dp))
-                {
-                    inlineRange.ApplyPropertyValue(dp, value);
-                }
-            }
-
-            // 4. Delete the (empty) hyperlink element.
-            hyperlink.SiblingInlines.Remove(hyperlink);
-
-            return newCaretPosition;
-        }
-
-        // Helper that returns true if passed caretPosition and backspacePosition cross a hyperlink end boundary
-        // (under the assumption that caretPosition and backSpacePosition are adjacent insertion positions).
-        private static bool IsHyperlinkBoundaryCrossed(TextPointer caretPosition, TextPointer backspacePosition, out Hyperlink backspacePositionHyperlink)
-        {
-            var caretPositionHyperlink = GetHyperlinkAncestor(caretPosition);
-            backspacePositionHyperlink = GetHyperlinkAncestor(backspacePosition);
-
-            return (caretPositionHyperlink == null && backspacePositionHyperlink != null) ||
-                (caretPositionHyperlink != null && backspacePositionHyperlink != null && caretPositionHyperlink != backspacePositionHyperlink);
-        }
-
-        // Helper that returns true when passed property applies to Hyperlink only.
-        private static bool IsHyperlinkProperty(DependencyProperty dp)
-        {
-            return dp == Hyperlink.CommandProperty ||
-                dp == Hyperlink.CommandParameterProperty ||
-                dp == Hyperlink.CommandTargetProperty ||
-                dp == Hyperlink.NavigateUriProperty ||
-                dp == Hyperlink.TargetNameProperty;
         }
 
         // https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo

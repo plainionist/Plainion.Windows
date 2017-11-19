@@ -67,8 +67,8 @@ namespace Plainion.Windows.Controls.Text
         {
             var document = new Document(() => new FlowDocument()
             {
-                FontFamily = new FontFamily("Arial"),
-                FontSize = 13d
+                FontFamily = TextStyles.Body.FontFamily,
+                FontSize = TextStyles.Body.FontSize
             });
             document.Title = title;
 

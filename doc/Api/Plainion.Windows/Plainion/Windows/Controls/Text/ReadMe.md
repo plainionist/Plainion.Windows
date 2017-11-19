@@ -20,3 +20,7 @@
 * [NoteBook](NoteBook.md)
 * [NotePad](NotePad.md)
 * [RichTextEditor](RichTextEditor.md)
+
+## Namespaces
+
+* [Plainion.Windows.Controls.Text.AutoCorrection](AutoCorrection/ReadMe.md)

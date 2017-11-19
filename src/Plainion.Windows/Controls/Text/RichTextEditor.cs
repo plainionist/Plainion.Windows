@@ -1,23 +1,17 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Plainion.Windows.Controls.Text.AutoCorrection;
 
 namespace Plainion.Windows.Controls.Text
 {
     /// <summary>
     /// Extends RichtTextBox by auto-completion.
-    /// Current implementation supports: 
-    /// - autodetection of hyperlinks
+    /// See "AutoCorrection" namespace for more details
     /// </summary>
-    /// <remarks>
-    /// Initial verison inspired by:
-    /// http://blogs.msdn.com/b/prajakta/archive/2006/10/17/autp-detecting-hyperlinks-in-richtextbox-part-i.aspx
-    /// http://blogs.msdn.com/b/prajakta/archive/2006/11/28/auto-detecting-hyperlinks-in-richtextbox-part-ii.aspx
-    /// </remarks>
     public class RichTextEditor : RichTextBox
     {
         internal static Brush SearchHighlightBrush = Brushes.Yellow;
@@ -31,6 +25,8 @@ namespace Plainion.Windows.Controls.Text
 
         public RichTextEditor()
         {
+            AutoCorrection = new AutoCorrectionTable();
+
             AddHandler(KeyDownEvent, new KeyEventHandler(OnKeyDown), handledEventsToo: true);
 
             TextChanged += OnTextChanged;
@@ -40,6 +36,8 @@ namespace Plainion.Windows.Controls.Text
             // required to get hyperlinks working
             IsDocumentEnabled = true;
         }
+
+        public AutoCorrectionTable AutoCorrection { get; private set; }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
@@ -58,14 +56,15 @@ namespace Plainion.Windows.Controls.Text
                 myWordsAdded = true;
                 mySelectionStartPosition = Selection.Start;
                 mySelectionEndPosition = Selection.End.GetPositionAtOffset(0, LogicalDirection.Forward);
-                // Hyperlink detection will be done in OnTextChanged()
+                
+                // auto correction detection will be done in OnTextChanged()
             }
             else // Key.Back
             {
-                var newCaretPosition = DocumentOperations.RemoveHyperlink(Selection.Start);
+                var newCaretPosition = AutoCorrection.Undo(Selection.Start);
                 if(newCaretPosition != null)
                 {
-                    // Update selection, since we deleted Hyperlink element and caretPosition was at that Hyperlink's end boundary.
+                    // Update selection, since we deleted a auto correction element and caretPosition was at that auto correction's end boundary.
                     Selection.Select(newCaretPosition, newCaretPosition);
                 }
             }
@@ -77,7 +76,7 @@ namespace Plainion.Windows.Controls.Text
             mySelectionStartPosition = Selection.Start;
             mySelectionEndPosition = Selection.IsEmpty ? Selection.End.GetPositionAtOffset(0, LogicalDirection.Forward) : Selection.End;
 
-            // Hyperlink detection will be done in OnTextChanged()
+            // auto correction detection will be done in OnTextChanged()
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
@@ -89,7 +88,7 @@ namespace Plainion.Windows.Controls.Text
 
             TextChanged -= OnTextChanged;
 
-            DocumentOperations.TryMakeHyperlinks(new TextRange(mySelectionStartPosition, mySelectionEndPosition));
+            AutoCorrection.Apply(new TextRange(mySelectionStartPosition, mySelectionEndPosition));
 
             TextChanged += OnTextChanged;
 
@@ -98,7 +97,6 @@ namespace Plainion.Windows.Controls.Text
             mySelectionEndPosition = null;
         }
 
-        // https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo
         public bool Search(string searchText, SearchMode mode)
         {
             if(Document == null)

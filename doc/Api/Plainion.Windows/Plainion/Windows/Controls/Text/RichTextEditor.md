@@ -5,16 +5,17 @@
 
 **Assembly:** Plainion.Windows
 
-Extends RichtTextBox by auto-completion. Current implementation supports: - autodetection of hyperlinks
-
-## Remarks
-
-Initial verison inspired by: http://blogs.msdn.com/b/prajakta/archive/2006/10/17/autp-detecting-hyperlinks-in-richtextbox-part-i.aspx http://blogs.msdn.com/b/prajakta/archive/2006/11/28/auto-detecting-hyperlinks-in-richtextbox-part-ii.aspx
+Extends RichtTextBox by auto-completion. See "AutoCorrection" namespace for more details
 
 
 ## Constructors
 
 ### Constructor()
+
+
+## Properties
+
+### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionTable AutoCorrection
 
 
 ## Methods

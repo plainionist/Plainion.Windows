@@ -24,8 +24,8 @@ namespace Plainion.Windows.Controls.Text
 
             // Initialize default document from RichTextEditor
             Document = myEditor.Document;
-            Document.FontFamily = new FontFamily("Arial");
-            Document.FontSize = 13d;
+            Document.FontFamily = TextStyles.Body.FontFamily;
+            Document.FontSize = TextStyles.Body.FontSize;
         }
 
         public static readonly DependencyProperty DocumentProperty = DependencyProperty.Register("Document",
@@ -73,13 +73,13 @@ namespace Plainion.Windows.Controls.Text
         {
             if(myHeadline.IsChecked == true)
             {
-                myEditor.Selection.ApplyPropertyValue(Inline.FontSizeProperty, 20d);
-                myEditor.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+                myEditor.Selection.ApplyPropertyValue(Inline.FontSizeProperty, TextStyles.Headline.FontSize);
+                myEditor.Selection.ApplyPropertyValue(Inline.FontWeightProperty, TextStyles.Headline.FontWeight);
             }
             else
             {
-                myEditor.Selection.ApplyPropertyValue(Inline.FontSizeProperty, 13d);
-                myEditor.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+                myEditor.Selection.ApplyPropertyValue(Inline.FontSizeProperty, TextStyles.Body.FontSize);
+                myEditor.Selection.ApplyPropertyValue(Inline.FontWeightProperty, TextStyles.Body.FontWeight);
             }
         }
 

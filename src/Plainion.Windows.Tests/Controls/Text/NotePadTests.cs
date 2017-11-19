@@ -12,13 +12,13 @@ namespace Plainion.Windows.Tests.Controls.Text
     class NotePadTests
     {
         [Test]
-        public void OnLoaded_WhenReceived_DefaultFontIsArialWithSize13()
+        public void OnLoaded_WhenReceived_DefaultFontFamilyAndSizeSet()
         {
             var notepad = new NotePad();
             notepad.RaiseEvent(new RoutedEventArgs(FrameworkElement.LoadedEvent));
 
-            Assert.That(notepad.Document.FontFamily.FamilyNames.Values, Is.EquivalentTo(new[] { "Arial" }));
-            Assert.That(notepad.Document.FontSize, Is.EqualTo(13d));
+            Assert.That(notepad.Document.FontFamily.FamilyNames.Values, Is.EquivalentTo(TextStyles.Body.FontFamily.FamilyNames.Values));
+            Assert.That(notepad.Document.FontSize, Is.EqualTo(TextStyles.Body.FontSize));
         }
 
         [Test]
