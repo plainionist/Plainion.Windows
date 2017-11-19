@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
+﻿using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
@@ -11,7 +6,20 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
     {
         public bool TryApply(TextRange range)
         {
-            return false;
+            bool ret = false;
+
+            foreach (var wordRange in DocumentOperations.GetWords(range))
+            {
+                if (wordRange.Text == "##") // TODO: at line start
+                {
+                    wordRange.Text = wordRange.Text.Replace("##", "");
+                    // TODO: change font
+
+                    ret = true;
+                }
+            }
+
+            return ret;
         }
 
         public TextPointer TryUndo(TextPointer start)
