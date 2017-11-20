@@ -58,8 +58,23 @@ namespace Plainion.Windows.Controls.Tree
             State.Attach(this);
 
             var childrenCount = (TextBlock)GetTemplateChild("PART_ChildrenCount");
-            var expr = BindingOperations.GetMultiBindingExpression(childrenCount, TextBlock.TextProperty);
-            expr.UpdateTarget();
+            if (childrenCount != null)
+            {
+                var expr = BindingOperations.GetMultiBindingExpression(childrenCount, TextBlock.TextProperty);
+                expr.UpdateTarget();
+            }
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            if (State != null)
+            {
+                var childrenCount = (TextBlock)GetTemplateChild("PART_ChildrenCount");
+                var expr = BindingOperations.GetMultiBindingExpression(childrenCount, TextBlock.TextProperty);
+                expr.UpdateTarget();
+            }
         }
 
         protected override DependencyObject GetContainerForItemOverride()

@@ -46,22 +46,30 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key != Key.Back && e.Key != Key.Space && e.Key != Key.Return)
+            if (e.Key != Key.Back && e.Key != Key.Space && e.Key != Key.Return)
             {
                 return;
             }
 
-            if(!Selection.IsEmpty)
+            if (!Selection.IsEmpty)
             {
                 Selection.Text = string.Empty;
             }
 
-            if(e.Key == Key.Space || e.Key == Key.Return)
+            if (e.Key == Key.Space || e.Key == Key.Return)
             {
                 myWordsAdded = true;
-                mySelectionStartPosition = Document.ContentStart.GetOffsetToPosition(Selection.Start);
+
+                // we get "next insertion position backwards" to "skip" the space or enter and want to remember "last content" typed
+                mySelectionStartPosition = Document.ContentStart.GetOffsetToPosition(Selection.Start.GetNextInsertionPosition(LogicalDirection.Backward));
 
                 // auto correction detection will be done in OnTextChanged()
+
+                if (e.Key == Key.Return)
+                {
+                    // we have to trigger auto correction explicitly here
+                    ApplyAutoCorrection();
+                }
             }
             else // Key.Back
             {
@@ -71,7 +79,7 @@ namespace Plainion.Windows.Controls.Text
 
                 var newCaretPosition = Selection.Start.GetPositionAtOffset(0, LogicalDirection.Forward);
 
-                if(AutoCorrection.Undo(Selection.Start))
+                if (AutoCorrection.Undo(Selection.Start))
                 {
                     // Update selection, since we deleted a auto correction element and caretPosition was at that auto correction's end boundary.
                     Selection.Select(newCaretPosition, newCaretPosition);
@@ -89,23 +97,28 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if(!myWordsAdded || Document == null)
+            ApplyAutoCorrection();
+        }
+
+        private void ApplyAutoCorrection()
+        { 
+            if (!myWordsAdded || Document == null)
             {
                 return;
             }
+
+            myWordsAdded = false;
 
             TextChanged -= OnTextChanged;
 
             AutoCorrection.Apply(new TextRange(Document.ContentStart.GetPositionAtOffset(mySelectionStartPosition), CaretPosition));
 
             TextChanged += OnTextChanged;
-
-            myWordsAdded = false;
         }
 
         public bool Search(string searchText, SearchMode mode)
         {
-            if(Document == null)
+            if (Document == null)
             {
                 return false;
             }

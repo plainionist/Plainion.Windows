@@ -1,4 +1,5 @@
-﻿using System.Windows.Documents;
+﻿using System;
+using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
@@ -8,19 +9,21 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
         {
             bool ret = false;
 
-            //var lineStart = DocumentOperations.GetLineAt(range.Start).Start;
+            var lineStart = new Lazy<TextPointer>(() => DocumentOperations.GetLineAt(range.Start).Start);
 
-            //foreach (var wordRange in DocumentOperations.GetWords(range))
-            //{
-            //    if (wordRange.Start.CompareTo(lineStart) == 0  && wordRange.Text == "##") 
-            //    {
-            //        wordRange.Text = string.Empty;
-            //        wordRange.ApplyPropertyValue(Inline.FontSizeProperty, TextStyles.Headline.FontSize);
-            //        wordRange.ApplyPropertyValue(Inline.FontWeightProperty, TextStyles.Headline.FontWeight);
+            foreach (var wordRange in DocumentOperations.GetWords(range))
+            {
+                if (wordRange.Start.CompareTo(lineStart.Value) == 0 && wordRange.Text == "##")
+                {
+                    wordRange.Text = string.Empty;
 
-            //        ret = true;
-            //    }
-            //}
+                    var run = new Run(string.Empty, wordRange.Start);
+                    run.FontSize = TextStyles.Headline.FontSize;
+                    run.FontWeight = TextStyles.Headline.FontWeight;
+
+                    ret = true;
+                }
+            }
 
             return ret;
         }

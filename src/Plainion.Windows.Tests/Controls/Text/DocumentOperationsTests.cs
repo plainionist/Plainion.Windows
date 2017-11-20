@@ -16,6 +16,7 @@ namespace Plainion.Windows.Tests.Controls.Text.AutoCorrection
             myDocument = new FlowDocument();
             myDocument.Blocks.Add(new Paragraph(new Run("Here is some text to test parsing")));
             myDocument.Blocks.Add(new Paragraph(new Run("a second line would be helpful.")));
+            myDocument.Blocks.Add(new Paragraph(new LineBreak()));
             myDocument.Blocks.Add(new Paragraph(new Run("A third is even better.")));
         }
 
@@ -66,6 +67,13 @@ namespace Plainion.Windows.Tests.Controls.Text.AutoCorrection
         {
             var line = DocumentOperations.GetLineAt(DocumentOperations.GetPointerFromCharOffset(myDocument.Content(), 40));
             Assert.That(line.Text, Is.EqualTo("a second line would be helpful."));
+        }
+
+        [Test]
+        public void GetLineAt_EmptyLine_ReturnsEmptyLine()
+        {
+            var line = DocumentOperations.GetLineAt(myDocument.ContentStart.GetPositionAtOffset(73));
+            Assert.That(line.Text, Is.EqualTo(string.Empty));
         }
 
         [Test]

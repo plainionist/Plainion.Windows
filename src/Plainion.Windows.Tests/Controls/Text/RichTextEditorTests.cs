@@ -12,7 +12,7 @@ namespace Plainion.Windows.Tests.Controls.Text
     [TestFixture]
     class RichTextEditorTests
     {
-        [Test]
+        [Test,Ignore("layout required?")]
         public void OnKeyDown_WithSpecialKey_SelectionIsCleared([Values(Key.Space, Key.Return, Key.Back)]Key key)
         {
             var editor = new RichTextEditor();

@@ -195,12 +195,16 @@ namespace Plainion.Windows.Controls.Text
             var navigator = pos;
             while (navigator != null && navigator.CompareTo(pos.DocumentStart) >= 0)
             {
-                var text = new TextRange(navigator.GetNextInsertionPosition(direction), navigator).Text;
-                if (text == Environment.NewLine)
+                var next = navigator.GetNextInsertionPosition(direction);
+                if (next != null)
                 {
-                    break;
+                    var text = new TextRange(next, navigator).Text;
+                    if (text == Environment.NewLine)
+                    {
+                        break;
+                    }
                 }
-                navigator = navigator.GetNextInsertionPosition(direction);
+                navigator = next;
             }
 
             if (navigator == null)
