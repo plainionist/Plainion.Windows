@@ -16,7 +16,7 @@ namespace Plainion.RI.Controls
         public NoteBookViewModel()
         {
             AutoCorrection = new AutoCorrectionTable();
-            AutoCorrection.Corrections.Add(new ArrowCorrection());
+            AutoCorrection.Corrections.Add(new SampleCorrection());
 
             var fs = new FileSystemImpl();
 

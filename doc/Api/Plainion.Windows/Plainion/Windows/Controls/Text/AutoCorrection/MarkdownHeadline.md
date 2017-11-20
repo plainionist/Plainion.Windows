@@ -1,5 +1,5 @@
 
-# Plainion.Windows.Controls.Text.AutoCorrection.MarkupHeadline
+# Plainion.Windows.Controls.Text.AutoCorrection.MarkdownHeadline
 
 **Namespace:** Plainion.Windows.Controls.Text.AutoCorrection
 
@@ -15,4 +15,4 @@
 
 ### System.Boolean TryApply(System.Windows.Documents.TextRange range)
 
-### System.Windows.Documents.TextPointer TryUndo(System.Windows.Documents.TextPointer start)
+### System.Boolean TryUndo(System.Windows.Documents.TextPointer start)

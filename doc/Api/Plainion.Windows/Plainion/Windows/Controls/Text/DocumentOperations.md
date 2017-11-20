@@ -8,11 +8,15 @@
 
 ## Methods
 
+### System.Windows.Documents.TextRange Content(System.Windows.Documents.FlowDocument self)
+
+Returns a TextRange from ContentStart to ContentEnd.
+
 ### System.Windows.Documents.TextPointer GetPointerFromCharOffset(System.Windows.Documents.TextRange range,System.Int32 charOffset)
 
 Returns a text pointer for the given character offset.
 
-### System.Windows.Documents.TextRange GetWord(System.Windows.Documents.TextPointer position)
+### System.Windows.Documents.TextRange GetWordAt(System.Windows.Documents.TextPointer position)
 
 Returns a TextRange covering a word containing or following this TextPointer.
 

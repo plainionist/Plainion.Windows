@@ -83,21 +83,14 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             }
         }
 
-        public TextPointer TryUndo(TextPointer start)
+        public bool TryUndo(TextPointer pos)
         {
-            var backspacePosition = start.GetNextInsertionPosition(LogicalDirection.Backward);
+            var backspacePosition = pos.GetNextInsertionPosition(LogicalDirection.Backward);
             Hyperlink hyperlink;
-            if (backspacePosition == null || !IsHyperlinkBoundaryCrossed(start, backspacePosition, out hyperlink))
+            if (backspacePosition == null || !IsHyperlinkBoundaryCrossed(pos, backspacePosition, out hyperlink))
             {
-                return null;
+                return false;
             }
-
-            // Remember caretPosition with forward gravity. This is necessary since we are going to delete 
-            // the hyperlink element preceeding caretPosition and after deletion current caretPosition 
-            // (with backward gravity) will follow content preceeding the hyperlink. 
-            // We want to remember content following the hyperlink to set new caret position at.
-
-            var newCaretPosition = start.GetPositionAtOffset(0, LogicalDirection.Forward);
 
             // Deleting the hyperlink is done using logic below.
 
@@ -136,7 +129,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             // 4. Delete the (empty) hyperlink element.
             hyperlink.SiblingInlines.Remove(hyperlink);
 
-            return newCaretPosition;
+            return true;
         }
 
         // Returns true if passed caretPosition and backspacePosition cross a hyperlink end boundary

@@ -18,6 +18,6 @@
 
 ## Methods
 
-### void Apply(System.Windows.Documents.TextRange range)
+### System.Boolean Apply(System.Windows.Documents.TextRange range)
 
-### System.Windows.Documents.TextPointer Undo(System.Windows.Documents.TextPointer start)
+### System.Boolean Undo(System.Windows.Documents.TextPointer pos)

@@ -21,4 +21,4 @@ Initial verison inspired by: http://blogs.msdn.com/b/prajakta/archive/2006/10/17
 
 ### System.Boolean TryApply(System.Windows.Documents.TextRange range)
 
-### System.Windows.Documents.TextPointer TryUndo(System.Windows.Documents.TextPointer start)
+### System.Boolean TryUndo(System.Windows.Documents.TextPointer pos)

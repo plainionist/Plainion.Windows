@@ -9,34 +9,36 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
         {
             Corrections = new List<IAutoCorrection>();
             Corrections.Add(new ClickableHyperlink());
-            Corrections.Add(new MarkupHeadline());
+            Corrections.Add(new UnicodeSymbolCorrection());
+            Corrections.Add(new MarkdownHeadline());
         }
 
         public IList<IAutoCorrection> Corrections { get; private set; }
 
-        public void Apply(TextRange range)
+        public bool Apply(TextRange range)
         {
             foreach (var correction in Corrections)
             {
                 if (correction.TryApply(range))
                 {
-                    break;
+                    return true;
                 }
             }
+
+            return false;
         }
 
-        public TextPointer Undo(TextPointer start)
+        public bool Undo(TextPointer pos)
         {
             foreach (var correction in Corrections)
             {
-                var newCaretPosition = correction.TryUndo(start);
-                if (newCaretPosition != null)
+                if (correction.TryUndo(pos))
                 {
-                    return newCaretPosition;
+                    return true;
                 }
             }
 
-            return null;
+            return false;
         }
     }
 }

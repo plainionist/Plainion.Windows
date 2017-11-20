@@ -7,10 +7,23 @@ namespace Plainion.Windows.Controls.Text
     public static class DocumentOperations
     {
         /// <summary>
+        /// Returns a TextRange from ContentStart to ContentEnd.
+        /// </summary>
+        public static TextRange Content(this FlowDocument self)
+        {
+            Contract.RequiresNotNull(self, "self");
+
+            return new TextRange(self.ContentStart, self.ContentEnd);
+        }
+
+        /// <summary>
         /// Returns a text pointer for the given character offset.
         /// </summary>
         public static TextPointer GetPointerFromCharOffset(TextRange range, int charOffset)
         {
+            Contract.RequiresNotNull(range, "range");
+            Contract.Requires(charOffset >= 0, "charOffset >= 0");
+
             if (charOffset == 0)
             {
                 return range.Start;
@@ -51,8 +64,10 @@ namespace Plainion.Windows.Controls.Text
         /// If this TextPointer is between two words, the following word range is returned.
         /// If this TextPointer is at trailing word boundary, the preceding word range is returned.
         /// </remarks>
-        public static TextRange GetWord(TextPointer position)
+        public static TextRange GetWordAt(TextPointer position)
         {
+            Contract.RequiresNotNull(position, "position");
+
             TextRange wordRange = null;
             TextPointer wordStartPosition = null;
             TextPointer wordEndPosition = null;
@@ -140,10 +155,12 @@ namespace Plainion.Windows.Controls.Text
         /// </summary>
         public static IEnumerable<TextRange> GetWords(TextRange range)
         {
+            Contract.RequiresNotNull(range, "range");
+
             var navigator = range.Start;
             while (navigator != null && navigator.CompareTo(range.End) <= 0)
             {
-                var wordRange = GetWord(navigator);
+                var wordRange = GetWordAt(navigator);
                 if (wordRange == null || wordRange.IsEmpty)
                 {
                     // No more words in the document.
@@ -158,8 +175,40 @@ namespace Plainion.Windows.Controls.Text
 
         public static TextRange GetLineAt(TextPointer pos)
         {
+            Contract.RequiresNotNull(pos, "pos");
 
-            return new TextRange(pos.GetLineStartPosition(0), pos.GetLineStartPosition(1) ?? pos.DocumentEnd);
+            if (pos.HasValidLayout)
+            {
+                return new TextRange(pos.GetLineStartPosition(0), pos.GetLineStartPosition(1) ?? pos.DocumentEnd);
+            }
+            else
+            {
+                var start = FindNewLine(pos, LogicalDirection.Backward);
+                var end = FindNewLine(pos, LogicalDirection.Forward);
+
+                return new TextRange(start, end);
+            }
+        }
+
+        private static TextPointer FindNewLine(TextPointer pos, LogicalDirection direction)
+        {
+            var navigator = pos;
+            while (navigator != null && navigator.CompareTo(pos.DocumentStart) >= 0)
+            {
+                var text = new TextRange(navigator.GetNextInsertionPosition(direction), navigator).Text;
+                if (text == Environment.NewLine)
+                {
+                    break;
+                }
+                navigator = navigator.GetNextInsertionPosition(direction);
+            }
+
+            if (navigator == null)
+            {
+                navigator = direction == LogicalDirection.Backward ? pos.DocumentStart : pos.DocumentEnd;
+            }
+
+            return navigator;
         }
 
         // https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo

@@ -43,10 +43,11 @@
     <Compile Include="Controls\AdornerPlacement.cs" />
     <Compile Include="Controls\Text\AbstractStoreItem.cs" />
     <Compile Include="Controls\Text\AbstractStoreItemId.cs" />
+    <Compile Include="Controls\Text\AutoCorrection\ArrowCorrection.cs" />
     <Compile Include="Controls\Text\AutoCorrection\AutoCorrectionTable.cs" />
     <Compile Include="Controls\Text\AutoCorrection\ClickableHyperlink.cs" />
     <Compile Include="Controls\Text\AutoCorrection\IAutoCorrection.cs" />
-    <Compile Include="Controls\Text\AutoCorrection\MarkupHeadline.cs" />
+    <Compile Include="Controls\Text\AutoCorrection\MarkdownHeadline.cs" />
     <Compile Include="Controls\Text\DocumentStoreExtensions.cs" />
     <Compile Include="Controls\Text\Document.cs" />
     <Compile Include="Controls\Text\DocumentOperations.cs" />

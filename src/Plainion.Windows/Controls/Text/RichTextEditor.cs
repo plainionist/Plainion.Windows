@@ -65,8 +65,13 @@ namespace Plainion.Windows.Controls.Text
             }
             else // Key.Back
             {
-                var newCaretPosition = AutoCorrection.Undo(Selection.Start);
-                if(newCaretPosition != null)
+                // Remember caretPosition with forward gravity. This is necessary since we might remove highlighting elements preceeding caretPosition 
+                // and after deletion current caretPosition (with backward gravity) will follow content preceeding the highlighting. 
+                // We want to remember content following the highlighting to set new caret position at.
+
+                var newCaretPosition = Selection.Start.GetPositionAtOffset(0, LogicalDirection.Forward);
+
+                if(AutoCorrection.Undo(Selection.Start))
                 {
                     // Update selection, since we deleted a auto correction element and caretPosition was at that auto correction's end boundary.
                     Selection.Select(newCaretPosition, newCaretPosition);

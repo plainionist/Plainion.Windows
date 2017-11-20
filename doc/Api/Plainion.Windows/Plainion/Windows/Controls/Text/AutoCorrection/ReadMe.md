@@ -4,7 +4,8 @@
 
 ## Types
 
+* [UnicodeSymbolCorrection](UnicodeSymbolCorrection.md)
 * [AutoCorrectionTable](AutoCorrectionTable.md)
 * [ClickableHyperlink](ClickableHyperlink.md)
 * [IAutoCorrection](IAutoCorrection.md)
-* [MarkupHeadline](MarkupHeadline.md)
+* [MarkdownHeadline](MarkdownHeadline.md)
