@@ -7,6 +7,43 @@ namespace Plainion.Windows.Controls.Text
     public static class DocumentOperations
     {
         /// <summary>
+        /// Returns a text pointer for the given character offset.
+        /// </summary>
+        public static TextPointer GetPointerFromCharOffset(TextRange range, int charOffset)
+        {
+            if (charOffset == 0)
+            {
+                return range.Start;
+            }
+
+            var navigator = range.Start;
+            var nextPointer = navigator;
+            int counter = 0;
+            while (nextPointer != null && counter < charOffset)
+            {
+                if (nextPointer.CompareTo(range.End) == 0)
+                {
+                    // If we reach to the end of range, return the EOF pointer.
+                    return nextPointer;
+                }
+
+                if (nextPointer.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text)
+                {
+                    nextPointer = nextPointer.GetNextInsertionPosition(LogicalDirection.Forward);
+                    counter++;
+                }
+                else
+                {
+                    // If the current pointer is not pointing at a character, we should move to next insertion point 
+                    // without incrementing the character counter.
+                    nextPointer = nextPointer.GetNextInsertionPosition(LogicalDirection.Forward);
+                }
+            }
+
+            return nextPointer;
+        }
+
+        /// <summary>
         /// Returns a TextRange covering a word containing or following this TextPointer.
         /// </summary>
         /// <remarks>
@@ -117,6 +154,12 @@ namespace Plainion.Windows.Controls.Text
 
                 navigator = wordRange.End.GetNextInsertionPosition(LogicalDirection.Forward);
             }
+        }
+
+        public static TextRange GetLineAt(TextPointer pos)
+        {
+
+            return new TextRange(pos.GetLineStartPosition(0), pos.GetLineStartPosition(1) ?? pos.DocumentEnd);
         }
 
         // https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo

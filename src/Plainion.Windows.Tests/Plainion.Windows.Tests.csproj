@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindablePropertyTests.cs" />
+    <Compile Include="Controls\Text\DocumentOperationsTests.cs" />
     <Compile Include="Controls\Text\AutoCorrection\ClickableHyperlinkTests.cs" />
     <Compile Include="Controls\Text\FakePresentationSource.cs" />
     <Compile Include="Controls\Text\FlowDocumentVisitorTests.cs" />
