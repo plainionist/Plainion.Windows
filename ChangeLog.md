@@ -1,4 +1,4 @@
-## 2.5.0 - 2017-11-19
+## 2.5.0 - 2017-
 
 - DocumentStore: default font changed to Calibri, size = 11pt
 - AutoCorrection refactored to support multiple auto-corrections

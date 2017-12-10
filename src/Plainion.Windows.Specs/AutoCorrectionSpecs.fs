@@ -7,9 +7,9 @@ open NUnit.Framework
 open FsUnit
 
 [<Spec>]
-module ``Given a text with potential hyperlinks`` =
+module ``Given a text to be auto-corrected (hyperlinks)`` =
 
-    let tryMakeHyperlink (doc:FlowDocument) =
+    let tryAutoCorrect (doc:FlowDocument) =
         (new ClickableHyperlink()).TryApply(new TextRange(doc.ContentEnd, doc.ContentEnd))
 
     let getHyperlinks (doc:FlowDocument) =
@@ -25,7 +25,7 @@ module ``Given a text with potential hyperlinks`` =
     let ``<When> valid URI is entered <Then> URI is replaced with clickable hyperlink``([<Values("http://github.com/", "https://github.com/", "ftp://github.com/")>] url) =
         let document = new FlowDocument(new Paragraph(new Run("Some dummy " + url)))
 
-        document |> tryMakeHyperlink |> should be True
+        document |> tryAutoCorrect |> should be True
 
         let links = document |> getHyperlinks
         
@@ -39,7 +39,7 @@ module ``Given a text with potential hyperlinks`` =
     let ``<When> invalid URI is entered <Then> no hyperlink is inserted`` () =
         let document = new FlowDocument(new Paragraph(new Run("Some dummy text")));
 
-        document |> tryMakeHyperlink |> should be False
+        document |> tryAutoCorrect |> should be False
 
         document |> getHyperlinks |> should be Empty
 
@@ -47,7 +47,7 @@ module ``Given a text with potential hyperlinks`` =
     let ``<When> URI without protocol but with "www" is entered <Then> clickable hyperlink is created`` () =
         let document = new FlowDocument(new Paragraph(new Run("Some dummy www.host.org")));
 
-        document |> tryMakeHyperlink |> should be True
+        document |> tryAutoCorrect |> should be True
 
         let links = document |> getHyperlinks
         
@@ -58,10 +58,53 @@ module ``Given a text with potential hyperlinks`` =
         hyperlink.NavigateUri.ToString() |> should equal "http://www.host.org/"
 
     [<Test>]
-    let ``<When> removal of hyperlink triggered <Then> clickable hyperlink is removed`` () =
+    let ``<When> removal of hyperlink is triggered <Then> clickable hyperlink is removed`` () =
         let document = new FlowDocument(new Paragraph(new Run("Some dummy http://github.org/")));
 
-        document |> tryMakeHyperlink |> should be True
+        document |> tryAutoCorrect |> should be True
         (new ClickableHyperlink()).TryUndo(document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward)) |> should be True
 
         document |> getHyperlinks |> should be Empty
+
+[<Spec>]
+module ``Given a text to be auto-corrected (unicode symbol)`` =
+
+    let tryAutoCorrect (doc:FlowDocument) =
+        (new UnicodeSymbolCorrection()).TryApply(new TextRange(doc.ContentEnd, doc.ContentEnd))
+
+    let text (doc:FlowDocument) = 
+        let range = new TextRange(doc.ContentStart, doc.ContentEnd)
+        range.Text
+
+    [<Test>]
+    let ``<When> "-->" is enteried <Then> it will be replaced by arrow symbol`` () =
+        let document = new FlowDocument(new Paragraph(new Run("so -->")))
+
+        document |> tryAutoCorrect |> should be True
+
+        document |> text |> should haveSubstring "\u2192"
+
+    [<Test>]
+    let ``<When> "==>" is enteried <Then> it will be replaced by arrow symbol`` () =
+        let document = new FlowDocument(new Paragraph(new Run("so ==>")))
+
+        document |> tryAutoCorrect |> should be True
+
+        document |> text |> should haveSubstring "\u21e8"
+
+    [<Test>]
+    let ``<When> unrecognized text is entered <Then> no symbol is inserted`` () =
+        let document = new FlowDocument(new Paragraph(new Run("Some dummy text")));
+
+        document |> tryAutoCorrect |> should be False
+
+        document |> text |> should equal "Some dummy text\r\n"
+
+    [<Test>]
+    let ``<When> removal of symbol is triggered <Then> symbol is removed`` () =
+        let document = new FlowDocument(new Paragraph(new Run("we conclude ==>")))
+
+        document |> tryAutoCorrect |> should be True
+        (new UnicodeSymbolCorrection()).TryUndo(document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward)) |> should be True
+
+        document |> text |> should equal "we conclude ==>\r\n"
