@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using Plainion.Windows.Controls.Text.AutoCorrection;
 
 namespace Plainion.Windows.Tests.Controls.Text
 {
@@ -12,152 +13,97 @@ namespace Plainion.Windows.Tests.Controls.Text
     [TestFixture]
     class RichTextEditorTests
     {
-        [Test,Ignore("layout required?")]
+        private class AutoCorrectionObserver : IAutoCorrection
+        {
+            public bool ApplyTriggered { get; private set; }
+            public bool UndoTriggered { get; private set; }
+
+            public bool TryApply(TextRange range)
+            {
+                ApplyTriggered = true;
+                return false;
+            }
+
+            public bool TryUndo(TextPointer pos)
+            {
+                UndoTriggered = true;
+                return false;
+            }
+        }
+
+        private RichTextEditor myEditor;
+        private AutoCorrectionObserver myAutoCorrections;
+
+        [SetUp]
+        public void SetUp()
+        {
+            myEditor = new RichTextEditor();
+            myEditor.AutoCorrection.Corrections.Clear();
+
+            myAutoCorrections = new AutoCorrectionObserver();
+            myEditor.AutoCorrection.Corrections.Add(myAutoCorrections);
+        }
+
+        [Test, Ignore("layout required?")]
         public void OnKeyDown_WithSpecialKey_SelectionIsCleared([Values(Key.Space, Key.Return, Key.Back)]Key key)
         {
-            var editor = new RichTextEditor();
-            editor.Document.Blocks.Add(new Paragraph(new Run("Some dummy text")));
-            editor.Selection.Select(editor.Document.ContentStart, editor.Document.ContentEnd);
+            myEditor.Document.Blocks.Add(new Paragraph(new Run("Some dummy text")));
+            myEditor.Selection.Select(myEditor.Document.ContentStart, myEditor.Document.ContentEnd);
 
-            Assert.That(editor.Selection.IsEmpty, Is.False, "Failed to select some text");
+            Assert.That(myEditor.Selection.IsEmpty, Is.False, "Failed to select some text");
 
-            editor.TriggerInput(key);
+            myEditor.TriggerInput(key);
 
-            Assert.That(editor.Selection.IsEmpty, Is.True, "Selection not empty");
+            Assert.That(myEditor.Selection.IsEmpty, Is.True, "Selection not empty");
         }
 
         [Test]
-        public void OnWordCompleted_AfterNonLink_NoHyperlinkInserted([Values(Key.Space, Key.Return)]Key key)
+        public void OnKeyDown_WordCompletionCharacter_AutoCorrectionTriggered([Values(Key.Space, Key.Return)]Key key)
         {
-            var editor = new RichTextEditor();
-            editor.Document.Blocks.Add(new Paragraph(new Run("Some dummy text")));
-            editor.CaretPosition = editor.Document.ContentEnd;
+            AddText(new Paragraph(new Run("Some dummy text")));
 
-            editor.TriggerInput(key);
+            myEditor.TriggerInput(key);
 
-            var visitor = new FlowDocumentVisitor(e => e is Hyperlink);
-            visitor.Accept(editor.Document);
-            Assert.That(visitor.Results, Is.Empty);
+            Assert.That(myAutoCorrections.ApplyTriggered, Is.True);
         }
 
         [Test]
-        public void OnWordCompleted_AfterLink_HyperlinkInserted([Values(Key.Space, Key.Return)]Key key)
+        public void OnKeyDown_WordContinued_NoAutoCorrectionTriggered()
         {
-            var url = "http://github.com/";
-            var editor = new RichTextEditor();
-            editor.Document.Blocks.Add(new Paragraph(new Run("Some dummy "+url)));
-            editor.CaretPosition = editor.Document.ContentEnd;
+            AddText(new Paragraph(new Run("Some dummy text")));
 
-            editor.TriggerInput(key);
+            myEditor.TriggerInput(Key.A);
 
-            var visitor = new FlowDocumentVisitor(e => e is Hyperlink);
-            visitor.Accept(editor.Document);
-            Assert.That(visitor.Results.Count, Is.EqualTo(1));
-
-            var hyperlink = visitor.Results.OfType<Hyperlink>().Single();
-            Assert.That(hyperlink.Inlines.OfType<Run>().Single().Text, Is.EqualTo(url));
-            Assert.That(hyperlink.NavigateUri.ToString(), Is.EqualTo(url));
+            Assert.That(myAutoCorrections.ApplyTriggered, Is.False);
         }
 
         [Test]
-        public void OnWordCompleted_AfterIncompleteWwwLink_HyperlinkWithHttpPrefixInserted([Values(Key.Space, Key.Return)]Key key)
+        public void OnKeyDown_Backspace_UndoOfAutoCorrectionTriggered()
         {
-            var editor = new RichTextEditor();
-            editor.Document.Blocks.Add(new Paragraph(new Run("Some dummy www.host.org")));
-            editor.CaretPosition = editor.Document.ContentEnd;
+            AddText(new Paragraph(new Run("Some dummy http://github.org/")));
 
-            editor.TriggerInput(key);
+            myEditor.TriggerInput(Key.Back);
 
-            var visitor = new FlowDocumentVisitor(e => e is Hyperlink);
-            visitor.Accept(editor.Document);
-            Assert.That(visitor.Results.Count, Is.EqualTo(1));
-
-            var hyperlink = visitor.Results.OfType<Hyperlink>().Single();
-            Assert.That(hyperlink.Inlines.OfType<Run>().Single().Text, Is.EqualTo("www.host.org"));
-            Assert.That(hyperlink.NavigateUri.ToString(), Is.EqualTo("http://www.host.org/"));
+            Assert.That(myAutoCorrections.UndoTriggered, Is.True);
         }
 
         [Test]
-        public void OnWordContinued_AfterNonLink_NoHyperlinkInserted()
-        {
-            var editor = new RichTextEditor();
-            editor.Document.Blocks.Add(new Paragraph(new Run("Some dummy text")));
-            editor.CaretPosition = editor.Document.ContentEnd;
-
-            editor.TriggerInput(Key.A);
-
-            var visitor = new FlowDocumentVisitor(e => e is Hyperlink);
-            visitor.Accept(editor.Document);
-            Assert.That(visitor.Results, Is.Empty);
-        }
-
-        [Test]
-        public void OnWordContinued_AfterHttpLink_NoHyperlinkInserted()
-        {
-            var url = "http://github.com/";
-            
-            var editor = new RichTextEditor();
-            editor.Document.Blocks.Add(new Paragraph(new Run("Some dummy " + url)));
-            editor.CaretPosition = editor.Document.ContentEnd;
-
-            editor.TriggerInput(Key.A);
-
-            var visitor = new FlowDocumentVisitor(e => e is Hyperlink);
-            visitor.Accept(editor.Document);
-            Assert.That(visitor.Results, Is.Empty);
-        }
-
-        [Test]
-        public void OnBackspace_AfterLink_HyperlinkRemoved()
-        {
-            var editor = new RichTextEditor();
-            editor.Document.Blocks.Add(new Paragraph(new Run("Some dummy http://github.org/")));
-            editor.CaretPosition = editor.Document.ContentEnd;
-
-            // we know from other tests that this works
-            editor.TriggerInput(Key.Space);
-
-            editor.TriggerInput(Key.Back);
-
-            var visitor = new FlowDocumentVisitor(e => e is Hyperlink);
-            visitor.Accept(editor.Document);
-            Assert.That(visitor.Results, Is.Empty);
-        }
-
-        [Test]
-        public void OnPaste_WithLink_HyperlinkInserted()
+        public void OnPaste_WhenCalled_AutoCorrectionTriggered()
         {
             var url = "http://github.com/";
 
-            var editor = new RichTextEditor();
-            editor.Document.Blocks.Add(new Paragraph(new Run("Some dummy ")));
-            editor.CaretPosition = editor.Document.ContentEnd;
+            AddText(new Paragraph(new Run("Some dummy ")));
 
             Clipboard.SetData(DataFormats.Text, url);
-            editor.Paste();
+            myEditor.Paste();
 
-            var visitor = new FlowDocumentVisitor(e => e is Hyperlink);
-            visitor.Accept(editor.Document);
-            Assert.That(visitor.Results.Count, Is.EqualTo(1));
-
-            var hyperlink = visitor.Results.OfType<Hyperlink>().Single();
-            Assert.That(hyperlink.Inlines.OfType<Run>().Single().Text, Is.EqualTo(url));
-            Assert.That(hyperlink.NavigateUri.ToString(), Is.EqualTo(url));
+            Assert.That(myAutoCorrections.UndoTriggered, Is.False);
         }
 
-        [Test]
-        public void OnPaste_NonLink_NoHyperlinkInserted()
+        private void AddText(Paragraph text)
         {
-            var editor = new RichTextEditor();
-            editor.Document.Blocks.Add(new Paragraph(new Run("Some dummy ")));
-            editor.CaretPosition = editor.Document.ContentEnd;
-
-            Clipboard.SetData(DataFormats.Text, "some-other-text");
-            editor.Paste();
-
-            var visitor = new FlowDocumentVisitor(e => e is Hyperlink);
-            visitor.Accept(editor.Document);
-            Assert.That(visitor.Results, Is.Empty);
+            myEditor.Document.Blocks.Add(text);
+            myEditor.CaretPosition = myEditor.Document.ContentEnd;
         }
     }
 }
