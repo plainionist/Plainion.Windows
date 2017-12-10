@@ -108,17 +108,18 @@ namespace Plainion.Windows.Controls.Text
 
             TextChanged -= OnTextChanged;
 
-            ME = this;
-
             var intput = new AutoCorrectionInput(new TextRange(Document.ContentStart.GetPositionAtOffset(mySelectionStartPosition), CaretPosition), myAutoCorrectionTrigger.Value);
-            AutoCorrection.Apply(intput);
+            var result = AutoCorrection.Apply(intput);
+
+            if (result.Success && result.CaretPosition != null)
+            {
+                CaretPosition = result.CaretPosition;
+            }
 
             TextChanged += OnTextChanged;
 
             myAutoCorrectionTrigger = null;
         }
-
-        public static RichTextEditor ME { get; private set; }
 
         public bool Search(string searchText, SearchMode mode)
         {

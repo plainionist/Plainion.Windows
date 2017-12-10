@@ -7,36 +7,35 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
     {
         public AutoCorrectionResult TryApply(AutoCorrectionInput input)
         {
-            Headline last = null;
+            var result = new AutoCorrectionResult(false);
 
             foreach (var line in DocumentOperations.GetLines(input.Range))
             {
                 if (line.Text.StartsWith("# "))
                 {
-                    last = InsertHeadline(line, 0);
+                    result = InsertHeadline(line, 0);
                 }
                 else if (line.Text.StartsWith("## "))
                 {
-                    last = InsertHeadline(line, 1);
+                    result = InsertHeadline(line, 1);
                 }
                 else if (line.Text.StartsWith("### "))
                 {
-                    last = InsertHeadline(line, 2);
+                    result = InsertHeadline(line, 2);
                 }
             }
 
-            // TODO: only on "ENTER" --> we need an input container and a result container for the caret pos
             // add a new body Run if user hit enter after existing headline
-            if (last == null && Headline.IsHeadline(input.Range.End))
+            if (!result.Success && input.Trigger == AutoCorrectionTrigger.Return && Headline.IsHeadline(input.Range.End))
             {
                 var body = new Body(string.Empty, input.Range.End);
-                RichTextEditor.ME.CaretPosition = body.ContentStart;
+                return new AutoCorrectionResult(true, body.ContentStart);
             }
 
-            return new AutoCorrectionResult(last != null);
+            return result;
         }
 
-        private Headline InsertHeadline(TextRange line, int level)
+        private AutoCorrectionResult InsertHeadline(TextRange line, int level)
         {
             var text = line.Text.Substring(level + 1).Trim();
             line.Text = string.Empty;
@@ -45,10 +44,12 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
             if (string.IsNullOrEmpty(text))
             {
-                RichTextEditor.ME.CaretPosition = headline.ContentStart;
+                return new AutoCorrectionResult(true, headline.ContentStart);
             }
-
-            return headline;
+            else
+            {
+                return new AutoCorrectionResult(true);
+            }
         }
 
         public AutoCorrectionResult TryUndo(TextPointer start)
