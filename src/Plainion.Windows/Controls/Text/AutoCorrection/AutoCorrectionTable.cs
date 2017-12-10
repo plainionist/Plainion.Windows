@@ -17,15 +17,18 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
         public bool Apply(TextRange range)
         {
+            var success = false;
+
             foreach (var correction in Corrections)
             {
                 if (correction.TryApply(range))
                 {
-                    return true;
+                    success = true;
+                    // could be a paste operation so replacing multiple autocorrections makes sense!
                 }
             }
 
-            return false;
+            return success;
         }
 
         public bool Undo(TextPointer pos)

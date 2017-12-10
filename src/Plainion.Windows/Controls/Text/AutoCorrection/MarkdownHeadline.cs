@@ -3,63 +3,52 @@ using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
-    internal class Headline : Run
-    {
-        public Headline()
-            : this(string.Empty, null, TextStyles.Headlines[1])
-        {
-        }
-
-        public Headline(string text, TextPointer insertionPosition, TextStyles.Headline headline)
-            : base(text, insertionPosition)
-        {
-            FontFamily = headline.FontFamily;
-            FontSize = headline.FontSize;
-            FontWeight = headline.FontWeight;
-        }
-    }
-
     public class MarkdownHeadline : IAutoCorrection
     {
         public bool TryApply(TextRange range)
         {
-            bool success = false;
+            Headline last = null;
 
             foreach (var line in DocumentOperations.GetLines(range))
             {
                 if (line.Text.StartsWith("# "))
                 {
-                    InsertHeadline(line, 0);
-                    success = true;
+                    last = InsertHeadline(line, 0);
                 }
                 else if (line.Text.StartsWith("## "))
                 {
-                    InsertHeadline(line, 1);
-                    success = true;
+                    last = InsertHeadline(line, 1);
                 }
                 else if (line.Text.StartsWith("### "))
                 {
-                    InsertHeadline(line, 2);
-                    success = true;
+                    last = InsertHeadline(line, 2);
                 }
             }
 
-            if (success && range.End.CompareTo(range.End.DocumentEnd) <= 0)
+            // TODO: only on "ENTER" --> we need an input container and a result container for the caret pos
+            // add a new body Run if user hit enter after existing headline
+            if (last == null && Headline.IsHeadline(range.End))
             {
-                // if we converted the last line in the document
-                // -> add a new one in body text style
-                new Run(Environment.NewLine, range.End);
+                var body = new Body(string.Empty, range.End);
+                RichTextEditor.ME.CaretPosition = body.ContentStart;
             }
 
-            return success;
+            return last != null;
         }
 
-        private void InsertHeadline(TextRange line, int level)
+        private Headline InsertHeadline(TextRange line, int level)
         {
             var text = line.Text.Substring(level + 1).Trim();
             line.Text = string.Empty;
 
-            new Headline(text, line.Start, TextStyles.Headlines[level]);
+            var headline = new Headline(text, line.Start, TextStyles.Headlines[level]);
+
+            if (string.IsNullOrEmpty(text))
+            {
+                RichTextEditor.ME.CaretPosition = headline.ContentStart;
+            }
+
+            return headline;
         }
 
         public bool TryUndo(TextPointer start)
