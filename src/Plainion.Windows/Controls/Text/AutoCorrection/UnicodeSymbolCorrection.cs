@@ -27,35 +27,35 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
         public IList<Symbol> Symbols { get; private set; }
 
-        public bool TryApply(TextRange range)
+        public AutoCorrectionResult TryApply(AutoCorrectionInput input)
         {
-            bool ret = false;
+            bool success = false;
 
-            foreach (var wordRange in DocumentOperations.GetWords(range))
+            foreach (var wordRange in DocumentOperations.GetWords(input.Range))
             {
                 var symbol = Symbols.FirstOrDefault(x => x.Ascii == wordRange.Text);
                 if (symbol != null)
                 {
                     wordRange.Text = symbol.UniCode;
 
-                    ret = true;
+                    success = true;
                 }
             }
 
-            return ret;
+            return new AutoCorrectionResult(success);
         }
 
-        public bool TryUndo(TextPointer pos)
+        public AutoCorrectionResult TryUndo(TextPointer pos)
         {
             var wordRange = DocumentOperations.GetWordAt(pos);
             var symbol = Symbols.FirstOrDefault(x => x.UniCode == wordRange.Text);
             if (symbol != null)
             {
                 wordRange.Text = symbol.Ascii;
-                return true;
+                return new AutoCorrectionResult(true);
             }
 
-            return false;
+            return new AutoCorrectionResult(false);
         }
     }
 }

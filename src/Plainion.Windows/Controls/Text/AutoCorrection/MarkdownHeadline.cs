@@ -5,11 +5,11 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
     public class MarkdownHeadline : IAutoCorrection
     {
-        public bool TryApply(TextRange range)
+        public AutoCorrectionResult TryApply(AutoCorrectionInput input)
         {
             Headline last = null;
 
-            foreach (var line in DocumentOperations.GetLines(range))
+            foreach (var line in DocumentOperations.GetLines(input.Range))
             {
                 if (line.Text.StartsWith("# "))
                 {
@@ -27,13 +27,13 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
             // TODO: only on "ENTER" --> we need an input container and a result container for the caret pos
             // add a new body Run if user hit enter after existing headline
-            if (last == null && Headline.IsHeadline(range.End))
+            if (last == null && Headline.IsHeadline(input.Range.End))
             {
-                var body = new Body(string.Empty, range.End);
+                var body = new Body(string.Empty, input.Range.End);
                 RichTextEditor.ME.CaretPosition = body.ContentStart;
             }
 
-            return last != null;
+            return new AutoCorrectionResult(last != null);
         }
 
         private Headline InsertHeadline(TextRange line, int level)
@@ -51,9 +51,9 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             return headline;
         }
 
-        public bool TryUndo(TextPointer start)
+        public AutoCorrectionResult TryUndo(TextPointer start)
         {
-            return false;
+            return new AutoCorrectionResult(false);
         }
     }
 }

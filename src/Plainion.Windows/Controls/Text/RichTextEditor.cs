@@ -17,8 +17,7 @@ namespace Plainion.Windows.Controls.Text
     {
         internal static Brush SearchHighlightBrush = Brushes.Yellow;
 
-        // True when word(s) are added to this RichTextBox.
-        private bool myWordsAdded;
+        private AutoCorrectionTrigger? myAutoCorrectionTrigger;
 
         // TextPointers that track the range covering content where words are added.
         private int mySelectionStartPosition;
@@ -58,7 +57,7 @@ namespace Plainion.Windows.Controls.Text
 
             if (e.Key == Key.Space || e.Key == Key.Return)
             {
-                myWordsAdded = true;
+                myAutoCorrectionTrigger = e.Key == Key.Space ? AutoCorrectionTrigger.Space : AutoCorrectionTrigger.Return;
 
                 // we get "next insertion position backwards" to "skip" the space or enter and want to remember "last content" typed
                 mySelectionStartPosition = Document.ContentStart.GetOffsetToPosition(Selection.Start.GetNextInsertionPosition(LogicalDirection.Backward));
@@ -79,7 +78,7 @@ namespace Plainion.Windows.Controls.Text
 
                 var newCaretPosition = Selection.Start.GetPositionAtOffset(0, LogicalDirection.Forward);
 
-                if (AutoCorrection.Undo(Selection.Start))
+                if (AutoCorrection.Undo(Selection.Start).Success)
                 {
                     // Update selection, since we deleted a auto correction element and caretPosition was at that auto correction's end boundary.
                     Selection.Select(newCaretPosition, newCaretPosition);
@@ -89,7 +88,7 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnPasted(object sender, DataObjectPastingEventArgs e)
         {
-            myWordsAdded = true;
+            myAutoCorrectionTrigger = AutoCorrectionTrigger.CopyAndPaste;
             mySelectionStartPosition = Document.ContentStart.GetOffsetToPosition(CaretPosition);
 
             // auto correction detection will be done in OnTextChanged()
@@ -101,20 +100,22 @@ namespace Plainion.Windows.Controls.Text
         }
 
         private void ApplyAutoCorrection()
-        { 
-            if (!myWordsAdded || Document == null)
+        {
+            if (myAutoCorrectionTrigger == null || Document == null)
             {
                 return;
             }
 
-            myWordsAdded = false;
-
             TextChanged -= OnTextChanged;
 
             ME = this;
-            AutoCorrection.Apply(new TextRange(Document.ContentStart.GetPositionAtOffset(mySelectionStartPosition), CaretPosition));
+
+            var intput = new AutoCorrectionInput(new TextRange(Document.ContentStart.GetPositionAtOffset(mySelectionStartPosition), CaretPosition), myAutoCorrectionTrigger.Value);
+            AutoCorrection.Apply(intput);
 
             TextChanged += OnTextChanged;
+
+            myAutoCorrectionTrigger = null;
         }
 
         public static RichTextEditor ME { get; private set; }

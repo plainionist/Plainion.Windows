@@ -1,10 +1,9 @@
-﻿using NUnit.Framework;
-using Plainion.Windows.Controls.Text;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using NUnit.Framework;
+using Plainion.Windows.Controls.Text;
 using Plainion.Windows.Controls.Text.AutoCorrection;
 
 namespace Plainion.Windows.Tests.Controls.Text
@@ -18,16 +17,16 @@ namespace Plainion.Windows.Tests.Controls.Text
             public bool ApplyTriggered { get; private set; }
             public bool UndoTriggered { get; private set; }
 
-            public bool TryApply(TextRange range)
+            public AutoCorrectionResult TryApply(AutoCorrectionInput input)
             {
                 ApplyTriggered = true;
-                return false;
+                return new AutoCorrectionResult(false);
             }
 
-            public bool TryUndo(TextPointer pos)
+            public AutoCorrectionResult TryUndo(TextPointer pos)
             {
                 UndoTriggered = true;
-                return false;
+                return new AutoCorrectionResult(false);
             }
         }
 

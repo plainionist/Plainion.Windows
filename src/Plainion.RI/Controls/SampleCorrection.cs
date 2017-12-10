@@ -8,34 +8,34 @@ namespace Plainion.RI.Controls
     {
         private const string CopyrightSymbol = "\u00A9";
 
-        public bool TryApply(TextRange range)
+        public AutoCorrectionResult TryApply(AutoCorrectionInput input)
         {
-            bool ret = false;
+            bool success = false;
 
-            foreach (var wordRange in DocumentOperations.GetWords(range))
+            foreach (var wordRange in DocumentOperations.GetWords(input.Range))
             {
                 if (wordRange.Text == "(c)")
                 {
                     wordRange.Text = CopyrightSymbol;
  
-                    ret = true;
+                    success = true;
                 }
             }
 
-            return ret;
+            return new AutoCorrectionResult(success);
         }
 
-        public bool TryUndo(TextPointer pos)
+        public AutoCorrectionResult TryUndo(TextPointer pos)
         {
             var word = DocumentOperations.GetWordAt(pos);
 
             if (word.Text == CopyrightSymbol)
             {
                 word.Text = "(c)";
-                return true;
+                return new AutoCorrectionResult(true);
             }
 
-            return false;
+            return new AutoCorrectionResult(false);
         }
     }
 }

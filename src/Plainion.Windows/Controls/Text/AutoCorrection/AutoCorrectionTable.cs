@@ -15,33 +15,31 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
         public IList<IAutoCorrection> Corrections { get; private set; }
 
-        public bool Apply(TextRange range)
+        public AutoCorrectionResult Apply(AutoCorrectionInput input)
         {
-            var success = false;
+            var result = new AutoCorrectionResult(false);
 
             foreach (var correction in Corrections)
             {
-                if (correction.TryApply(range))
-                {
-                    success = true;
-                    // could be a paste operation so replacing multiple autocorrections makes sense!
-                }
+                // could be a paste operation so replacing multiple autocorrections makes sense!
+                result.Merge(correction.TryApply(input));
             }
 
-            return success;
+            return result;
         }
 
-        public bool Undo(TextPointer pos)
+        public AutoCorrectionResult Undo(TextPointer pos)
         {
             foreach (var correction in Corrections)
             {
-                if (correction.TryUndo(pos))
+                var result = correction.TryUndo(pos);
+                if (result.Success)
                 {
-                    return true;
+                    return result;
                 }
             }
 
-            return false;
+            return new AutoCorrectionResult(false);
         }
     }
 }

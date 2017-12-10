@@ -16,11 +16,11 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
     /// </remarks>
     public class ClickableHyperlink : IAutoCorrection
     {
-        public bool TryApply(TextRange range)
+        public AutoCorrectionResult TryApply(AutoCorrectionInput input)
         {
-            bool ret = false;
+            bool success = false;
 
-            foreach (var wordRange in DocumentOperations.GetWords(range))
+            foreach (var wordRange in DocumentOperations.GetWords(input.Range))
             {
                 string wordText = wordRange.Text;
                 var url = TryCreateUrl(wordText);
@@ -30,11 +30,11 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
                     hyperlink.NavigateUri = url;
                     WeakEventManager<Hyperlink, RequestNavigateEventArgs>.AddHandler(hyperlink, "RequestNavigate", OnHyperlinkRequestNavigate);
 
-                    ret = true;
+                    success = true;
                 }
             }
 
-            return ret;
+            return new AutoCorrectionResult(success);
         }
 
         private static bool IsInHyperlinkScope(TextPointer position)
@@ -83,13 +83,13 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             }
         }
 
-        public bool TryUndo(TextPointer pos)
+        public AutoCorrectionResult TryUndo(TextPointer pos)
         {
             var backspacePosition = pos.GetNextInsertionPosition(LogicalDirection.Backward);
             Hyperlink hyperlink;
             if (backspacePosition == null || !IsHyperlinkBoundaryCrossed(pos, backspacePosition, out hyperlink))
             {
-                return false;
+                return new AutoCorrectionResult( false);
             }
 
             // Deleting the hyperlink is done using logic below.
@@ -129,7 +129,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             // 4. Delete the (empty) hyperlink element.
             hyperlink.SiblingInlines.Remove(hyperlink);
 
-            return true;
+            return new AutoCorrectionResult(true);
         }
 
         // Returns true if passed caretPosition and backspacePosition cross a hyperlink end boundary
