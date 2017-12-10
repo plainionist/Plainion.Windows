@@ -3,29 +3,63 @@ using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
+    internal class Headline : Run
+    {
+        public Headline()
+            : this(string.Empty, null, TextStyles.Headlines[1])
+        {
+        }
+
+        public Headline(string text, TextPointer insertionPosition, TextStyles.Headline headline)
+            : base(text, insertionPosition)
+        {
+            FontFamily = headline.FontFamily;
+            FontSize = headline.FontSize;
+            FontWeight = headline.FontWeight;
+        }
+    }
+
     public class MarkdownHeadline : IAutoCorrection
     {
         public bool TryApply(TextRange range)
         {
-            bool ret = false;
+            bool success = false;
 
-            var lineStart = new Lazy<TextPointer>(() => DocumentOperations.GetLineAt(range.Start).Start);
-
-            foreach (var wordRange in DocumentOperations.GetWords(range))
+            foreach (var line in DocumentOperations.GetLines(range))
             {
-                if (wordRange.Start.CompareTo(lineStart.Value) == 0 && wordRange.Text == "##")
+                if (line.Text.StartsWith("# "))
                 {
-                    wordRange.Text = string.Empty;
-
-                    var run = new Run(string.Empty, wordRange.Start);
-                    run.FontSize = TextStyles.Headline.FontSize;
-                    run.FontWeight = TextStyles.Headline.FontWeight;
-
-                    ret = true;
+                    InsertHeadline(line, 0);
+                    success = true;
+                }
+                else if (line.Text.StartsWith("## "))
+                {
+                    InsertHeadline(line, 1);
+                    success = true;
+                }
+                else if (line.Text.StartsWith("### "))
+                {
+                    InsertHeadline(line, 2);
+                    success = true;
                 }
             }
 
-            return ret;
+            if (success && range.End.CompareTo(range.End.DocumentEnd) <= 0)
+            {
+                // if we converted the last line in the document
+                // -> add a new one in body text style
+                new Run(Environment.NewLine, range.End);
+            }
+
+            return success;
+        }
+
+        private void InsertHeadline(TextRange line, int level)
+        {
+            var text = line.Text.Substring(level + 1).Trim();
+            line.Text = string.Empty;
+
+            new Headline(text, line.Start, TextStyles.Headlines[level]);
         }
 
         public bool TryUndo(TextPointer start)

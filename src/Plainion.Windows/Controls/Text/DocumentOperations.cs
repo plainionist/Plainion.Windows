@@ -150,9 +150,6 @@ namespace Plainion.Windows.Controls.Text
             return isAtWordBoundary;
         }
 
-        /// <summary>
-        /// Returns all words within given range
-        /// </summary>
         public static IEnumerable<TextRange> GetWords(TextRange range)
         {
             Contract.RequiresNotNull(range, "range");
@@ -173,21 +170,37 @@ namespace Plainion.Windows.Controls.Text
             }
         }
 
+        public static IEnumerable<TextRange> GetLines(TextRange range)
+        {
+            Contract.RequiresNotNull(range, "range");
+
+            var navigator = range.Start;
+            while (navigator != null && navigator.CompareTo(range.End) <= 0)
+            {
+                var line = GetLineAt(navigator);
+
+                yield return line;
+
+                navigator = line.End.GetNextInsertionPosition(LogicalDirection.Forward);
+            }
+        }
+
         public static TextRange GetLineAt(TextPointer pos)
         {
             Contract.RequiresNotNull(pos, "pos");
 
-            if (pos.HasValidLayout)
-            {
-                return new TextRange(pos.GetLineStartPosition(0), pos.GetLineStartPosition(1) ?? pos.DocumentEnd);
-            }
-            else
-            {
-                var start = FindNewLine(pos, LogicalDirection.Backward);
-                var end = FindNewLine(pos, LogicalDirection.Forward);
+            var start = FindNewLine(pos, LogicalDirection.Backward);
+            var end = FindNewLine(pos, LogicalDirection.Forward);
 
-                return new TextRange(start, end);
+            var line = new TextRange(start, end);
+
+            if (line.Text.EndsWith(Environment.NewLine))
+            {
+                // this happens if this is the last line in the document
+                line = new TextRange(start, end.GetNextInsertionPosition(LogicalDirection.Backward));
             }
+
+            return line;
         }
 
         private static TextPointer FindNewLine(TextPointer pos, LogicalDirection direction)

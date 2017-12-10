@@ -17,9 +17,30 @@ namespace Plainion.Windows.Controls.Text
 
         public class Headline
         {
-            public static FontFamily FontFamily = new FontFamily("Calibri");
-            public static double FontSize = 14.0 * pt;
-            public static FontWeight FontWeight = FontWeights.Bold;
+            public FontFamily FontFamily;
+            public double FontSize;
+            public FontWeight FontWeight;
         }
+
+        public static Headline[] Headlines = {
+            new Headline
+            {
+                FontFamily = new FontFamily("Calibri"),
+                FontSize = 16.0 * pt,
+                FontWeight = FontWeights.Bold
+            },
+            new Headline
+            {
+                FontFamily = new FontFamily("Calibri"),
+                FontSize = 14.0 * pt,
+                FontWeight = FontWeights.Bold
+            },
+            new Headline
+            {
+                FontFamily = new FontFamily("Calibri"),
+                FontSize = 12.0 * pt,
+                FontWeight = FontWeights.Bold
+            }
+        };
     }
 }

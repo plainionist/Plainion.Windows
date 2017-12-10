@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Documents;
 using NUnit.Framework;
 using Plainion.Windows.Controls.Text;
@@ -16,7 +17,7 @@ namespace Plainion.Windows.Tests.Controls.Text.AutoCorrection
             myDocument = new FlowDocument();
             myDocument.Blocks.Add(new Paragraph(new Run("Here is some text to test parsing")));
             myDocument.Blocks.Add(new Paragraph(new Run("a second line would be helpful.")));
-            myDocument.Blocks.Add(new Paragraph(new LineBreak()));
+            myDocument.Blocks.Add(new Paragraph(new Run("")));
             myDocument.Blocks.Add(new Paragraph(new Run("A third is even better.")));
         }
 
@@ -81,6 +82,22 @@ namespace Plainion.Windows.Tests.Controls.Text.AutoCorrection
         {
             var line = DocumentOperations.GetLineAt(DocumentOperations.GetPointerFromCharOffset(myDocument.Content(), 40));
             Assert.That(DocumentOperations.GetWords(line).Select(x => x.Text), Is.EquivalentTo(new[] { "a", "second", "line", "would", "be", "helpful." }));
+        }
+
+        [Test]
+        public void GetLines_When_ReturnsAllLinesOfARange()
+        {
+            var lines = DocumentOperations.GetLines(new TextRange(myDocument.ContentStart, myDocument.ContentEnd))
+                .Select(l => l.Text)
+                .ToList();
+
+            var expected = new[] {
+                "Here is some text to test parsing",
+                "a second line would be helpful.",
+                string.Empty,
+                "A third is even better."
+            };
+            Assert.That(lines, Is.EquivalentTo(expected));
         }
     }
 }

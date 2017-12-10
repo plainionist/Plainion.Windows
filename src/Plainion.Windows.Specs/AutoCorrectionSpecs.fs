@@ -108,3 +108,46 @@ module ``Given a text to be auto-corrected (unicode symbol)`` =
         (new UnicodeSymbolCorrection()).TryUndo(document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward)) |> should be True
 
         document |> text |> should equal "we conclude ==>\r\n"
+
+//[<Spec>]
+//module ``Given a text to be auto-corrected (markdown headline)`` =
+
+//    let tryAutoCorrect (doc:FlowDocument) =
+//        (new MarkdownHeadline()).TryApply(new TextRange(doc.ContentEnd, doc.ContentEnd))
+
+//    let text (doc:FlowDocument) = 
+//        let range = new TextRange(doc.ContentStart, doc.ContentEnd)
+//        range.Text
+
+//    [<Test>]
+//    let ``<When> "-->" is enteried <Then> it will be replaced by arrow symbol`` () =
+//        let document = new FlowDocument(new Paragraph(new Run("so -->")))
+
+//        document |> tryAutoCorrect |> should be True
+
+//        document |> text |> should haveSubstring "\u2192"
+
+//    [<Test>]
+//    let ``<When> "==>" is enteried <Then> it will be replaced by arrow symbol`` () =
+//        let document = new FlowDocument(new Paragraph(new Run("so ==>")))
+
+//        document |> tryAutoCorrect |> should be True
+
+//        document |> text |> should haveSubstring "\u21e8"
+
+//    [<Test>]
+//    let ``<When> unrecognized text is entered <Then> no symbol is inserted`` () =
+//        let document = new FlowDocument(new Paragraph(new Run("Some dummy text")));
+
+//        document |> tryAutoCorrect |> should be False
+
+//        document |> text |> should equal "Some dummy text\r\n"
+
+//    [<Test>]
+//    let ``<When> removal of symbol is triggered <Then> symbol is removed`` () =
+//        let document = new FlowDocument(new Paragraph(new Run("we conclude ==>")))
+
+//        document |> tryAutoCorrect |> should be True
+//        (new MarkdownHeadline()).TryUndo(document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward)) |> should be True
+
+//        document |> text |> should equal "we conclude ==>\r\n"
