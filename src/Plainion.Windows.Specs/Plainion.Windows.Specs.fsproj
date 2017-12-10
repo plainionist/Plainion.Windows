@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="DomainModel.fs" />
+    <Compile Include="AutoCorrectionSpecs.fs" />
     <Compile Include="RichTextEditorSpecs.fs" />
     <Compile Include="DocumentStoreSpecs.fs" />
     <Compile Include="NoteBookSpecs.fs" />
