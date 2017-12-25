@@ -10,7 +10,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             if(input.Trigger == AutoCorrectionTrigger.Return && input.Range.End.Parent is Headline)
             {
                 var body = new Body(string.Empty, input.Range.End);
-                return new AutoCorrectionResult(true, body.ContentEnd);
+                return new AutoCorrectionResult(true, body.ContentStart);
             }
 
             var result = new AutoCorrectionResult(false);

@@ -1,4 +1,5 @@
-﻿using System.Windows.Documents;
+﻿using System;
+using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
@@ -53,8 +54,22 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
             return new AutoCorrectionResult(
                 Success || other.Success,
-                CaretPosition != null && CaretPosition.CompareTo(other.CaretPosition) > 0 ? CaretPosition : other.CaretPosition
+                GetCaretPosition(CaretPosition, other.CaretPosition)
                 );
+        }
+
+        private static TextPointer GetCaretPosition(TextPointer lhs, TextPointer rhs)
+        {
+            if (lhs == null)
+            {
+                return rhs;
+            }
+            if (rhs == null)
+            {
+                return lhs;
+            }
+
+            return lhs.CompareTo(rhs) > 0 ? lhs : rhs;
         }
     }
 }

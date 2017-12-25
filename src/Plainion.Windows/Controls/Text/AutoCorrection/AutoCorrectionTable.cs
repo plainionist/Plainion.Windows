@@ -22,7 +22,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             foreach (var correction in Corrections)
             {
                 // could be a paste operation so replacing multiple autocorrections makes sense!
-                result.Merge(correction.TryApply(input));
+                result = result.Merge(correction.TryApply(input));
             }
 
             return result;
