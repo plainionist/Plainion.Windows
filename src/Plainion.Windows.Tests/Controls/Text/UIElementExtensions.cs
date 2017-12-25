@@ -17,7 +17,7 @@ namespace Plainion.Windows.Tests.Controls.Text
 
         public static void TriggerInput(this TextBoxBase self, Key key)
         {
-            self.RaiseKeyboardEvent(UIElement.KeyDownEvent, key);
+            self.RaiseKeyboardEvent(UIElement.PreviewKeyDownEvent, key);
             self.RaiseEvent(new TextChangedEventArgs(TextBox.TextChangedEvent, UndoAction.None));
         }
     }

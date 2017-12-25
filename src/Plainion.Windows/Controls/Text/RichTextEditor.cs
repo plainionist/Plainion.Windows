@@ -24,7 +24,7 @@ namespace Plainion.Windows.Controls.Text
 
         public RichTextEditor()
         {
-            AddHandler(KeyDownEvent, new KeyEventHandler(OnKeyDown), handledEventsToo: true);
+            AddHandler(PreviewKeyDownEvent, new KeyEventHandler(OnPreviewKeyDown), handledEventsToo: true);
 
             TextChanged += OnTextChanged;
 
@@ -43,7 +43,7 @@ namespace Plainion.Windows.Controls.Text
             set { SetValue(AutoCorrectionProperty, value); }
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Back && e.Key != Key.Space && e.Key != Key.Return)
             {
@@ -77,14 +77,17 @@ namespace Plainion.Windows.Controls.Text
                 // We want to remember content following the highlighting to set new caret position at.
 
                 var newCaretPosition = Selection.Start.GetPositionAtOffset(0, LogicalDirection.Forward);
-
+                Content = Document;
                 if (AutoCorrection.Undo(Selection.Start).Success)
                 {
                     // Update selection, since we deleted a auto correction element and caretPosition was at that auto correction's end boundary.
                     Selection.Select(newCaretPosition, newCaretPosition);
+                    e.Handled = true;
                 }
             }
         }
+
+        public static FlowDocument Content;
 
         private void OnPasted(object sender, DataObjectPastingEventArgs e)
         {

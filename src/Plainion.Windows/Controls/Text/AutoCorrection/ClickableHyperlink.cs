@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
@@ -83,13 +84,21 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             }
         }
 
-        public AutoCorrectionResult TryUndo(TextPointer pos)
+        public AutoCorrectionResult TryUndo(TextPointer start)
         {
-            var backspacePosition = pos.GetNextInsertionPosition(LogicalDirection.Backward);
-            Hyperlink hyperlink;
-            if (backspacePosition == null || !IsHyperlinkBoundaryCrossed(pos, backspacePosition, out hyperlink))
+            var hyperlink = start.Parent as Hyperlink;
+            if (hyperlink == null)
             {
-                return new AutoCorrectionResult( false);
+                var para = start.Parent as Paragraph;
+                if (para != null)
+                {
+                    hyperlink = para.Inlines.OfType<Hyperlink>().SingleOrDefault();
+                }
+
+                if (hyperlink == null)
+                {
+                    return new AutoCorrectionResult(false);
+                }
             }
 
             // Deleting the hyperlink is done using logic below.
@@ -130,17 +139,6 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             hyperlink.SiblingInlines.Remove(hyperlink);
 
             return new AutoCorrectionResult(true);
-        }
-
-        // Returns true if passed caretPosition and backspacePosition cross a hyperlink end boundary
-        // (under the assumption that caretPosition and backSpacePosition are adjacent insertion positions).
-        private static bool IsHyperlinkBoundaryCrossed(TextPointer caretPosition, TextPointer backspacePosition, out Hyperlink backspacePositionHyperlink)
-        {
-            var caretPositionHyperlink = GetHyperlinkAncestor(caretPosition);
-            backspacePositionHyperlink = GetHyperlinkAncestor(backspacePosition);
-
-            return (caretPositionHyperlink == null && backspacePositionHyperlink != null) ||
-                (caretPositionHyperlink != null && backspacePositionHyperlink != null && caretPositionHyperlink != backspacePositionHyperlink);
         }
 
         private static bool IsHyperlinkProperty(DependencyProperty dp)

@@ -53,6 +53,14 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
         public AutoCorrectionResult TryUndo(TextPointer start)
         {
+            var headline = start.Parent as Headline;
+            if (headline != null)
+            {
+                headline.SiblingInlines.Remove(headline);
+                var body = new Body(headline.Text, start);
+                return new AutoCorrectionResult(true, body.ContentEnd);
+            }
+
             return new AutoCorrectionResult(false);
         }
     }
