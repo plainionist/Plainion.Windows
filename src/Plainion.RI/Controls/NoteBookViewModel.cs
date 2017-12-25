@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.Composition;
 using System.Windows.Documents;
-using Plainion.IO.RealFS;
 using Plainion.Windows.Controls.Text;
 using Plainion.Windows.Controls.Text.AutoCorrection;
 using Prism.Commands;
@@ -20,7 +19,7 @@ namespace Plainion.RI.Controls
             AutoCorrection = new AutoCorrectionTable();
             AutoCorrection.Corrections.Add(new SampleCorrection());
 
-            var fs = new FileSystemImpl();
+            var fs = new Plainion.IO.MemoryFS.FileSystemImpl();
             var root = fs.Directory(RootPath);
             if(root.Exists)
             {
