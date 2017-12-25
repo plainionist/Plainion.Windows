@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using System.Windows.Documents;
-using Plainion.IO.MemoryFS;
+using Plainion.IO.RealFS;
 using Plainion.Windows.Controls.Text;
 using Plainion.Windows.Controls.Text.AutoCorrection;
 using Prism.Commands;
@@ -11,6 +11,8 @@ namespace Plainion.RI.Controls
     [Export]
     class NoteBookViewModel : BindableBase
     {
+        private const string RootPath = "c:/temp/fs";
+
         private FileSystemDocumentStore myDocumentStore;
 
         public NoteBookViewModel()
@@ -19,8 +21,14 @@ namespace Plainion.RI.Controls
             AutoCorrection.Corrections.Add(new SampleCorrection());
 
             var fs = new FileSystemImpl();
+            var root = fs.Directory(RootPath);
+            if(root.Exists)
+            {
+                root.Delete(true);
+            }
+            root.Create();
 
-            DocumentStore = new FileSystemDocumentStore(fs.Directory("/x"));
+            DocumentStore = new FileSystemDocumentStore(root);
             DocumentStore.Initialize();
 
             DocumentStore.Create("/User documentation/Installation").Body.AddText("Installation");
@@ -34,7 +42,7 @@ namespace Plainion.RI.Controls
             {
                 DocumentStore.SaveChanges();
 
-                var store = new FileSystemDocumentStore(fs.Directory("/x"));
+                var store = new FileSystemDocumentStore(fs.Directory(RootPath));
                 store.Initialize();
 
                 DocumentStore = store;

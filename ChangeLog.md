@@ -5,6 +5,7 @@
 - AutoCorrections added for
   - arrows
   - markdown headlines
+- DocumentStore: format changed to Xaml to be able to store more semantical information
 
 ## 2.4.0 - 2017-08-27
 

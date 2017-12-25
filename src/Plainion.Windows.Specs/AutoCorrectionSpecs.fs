@@ -100,7 +100,7 @@ module ``Given a text to be auto-corrected (unicode symbol)`` =
         
         result.Success |> should be True
 
-        document |> text |> should haveSubstring "\u21e8"
+        document |> text |> should haveSubstring "\u2794"
 
     [<Test>]
     let ``<When> unrecognized text is entered <Then> no symbol is inserted`` () =

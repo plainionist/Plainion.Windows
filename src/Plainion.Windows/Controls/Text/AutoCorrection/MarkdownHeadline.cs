@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Documents;
+﻿using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
@@ -7,6 +6,13 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
     {
         public AutoCorrectionResult TryApply(AutoCorrectionInput input)
         {
+            // add a new body Run if user hit enter after existing headline
+            if(input.Trigger == AutoCorrectionTrigger.Return && input.Range.End.Parent is Headline)
+            {
+                var body = new Body(string.Empty, input.Range.End);
+                return new AutoCorrectionResult(true, body.ContentEnd);
+            }
+
             var result = new AutoCorrectionResult(false);
 
             foreach (var line in DocumentOperations.GetLines(input.Range))
@@ -23,13 +29,6 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
                 {
                     result = InsertHeadline(line, 2);
                 }
-            }
-
-            // add a new body Run if user hit enter after existing headline
-            if (!result.Success && input.Trigger == AutoCorrectionTrigger.Return && Headline.IsHeadline(input.Range.End))
-            {
-                var body = new Body(string.Empty, input.Range.End);
-                return new AutoCorrectionResult(true, body.ContentStart);
             }
 
             return result;

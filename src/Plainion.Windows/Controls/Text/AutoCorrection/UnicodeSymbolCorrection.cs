@@ -22,7 +22,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
         {
             Symbols = new List<Symbol>();
             Symbols.Add(new Symbol("-->", "\u2192"));
-            Symbols.Add(new Symbol("==>", "\u21e8"));
+            Symbols.Add(new Symbol("==>", "\u2794"));
         }
 
         public IList<Symbol> Symbols { get; private set; }

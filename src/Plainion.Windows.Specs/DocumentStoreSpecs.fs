@@ -1,26 +1,24 @@
 ﻿namespace Plainion.Windows.Specs.Controls.Text
 
+open System.Linq
 open System.Threading
 open NUnit.Framework
+open FsUnit
+open Plainion.IO
 open Plainion.Windows.Controls.Text
 open Plainion.Windows.Specs.Controls.Text
-open System.Linq
-open Plainion.IO.MemoryFS
-open FsUnit
 
 [<Apartment(ApartmentState.STA)>]
 [<Spec>]
 module ``Given any DocumentStore`` =
-    open System
-
-    let create (fs:FileSystemImpl) = 
+    let create (fs:IFileSystem) = 
         let store = new FileSystemDocumentStore(fs.Directory("/x"))
         store.Initialize()
         store
 
     [<Test>]
     let ``<When> adding documents <And> triggering save <Then> the new documents are saved``() =
-        let fs = new FileSystemImpl()
+        let fs = new Plainion.IO.MemoryFS.FileSystemImpl()
         let store = create fs
 
         let doc = store.Create("/doc1")
@@ -45,7 +43,7 @@ module ``Given any DocumentStore`` =
 
     [<Test>]
     let ``<When> changing documents <And> triggering save <Then> the modified documents are saved``() =
-        let fs = new FileSystemImpl()
+        let fs = new Plainion.IO.MemoryFS.FileSystemImpl()
         let store = create fs
 
         store.Create("/doc1").Body |> addText "test1"
@@ -65,7 +63,7 @@ module ``Given any DocumentStore`` =
         
     [<Test>]
     let ``<When> removing documents <And> triggering save <Then> the removal is made persistent``() =
-        let fs = new FileSystemImpl()
+        let fs = new Plainion.IO.MemoryFS.FileSystemImpl()
         let store = create fs
 
         store.Create("/doc1").Body |> addText "test1"
@@ -83,4 +81,47 @@ module ``Given any DocumentStore`` =
         store.Root.Entries.OfType<Document>() |> List.ofSeq |> should haveLength 0
         
 
+[<Apartment(ApartmentState.STA)>]
+[<Spec>]
+module ``Given a DocumentStore from previous version`` =
+    open System.Windows.Documents
+    open System.IO
+
+    [<Test>]
+    let ``<When> was created with version 1 <Then> it will be converted during initialization``() =
+        let location = typeof<SpecAttribute>.Assembly.Location |> Path.GetDirectoryName
+        let file = Path.Combine(location, "TestData", "FileSystemDocumentStore.v1")
+
+        let fs = 
+            use stream = new FileStream(file,FileMode.Open, FileAccess.Read)
+            Plainion.IO.MemoryFS.FileSystemImpl.Deserialize(stream)
+
+        let store = new FileSystemDocumentStore(fs.Directory(@"C:\x"))
+        store.Initialize()
+
+        let text (doc:Document) = doc.Body.Content().Text
+
+        store.Get("/User documentation/Installation") |> text |> should equal "Installation\r\n"
+        store.Get("/User documentation/Getting started") |> text |> should equal "Getting started\r\n"
+        store.Get("/Developer documentation/HowTos/MVC with F#") |> text |> should equal "MVC with F#\r\n"
+        store.Get("/Developer documentation/HowTos/WebApi with F#") |> text |> should equal "WebApi with F#\r\n"
+
+    [<Test>]
+    let ``<When> was created with version 2 <Then> it will be converted during initialization``() =
+        let location = typeof<SpecAttribute>.Assembly.Location |> Path.GetDirectoryName
+        let file = Path.Combine(location, "TestData", "FileSystemDocumentStore.v2")
+
+        let fs = 
+            use stream = new FileStream(file,FileMode.Open, FileAccess.Read)
+            Plainion.IO.MemoryFS.FileSystemImpl.Deserialize(stream)
+
+        let store = new FileSystemDocumentStore(fs.Directory(@"C:\x"))
+        store.Initialize()
+
+        let text (doc:Document) = doc.Body.Content().Text
+
+        store.Get("/User documentation/Installation") |> text |> should equal "Installation\r\n"
+        store.Get("/User documentation/Getting started") |> text |> should equal "Getting started\r\n"
+        store.Get("/Developer documentation/HowTos/MVC with F#") |> text |> should equal "MVC with F#\r\n"
+        store.Get("/Developer documentation/HowTos/WebApi with F#") |> text |> should equal "WebApi with F#\r\n"
 

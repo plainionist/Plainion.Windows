@@ -2,14 +2,14 @@
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
-    internal class Headline : Run
+    public class Headline : Run
     {
         public Headline()
             : this(string.Empty, null, TextStyles.Headlines[1])
         {
         }
 
-        public Headline(string text, TextPointer insertionPosition, TextStyles.Headline headline)
+        internal Headline(string text, TextPointer insertionPosition, TextStyles.Headline headline)
             : base(text, insertionPosition)
         {
             FontFamily = headline.FontFamily;
@@ -17,15 +17,9 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             FontWeight = headline.FontWeight;
             Tag = GetType().FullName;
         }
-
-        public static bool IsHeadline(TextPointer pos)
-        {
-            var parent = pos.Parent as Run;
-            return parent != null && parent.Tag != null && parent.Tag.Equals(typeof(Headline).FullName);
-        }
     }
 
-    internal class Body : Run
+    public class Body : Run
     {
         public Body()
             : this(string.Empty, null)

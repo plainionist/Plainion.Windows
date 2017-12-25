@@ -5,11 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Markup;
 
 namespace Plainion.Windows.Controls.Text
 {
     public class FileSystemDocumentStore : DocumentStore
     {
+        private const int Version = 2;
+        private int myStoredVersion;
+
         private IDirectory myRoot;
         private Index myIndex;
 
@@ -28,7 +32,7 @@ namespace Plainion.Windows.Controls.Text
 
             public void Initialize()
             {
-                if (myFile.Exists)
+                if(myFile.Exists)
                 {
                     Root = Load();
                 }
@@ -40,7 +44,7 @@ namespace Plainion.Windows.Controls.Text
 
             public void Save()
             {
-                using (var writer = new BinaryWriter(myFile.Stream(FileAccess.Write)))
+                using(var writer = new BinaryWriter(myFile.Stream(FileAccess.Write)))
                 {
                     Save(writer, Root);
                 }
@@ -54,10 +58,10 @@ namespace Plainion.Windows.Controls.Text
                 writer.Write(node.Title ?? string.Empty);
 
                 writer.Write(node.Entries.Count);
-                foreach (var entry in node.Entries)
+                foreach(var entry in node.Entries)
                 {
                     var folder = entry as Folder;
-                    if (folder == null)
+                    if(folder == null)
                     {
                         writer.Write(false);
                         writer.Write(((Document)entry).Id.Value.ToString());
@@ -72,7 +76,7 @@ namespace Plainion.Windows.Controls.Text
 
             private Folder Load()
             {
-                using (var reader = new BinaryReader(myFile.Stream(FileAccess.Read)))
+                using(var reader = new BinaryReader(myFile.Stream(FileAccess.Read)))
                 {
                     return Read(reader);
                 }
@@ -87,15 +91,15 @@ namespace Plainion.Windows.Controls.Text
                 var meta = new StoreItemMetaInfo<FolderId>(new FolderId(folderId), created, modified);
 
                 var folder = new Folder(meta);
-                using (folder.SuppressChangeTracking())
+                using(folder.SuppressChangeTracking())
                 {
                     folder.Title = reader.ReadString();
 
                     var count = reader.ReadInt32();
-                    for (int i = 0; i < count; ++i)
+                    for(int i = 0; i < count; ++i)
                     {
                         var isFolder = reader.ReadBoolean();
-                        if (isFolder)
+                        if(isFolder)
                         {
                             var child = Read(reader);
                             folder.Entries.Add(child);
@@ -123,8 +127,44 @@ namespace Plainion.Windows.Controls.Text
         // document meta data takes to long 
         public void Initialize()
         {
+            var metaInf = myRoot.File("MetaInf");
+            if(metaInf.Exists)
+            {
+                using(var reader = new BinaryReader(metaInf.Stream(FileAccess.Read)))
+                {
+                    myStoredVersion = reader.ReadInt32();
+                }
+            }
+            else
+            {
+                myStoredVersion = 1;
+            }
+
             myIndex = new Index(this, myRoot.File("Index"));
             myIndex.Initialize();
+
+            if(myStoredVersion == Version)
+            {
+                return;
+            }
+
+            if(myStoredVersion == 1)
+            {
+                foreach(var doc in myIndex.Root.Enumerate().OfType<Document>())
+                {
+                    Save(doc);
+                }
+            }
+            else
+            {
+                throw new NotSupportedException("Dont know how to migrate store version: " + myStoredVersion);
+            }
+
+            myStoredVersion = Version;
+            using(var writer = new BinaryWriter(metaInf.Stream(FileAccess.Write)))
+            {
+                writer.Write(myStoredVersion);
+            }
         }
 
         public override IReadOnlyCollection<Document> Search(string text)
@@ -141,19 +181,19 @@ namespace Plainion.Windows.Controls.Text
         {
             Contract.Invariant(myIndex != null, "DocumentStore not initialized");
 
-            using (var reader = new BinaryReader(GetMetaFile(id).Stream(FileAccess.Read)))
+            using(var reader = new BinaryReader(GetMetaFile(id).Stream(FileAccess.Read)))
             {
                 var created = new DateTime(reader.ReadInt64());
                 var modified = new DateTime(reader.ReadInt64());
                 var meta = new StoreItemMetaInfo<DocumentId>(id, created, modified);
 
                 var doc = new Document(meta, () => ReadContent(GetBodyFile(id)));
-                using (doc.SuppressChangeTracking())
+                using(doc.SuppressChangeTracking())
                 {
                     doc.Title = reader.ReadString();
 
                     var count = reader.ReadInt32();
-                    for (int i = 0; i < count; ++i)
+                    for(int i = 0; i < count; ++i)
                     {
                         doc.Tags.Add(reader.ReadString());
                     }
@@ -163,17 +203,22 @@ namespace Plainion.Windows.Controls.Text
             }
         }
 
-        private static FlowDocument ReadContent(IFile file)
+        private FlowDocument ReadContent(IFile file)
         {
-            var doc = new FlowDocument();
-
-            using (var stream = file.Stream(FileAccess.Read))
+            using(var stream = file.Stream(FileAccess.Read))
             {
-                var range = new TextRange(doc.ContentStart, doc.ContentEnd);
-                range.Load(stream, DataFormats.Rtf);
+                if(myStoredVersion == 1)
+                {
+                    var doc = new FlowDocument();
+                    var range = new TextRange(doc.ContentStart, doc.ContentEnd);
+                    range.Load(stream, DataFormats.Rtf);
+                    return doc;
+                }
+                else
+                {
+                    return (FlowDocument)XamlReader.Load(stream);
+                }
             }
-
-            return doc;
         }
 
         protected override Folder GetRoot()
@@ -194,7 +239,7 @@ namespace Plainion.Windows.Controls.Text
         {
             Contract.Invariant(myIndex != null, "DocumentStore not initialized");
 
-            using (var writer = new BinaryWriter(GetMetaFile(document.Id).Stream(FileAccess.Write)))
+            using(var writer = new BinaryWriter(GetMetaFile(document.Id).Stream(FileAccess.Write)))
             {
                 writer.Write(document.Created.Ticks);
                 writer.Write(document.LastModified.Ticks);
@@ -202,19 +247,15 @@ namespace Plainion.Windows.Controls.Text
                 writer.Write(document.Title ?? string.Empty);
 
                 writer.Write(document.Tags.Count);
-                foreach (var tag in document.Tags)
+                foreach(var tag in document.Tags)
                 {
                     writer.Write(tag);
                 }
             }
 
-            using (var stream = GetBodyFile(document.Id).Stream(FileAccess.Write))
+            using(var stream = GetBodyFile(document.Id).Stream(FileAccess.Write))
             {
-                var range = new TextRange(document.Body.ContentStart, document.Body.ContentEnd);
-                if (!range.IsEmpty)
-                {
-                    range.Save(stream, DataFormats.Rtf);
-                }
+                XamlWriter.Save(document.Body, stream);
             }
         }
 

@@ -34,6 +34,12 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
+    <Content Include="TestData\FileSystemDocumentStore.v1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\FileSystemDocumentStore.v2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="DomainModel.fs" />
     <Compile Include="AutoCorrectionSpecs.fs" />
