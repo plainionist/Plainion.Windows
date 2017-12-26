@@ -43,19 +43,6 @@ namespace Plainion.Windows.Tests.Controls.Text
             myEditor.AutoCorrection.Corrections.Add(myAutoCorrections);
         }
 
-        [Test, Ignore("layout required?")]
-        public void OnKeyDown_WithSpecialKey_SelectionIsCleared([Values(Key.Space, Key.Return, Key.Back)]Key key)
-        {
-            myEditor.Document.Blocks.Add(new Paragraph(new Run("Some dummy text")));
-            myEditor.Selection.Select(myEditor.Document.ContentStart, myEditor.Document.ContentEnd);
-
-            Assert.That(myEditor.Selection.IsEmpty, Is.False, "Failed to select some text");
-
-            myEditor.TriggerInput(key);
-
-            Assert.That(myEditor.Selection.IsEmpty, Is.True, "Selection not empty");
-        }
-
         [Test]
         public void OnKeyDown_WordCompletionCharacter_AutoCorrectionTriggered([Values(Key.Space, Key.Return)]Key key)
         {

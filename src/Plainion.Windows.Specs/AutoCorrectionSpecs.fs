@@ -122,45 +122,52 @@ module ``Given a text to be auto-corrected (unicode symbol)`` =
 
         document |> text |> should equal "we conclude ==>\r\n"
 
-//[<Spec>]
-//module ``Given a text to be auto-corrected (markdown headline)`` =
+[<Spec>]
+module ``Given a text to be auto-corrected (markdown headline)`` =
 
-//    let tryAutoCorrect (doc:FlowDocument) =
-//        (new MarkdownHeadline()).TryApply(new TextRange(doc.ContentEnd, doc.ContentEnd))
+    let tryAutoCorrect (doc:FlowDocument) =
+        (new MarkdownHeadline()).TryApply(new AutoCorrectionInput(new TextRange(doc.ContentEnd, doc.ContentEnd), AutoCorrectionTrigger.Return))
 
-//    let text (doc:FlowDocument) = 
-//        let range = new TextRange(doc.ContentStart, doc.ContentEnd)
-//        range.Text
+    let headline (doc:FlowDocument) = 
+        let visitor = new FlowDocumentVisitor(fun x -> x :? Headline)
+        visitor.Accept(doc)
+        visitor.Results |> Seq.cast<Headline> |> Seq.tryHead
 
-//    [<Test>]
-//    let ``<When> "-->" is enteried <Then> it will be replaced by arrow symbol`` () =
-//        let document = new FlowDocument(new Paragraph(new Run("so -->")))
+    [<Test>]
+    let ``<When> "#" is leading a text line <Then> the line will be converted into a headline`` () =
+        let document = new FlowDocument(new Paragraph(new Run("# headline")))
 
-//        document |> tryAutoCorrect |> should be True
+        let result = document |> tryAutoCorrect 
+        
+        result.Success |> should be True
 
-//        document |> text |> should haveSubstring "\u2192"
+        let headline = document |> headline 
+        headline |> should not' (equal None)
+        headline |> Option.map(fun x -> x.Text) |> should equal (Some("headline"))
 
-//    [<Test>]
-//    let ``<When> "==>" is enteried <Then> it will be replaced by arrow symbol`` () =
-//        let document = new FlowDocument(new Paragraph(new Run("so ==>")))
+    [<Test>]
+    let ``<When> RETURN is pressed after a headline <Then> a new body text block is started`` () =
+        let document = new FlowDocument(new Paragraph(new Headline("headline")))
 
-//        document |> tryAutoCorrect |> should be True
+        let result = document |> tryAutoCorrect 
+        
+        result.Success |> should be True
 
-//        document |> text |> should haveSubstring "\u21e8"
+        document.Blocks
+        |> Seq.cast<Paragraph>
+        |> Seq.last
+        |> fun b -> b.Inlines
+        |> Seq.last
+        |> should be instanceOfType<Body>
 
-//    [<Test>]
-//    let ``<When> unrecognized text is entered <Then> no symbol is inserted`` () =
-//        let document = new FlowDocument(new Paragraph(new Run("Some dummy text")));
+    [<Test>]
+    let ``<When> removal of headline is triggered <Then> headline is removed`` () =
+        let document = new FlowDocument(new Paragraph(new Headline("headline")))
 
-//        document |> tryAutoCorrect |> should be False
+        let result = (new MarkdownHeadline()).TryUndo(document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward)) 
+        
+        result.Success |> should be True
 
-//        document |> text |> should equal "Some dummy text\r\n"
+        document |> headline |> should equal None
+        document |> text |> should equal "headline\r\n"
 
-//    [<Test>]
-//    let ``<When> removal of symbol is triggered <Then> symbol is removed`` () =
-//        let document = new FlowDocument(new Paragraph(new Run("we conclude ==>")))
-
-//        document |> tryAutoCorrect |> should be True
-//        (new MarkdownHeadline()).TryUndo(document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward)) |> should be True
-
-//        document |> text |> should equal "we conclude ==>\r\n"

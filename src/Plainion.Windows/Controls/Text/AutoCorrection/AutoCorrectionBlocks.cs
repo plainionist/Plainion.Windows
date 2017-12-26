@@ -5,7 +5,12 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
     public class Headline : Run
     {
         public Headline()
-            : this(string.Empty, null, TextStyles.Headlines[1])
+            : this(string.Empty)
+        {
+        }
+
+        public Headline(string text)
+            : this(text, null, TextStyles.Headlines[1])
         {
         }
 
