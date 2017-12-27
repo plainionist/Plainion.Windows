@@ -11,6 +11,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             Corrections.Add(new ClickableHyperlink());
             Corrections.Add(new UnicodeSymbolCorrection());
             Corrections.Add(new MarkdownHeadline());
+            Corrections.Add(new BulletList());
         }
 
         public IList<IAutoCorrection> Corrections { get; private set; }

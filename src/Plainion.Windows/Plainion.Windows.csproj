@@ -45,6 +45,7 @@
     <Compile Include="Controls\Text\AbstractStoreItem.cs" />
     <Compile Include="Controls\Text\AbstractStoreItemId.cs" />
     <Compile Include="Controls\Text\AutoCorrection\AutoCorrectionBlocks.cs" />
+    <Compile Include="Controls\Text\AutoCorrection\BulletList.cs" />
     <Compile Include="Controls\Text\AutoCorrection\UnicodeSymbolCorrection.cs" />
     <Compile Include="Controls\Text\AutoCorrection\AutoCorrectionTable.cs" />
     <Compile Include="Controls\Text\AutoCorrection\ClickableHyperlink.cs" />

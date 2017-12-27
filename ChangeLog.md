@@ -1,10 +1,11 @@
-## 2.5.0 - 2017-
+## 2.5.0 - 2017-12-27
 
 - DocumentStore: default font changed to Calibri, size = 11pt
 - AutoCorrection refactored to support multiple auto-corrections
 - AutoCorrections added for
-  - arrows
-  - markdown headlines
+  - Arrows
+  - MarkDown headlines
+  - MarkDown bullet lists
 - DocumentStore: format changed to Xaml to be able to store more semantical information
 
 ## 2.4.0 - 2017-08-27

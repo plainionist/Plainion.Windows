@@ -1,4 +1,5 @@
-﻿using System.Windows.Documents;
+﻿using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
@@ -20,7 +21,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             FontFamily = headline.FontFamily;
             FontSize = headline.FontSize;
             FontWeight = headline.FontWeight;
-            Tag = GetType().FullName;
+            Tag = "Plainion.Text.Headline";
         }
     }
 
@@ -37,6 +38,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             FontFamily = TextStyles.Body.FontFamily;
             FontSize = TextStyles.Body.FontSize;
             FontWeight = TextStyles.Body.FontWeight;
+            Tag = "Plainion.Text.Body";
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,6 +6,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using Plainion.Windows.Controls.Text.AutoCorrection;
+using Plainion.Windows.Mvvm;
 
 namespace Plainion.Windows.Controls.Text
 {
@@ -32,6 +33,30 @@ namespace Plainion.Windows.Controls.Text
 
             // required to get hyperlinks working
             IsDocumentEnabled = true;
+
+            // allows indent of list items with tab/shift-tab
+            AcceptsTab = true;
+
+            ToggleBulletsCommand = new DelegateCommand(() => OnToggleList(EditingCommands.ToggleBullets));
+            ToggleNumberingommand = new DelegateCommand(() => OnToggleList(EditingCommands.ToggleNumbering));
+        }
+
+        public ICommand ToggleBulletsCommand { get; private set; }
+        public ICommand ToggleNumberingommand { get; private set; }
+
+        private void OnToggleList(RoutedUICommand toggleList)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                toggleList.Execute(null, this);
+
+                var visitor = new FlowDocumentVisitor(x => x is List);
+                visitor.Accept(Document);
+                foreach (var list in visitor.Results.Cast<List>())
+                {
+                    list.Margin = new Thickness(0, 0, 0, 0);
+                }
+            }));
         }
 
         public static readonly DependencyProperty AutoCorrectionProperty = DependencyProperty.Register("AutoCorrection",
@@ -60,14 +85,18 @@ namespace Plainion.Windows.Controls.Text
                 myAutoCorrectionTrigger = e.Key == Key.Space ? AutoCorrectionTrigger.Space : AutoCorrectionTrigger.Return;
 
                 // we get "next insertion position backwards" to "skip" the space or enter and want to remember "last content" typed
-                mySelectionStartPosition = Document.ContentStart.GetOffsetToPosition(Selection.Start.GetNextInsertionPosition(LogicalDirection.Backward));
-
-                // auto correction detection will be done in OnTextChanged()
-
-                if (e.Key == Key.Return)
+                var start = Selection.Start.GetNextInsertionPosition(LogicalDirection.Backward);
+                if (start != null)
                 {
-                    // we have to trigger auto correction explicitly here
-                    ApplyAutoCorrection();
+                    mySelectionStartPosition = Document.ContentStart.GetOffsetToPosition(start);
+
+                    // auto correction detection will be done in OnTextChanged()
+
+                    if (e.Key == Key.Return)
+                    {
+                        // we have to trigger auto correction explicitly here
+                        ApplyAutoCorrection();
+                    }
                 }
             }
             else // Key.Back
@@ -77,7 +106,7 @@ namespace Plainion.Windows.Controls.Text
                 // We want to remember content following the highlighting to set new caret position at.
 
                 var newCaretPosition = Selection.Start.GetPositionAtOffset(0, LogicalDirection.Forward);
-                Content = Document;
+
                 if (AutoCorrection.Undo(Selection.Start).Success)
                 {
                     // Update selection, since we deleted a auto correction element and caretPosition was at that auto correction's end boundary.
@@ -86,8 +115,6 @@ namespace Plainion.Windows.Controls.Text
                 }
             }
         }
-
-        public static FlowDocument Content;
 
         private void OnPasted(object sender, DataObjectPastingEventArgs e)
         {
@@ -111,8 +138,9 @@ namespace Plainion.Windows.Controls.Text
 
             TextChanged -= OnTextChanged;
 
-            var intput = new AutoCorrectionInput(new TextRange(Document.ContentStart.GetPositionAtOffset(mySelectionStartPosition), CaretPosition), myAutoCorrectionTrigger.Value);
-            var result = AutoCorrection.Apply(intput);
+            var input = new AutoCorrectionInput(new TextRange(Document.ContentStart.GetPositionAtOffset(mySelectionStartPosition), CaretPosition), myAutoCorrectionTrigger.Value);
+            input.Editor = this;
+            var result = AutoCorrection.Apply(input);
 
             if (result.Success && result.CaretPosition != null)
             {

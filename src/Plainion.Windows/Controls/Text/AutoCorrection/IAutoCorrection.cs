@@ -29,6 +29,8 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
         public TextRange Range { get; private set; }
 
         public AutoCorrectionTrigger Trigger { get; private set; }
+
+        internal RichTextEditor Editor { get; set; }
     }
 
     public class AutoCorrectionResult
