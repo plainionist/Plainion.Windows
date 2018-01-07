@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Node Id="9eaf72eb-62d2-4cde-9256-b63447373765" Created="636509356061480578" LastModified="636509356608401860">
+  <Caption><![CDATA[disable backspace for headlines ]]></Caption>
+  <Content><![CDATA[how do i do type correction in markdown headline if this removes the 
+headline mode?
+
+maybe we better transform headline back into "##" whe we do backspace just at
+this position?]]></Content>
+</Node>

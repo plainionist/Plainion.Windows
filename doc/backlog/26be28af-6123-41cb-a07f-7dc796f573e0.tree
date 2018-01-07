@@ -2,8 +2,14 @@
 <Tree>
   <Node Id="26be28af-6123-41cb-a07f-7dc796f573e0">
     <Caption><![CDATA[Planning]]></Caption>
-    <Node Id="91638c6f-d7a9-475d-8a53-c7648437c60d">
-      <Caption><![CDATA[auto link pages with wiki works]]></Caption>
+    <Node Id="53f59723-36c9-4281-a989-87e41d254cf2">
+      <Caption><![CDATA[NotePad]]></Caption>
+      <Node Id="91638c6f-d7a9-475d-8a53-c7648437c60d">
+        <Caption><![CDATA[auto link pages with wiki works]]></Caption>
+      </Node>
+      <Node Id="9eaf72eb-62d2-4cde-9256-b63447373765">
+        <Caption><![CDATA[disable backspace for headlines ]]></Caption>
+      </Node>
     </Node>
   </Node>
 </Tree>
