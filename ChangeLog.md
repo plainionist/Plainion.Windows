@@ -1,6 +1,7 @@
 ## 2.6.0 - 2018-01-17
 
 - Document: IsModified handling fixed for not loaded bodies
+- Plainion.Core updated (fix for File.Stream)
 
 ## 2.5.0 - 2017-12-27
 

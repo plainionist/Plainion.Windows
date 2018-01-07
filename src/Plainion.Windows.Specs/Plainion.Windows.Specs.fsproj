@@ -63,7 +63,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Plainion.Core">
-      <HintPath>..\..\packages\Plainion.Core.3.4.0\lib\NET45\Plainion.Core.dll</HintPath>
+      <HintPath>..\..\packages\Plainion.Core.3.5.0\lib\NET45\Plainion.Core.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
