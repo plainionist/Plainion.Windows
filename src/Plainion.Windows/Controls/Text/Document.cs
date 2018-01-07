@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Windows;
 using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text
@@ -54,7 +53,7 @@ namespace Plainion.Windows.Controls.Text
 
         protected override bool CheckModified()
         {
-            return myLastModifiedHashCode != GetBodyHashCode();
+            return myBody.IsValueCreated && myLastModifiedHashCode != GetBodyHashCode();
         }
 
         internal override void MarkAsSaved()
