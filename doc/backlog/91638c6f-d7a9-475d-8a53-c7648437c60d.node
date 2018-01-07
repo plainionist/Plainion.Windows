@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Node Id="91638c6f-d7a9-475d-8a53-c7648437c60d" Created="636509151619817183" LastModified="636509152094374327">
+  <Caption><![CDATA[auto link pages with wiki works]]></Caption>
+  <Content><![CDATA[- when creating words or WikiWords automatically links should be created
+- we might need to analyse the text constantly in the background 
+  triggered by text changes]]></Content>
+</Node>
