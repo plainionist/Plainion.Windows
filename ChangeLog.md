@@ -1,3 +1,7 @@
+## 2.7.0 - 2018-01-17
+
+- FileSystemDocumentStore: save unloaded documents fixed
+
 ## 2.6.0 - 2018-01-17
 
 - Document: IsModified handling fixed for not loaded bodies

@@ -253,9 +253,12 @@ namespace Plainion.Windows.Controls.Text
                 }
             }
 
+            // ensure that the body is already loaded - otherwise we try to read it within
+            // the using block below while a write stream has been opened on the file already
+            var body = document.Body;
             using(var stream = GetBodyFile(document.Id).Stream(FileAccess.Write))
             {
-                XamlWriter.Save(document.Body, stream);
+                XamlWriter.Save(body, stream);
             }
         }
 
