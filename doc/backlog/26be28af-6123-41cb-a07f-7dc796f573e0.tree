@@ -10,6 +10,9 @@
       <Node Id="9eaf72eb-62d2-4cde-9256-b63447373765">
         <Caption><![CDATA[disable backspace for headlines ]]></Caption>
       </Node>
+      <Node Id="3bddeea2-1384-4024-a77d-30e45544abd8">
+        <Caption><![CDATA[directories show listing]]></Caption>
+      </Node>
     </Node>
   </Node>
 </Tree>
