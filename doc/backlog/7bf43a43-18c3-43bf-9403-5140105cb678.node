@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Node Id="7bf43a43-18c3-43bf-9403-5140105cb678" Created="636513025410783618" LastModified="636513025744102683">
+  <Caption><![CDATA[when converting a doc into a folder ]]></Caption>
+  <Content><![CDATA[only really create a doc out of the folder in case the doc had 
+non whitespace content]]></Content>
+</Node>
