@@ -25,6 +25,15 @@
       <Node Id="2a7f58cf-07ff-4059-b2a9-f4b66d9b0cd4">
         <Caption><![CDATA[enter on empty page creates exception]]></Caption>
       </Node>
+      <Node Id="089050db-d256-4c46-97d3-032c84ba94a6">
+        <Caption><![CDATA[list start automatically upper case letter]]></Caption>
+      </Node>
+      <Node Id="ad99d4d9-98af-4c16-916b-eeb8e3856cd8">
+        <Caption><![CDATA[flowdoc has no scrollbar]]></Caption>
+      </Node>
+      <Node Id="bec5511a-c4e1-467b-b823-6c4a69881f39">
+        <Caption><![CDATA[copy links into lists does not work]]></Caption>
+      </Node>
     </Node>
   </Node>
 </Tree>
