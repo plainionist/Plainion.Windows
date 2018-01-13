@@ -4,12 +4,6 @@
     <Caption><![CDATA[Planning]]></Caption>
     <Node Id="53f59723-36c9-4281-a989-87e41d254cf2">
       <Caption><![CDATA[NotePad]]></Caption>
-      <Node Id="7bf43a43-18c3-43bf-9403-5140105cb678">
-        <Caption><![CDATA[when converting a doc into a folder ]]></Caption>
-      </Node>
-      <Node Id="3bddeea2-1384-4024-a77d-30e45544abd8">
-        <Caption><![CDATA[directories show listing]]></Caption>
-      </Node>
       <Node Id="dec9fe23-9244-4a90-a696-5182a8ef069b">
         <Caption><![CDATA[document all the shortcuts]]></Caption>
       </Node>

@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Node Id="3bddeea2-1384-4024-a77d-30e45544abd8" Created="636512122004997718" LastModified="636512122361648117">
-  <Caption><![CDATA[directories show listing]]></Caption>
-  <Content><![CDATA[currently directly nodes show the first document but this is
-rather confusing - can we just generate a document or show s.th. differnet?]]></Content>
-</Node>

@@ -45,13 +45,6 @@ namespace Plainion.Windows.Controls.Text
                 return document.Body;
             }
 
-            var folder = (Folder)item;
-            document = folder.Entries.OfType<Document>().FirstOrDefault();
-            if (document != null)
-            {
-                return document.Body;
-            }
-
             return null;
         }
 
