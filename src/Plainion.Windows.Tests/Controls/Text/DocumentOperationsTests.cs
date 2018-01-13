@@ -85,6 +85,23 @@ namespace Plainion.Windows.Tests.Controls.Text.AutoCorrection
         }
 
         [Test]
+        public void GetWords_SeparatedWithTabs_ReturnsAllWordsOfARange()
+        {
+            var doc = new FlowDocument();
+            doc.Blocks.Add(new Paragraph(new Run("a\ttest\twith\ttabs")));
+            Assert.That(DocumentOperations.GetWords(doc.Content()).Select(x => x.Text), Is.EquivalentTo(new[] { "a", "test", "with", "tabs" }));
+        }
+
+        [Test,Ignore("https://stackoverflow.com/questions/48240020/wpf-get-textrange-from-listitem-content")]
+        public void GetWords_TextAfterBullet_ReturnsWordWithoutBullet()
+        {
+            var doc = new FlowDocument();
+            doc.Blocks.Add(new System.Windows.Documents.List(new ListItem(new Paragraph(new Run("first bullet")))));
+
+            Assert.That(DocumentOperations.GetWords(doc.Content()).Select(x => x.Text), Is.EquivalentTo(new[] { "•", "first bullet" }));
+        }
+        
+        [Test]
         public void GetLines_When_ReturnsAllLinesOfARange()
         {
             var lines = DocumentOperations.GetLines(new TextRange(myDocument.ContentStart, myDocument.ContentEnd))

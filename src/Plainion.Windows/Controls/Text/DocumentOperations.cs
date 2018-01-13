@@ -70,15 +70,14 @@ namespace Plainion.Windows.Controls.Text
 
             TextRange wordRange = null;
             TextPointer wordStartPosition = null;
-            TextPointer wordEndPosition = null;
 
             // Go forward first, to find word end position.
-            wordEndPosition = GetPositionAtWordBoundary(position, /*wordBreakDirection*/LogicalDirection.Forward);
+            var wordEndPosition = GetPositionAtWordBoundary(position, LogicalDirection.Forward);
 
             if (wordEndPosition != null)
             {
                 // Then travel backwards, to find word start position.
-                wordStartPosition = GetPositionAtWordBoundary(wordEndPosition, /*wordBreakDirection*/LogicalDirection.Backward);
+                wordStartPosition = GetPositionAtWordBoundary(wordEndPosition, LogicalDirection.Backward);
             }
 
             if (wordStartPosition != null && wordEndPosition != null)
@@ -103,7 +102,7 @@ namespace Plainion.Windows.Controls.Text
                 position = position.GetInsertionPosition(wordBreakDirection);
             }
 
-            TextPointer navigator = position;
+            var navigator = position;
             while (navigator != null && !IsPositionNextToWordBreak(navigator, wordBreakDirection))
             {
                 navigator = navigator.GetNextInsertionPosition(wordBreakDirection);
@@ -112,12 +111,8 @@ namespace Plainion.Windows.Controls.Text
             return navigator;
         }
 
-        // Helper for GetPositionAtWordBoundary.
-        // Returns true when passed TextPointer is next to a wordBreak in requested direction.
         private static bool IsPositionNextToWordBreak(TextPointer position, LogicalDirection wordBreakDirection)
         {
-            bool isAtWordBoundary = false;
-
             // Skip over any formatting.
             if (position.GetPointerContext(wordBreakDirection) != TextPointerContext.Text)
             {
@@ -126,28 +121,27 @@ namespace Plainion.Windows.Controls.Text
 
             if (position.GetPointerContext(wordBreakDirection) == TextPointerContext.Text)
             {
-                LogicalDirection oppositeDirection = (wordBreakDirection == LogicalDirection.Forward) ?
-                    LogicalDirection.Backward : LogicalDirection.Forward;
+                var oppositeDirection = wordBreakDirection == LogicalDirection.Forward ? LogicalDirection.Backward : LogicalDirection.Forward;
 
-                char[] runBuffer = new char[1];
-                char[] oppositeRunBuffer = new char[1];
+                var runBuffer = new char[1];
+                var oppositeRunBuffer = new char[1];
 
-                position.GetTextInRun(wordBreakDirection, runBuffer, /*startIndex*/0, /*count*/1);
-                position.GetTextInRun(oppositeDirection, oppositeRunBuffer, /*startIndex*/0, /*count*/1);
+                position.GetTextInRun(wordBreakDirection, runBuffer, 0, 1);
+                position.GetTextInRun(oppositeDirection, oppositeRunBuffer, 0, 1);
 
                 if ((runBuffer[0] == ' ' || runBuffer[0] == '\t') && oppositeRunBuffer[0] != ' ' && oppositeRunBuffer[0] != '\t')
                 {
-                    isAtWordBoundary = true;
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
-            else
-            {
-                // If we're not adjacent to text then we always want to consider this position a "word break".  
-                // In practice, we're most likely next to an embedded object or a block boundary.
-                isAtWordBoundary = true;
-            }
 
-            return isAtWordBoundary;
+            // We are next to an embedded object or a block boundary
+            // -> consider as word break
+            return true;
         }
 
         public static IEnumerable<TextRange> GetWords(TextRange range)
