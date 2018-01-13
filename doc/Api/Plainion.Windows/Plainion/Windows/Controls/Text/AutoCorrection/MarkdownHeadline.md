@@ -13,6 +13,6 @@
 
 ## Methods
 
-### System.Boolean TryApply(System.Windows.Documents.TextRange range)
+### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionResult TryApply(Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionInput input)
 
-### System.Boolean TryUndo(System.Windows.Documents.TextPointer start)
+### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionResult TryUndo(System.Windows.Documents.TextPointer start)

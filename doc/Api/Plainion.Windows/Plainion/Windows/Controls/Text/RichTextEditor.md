@@ -20,6 +20,10 @@ Extends RichtTextBox by auto-completion. See "AutoCorrection" namespace for more
 
 ## Properties
 
+### System.Windows.Input.ICommand ToggleBulletsCommand
+
+### System.Windows.Input.ICommand ToggleNumberingommand
+
 ### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionTable AutoCorrection
 
 

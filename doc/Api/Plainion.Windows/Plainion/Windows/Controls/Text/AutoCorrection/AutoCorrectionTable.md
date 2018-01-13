@@ -13,11 +13,11 @@
 
 ## Properties
 
-### System.Collections.Generic.IList`1[[Plainion.Windows.Controls.Text.AutoCorrection.IAutoCorrection, Plainion.Windows, Version=2.5.0.0, Culture=neutral, PublicKeyToken=null]] Corrections
+### System.Collections.Generic.IList`1[[Plainion.Windows.Controls.Text.AutoCorrection.IAutoCorrection, Plainion.Windows, Version=2.8.0.0, Culture=neutral, PublicKeyToken=null]] Corrections
 
 
 ## Methods
 
-### System.Boolean Apply(System.Windows.Documents.TextRange range)
+### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionResult Apply(Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionInput input)
 
-### System.Boolean Undo(System.Windows.Documents.TextPointer pos)
+### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionResult Undo(System.Windows.Documents.TextPointer pos)

@@ -18,16 +18,33 @@ PropertyBinding.Bind( () => vm1.PrimaryValue, () => vm2.SecondaryValue, BindingM
 
 ## Plainion.Windows.Controls
 
-- Text.NotePad: Simple RichText editor control (see RI below)
-- Tree.TreeEditor: feature rich tree control/"editor" (see RI below)
-  - Drag&Drop of nodes
-  - In-place-Edit
-  - ContextMenu for create and Delete
-  - MVVM
 - FrameworkElementAdorner/AdornedControl allow putting controls (e.g. ProgressBar) into an Adorner
 - CircularProgressIndicator: simple progress indicator with details and flexible progress "numbers"
 - SearchTextBox: simple search box with preview
 - SelectFolderDialog wrapped to be used in WPF easily
+
+### TreeEditor
+
+Feature rich tree control/"editor" (see RI below)
+
+- Drag&Drop of nodes
+- In-place-Edit
+- ContextMenu for create and Delete
+- MVVM
+
+### Text
+
+- RichTextEditor
+  - nicer looking bullet lists
+  - various AutoCorrections
+    - MarkDown headlines and bullet lists
+	- ASCII to Unicode conversion
+- NotePad
+  - Adds toolbar with search and format buttons to the RichTextEditor
+- NoteBook
+  - Adds tree navigation for multiple documents and storage to the NotePad
+
+See it in production at [Plainion.OneNote](https://plainionist.github.io/Plainion.OneNote/) (including detailed feature description).
 
 ## Plainion.Windows.Diagnosis
 

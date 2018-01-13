@@ -15,7 +15,7 @@
 
 ### void Initialize()
 
-### System.Collections.Generic.IReadOnlyCollection`1[[Plainion.Windows.Controls.Text.Document, Plainion.Windows, Version=2.5.0.0, Culture=neutral, PublicKeyToken=null]] Search(System.String text)
+### System.Collections.Generic.IReadOnlyCollection`1[[Plainion.Windows.Controls.Text.Document, Plainion.Windows, Version=2.8.0.0, Culture=neutral, PublicKeyToken=null]] Search(System.String text)
 
 ### Plainion.Windows.Controls.Text.Document GetCore(Plainion.Windows.Controls.Text.DocumentId id)
 

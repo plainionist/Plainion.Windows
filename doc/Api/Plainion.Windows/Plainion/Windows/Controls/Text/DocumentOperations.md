@@ -26,7 +26,7 @@ If this TextPointer is within a word or at start of word, the containing word ra
 
 ### System.Collections.Generic.IEnumerable`1[[System.Windows.Documents.TextRange, PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35]] GetWords(System.Windows.Documents.TextRange range)
 
-Returns all words within given range
+### System.Collections.Generic.IEnumerable`1[[System.Windows.Documents.TextRange, PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35]] GetLines(System.Windows.Documents.TextRange range)
 
 ### System.Windows.Documents.TextRange GetLineAt(System.Windows.Documents.TextPointer pos)
 

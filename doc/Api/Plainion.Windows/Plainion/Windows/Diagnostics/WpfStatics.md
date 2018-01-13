@@ -13,7 +13,7 @@
 
 ## Properties
 
-### System.Collections.ObjectModel.ObservableCollection`1[[Plainion.Windows.Diagnostics.DiagnosticFinding, Plainion.Windows, Version=2.5.0.0, Culture=neutral, PublicKeyToken=null]] Findings
+### System.Collections.ObjectModel.ObservableCollection`1[[Plainion.Windows.Diagnostics.DiagnosticFinding, Plainion.Windows, Version=2.8.0.0, Culture=neutral, PublicKeyToken=null]] Findings
 
 ### System.Boolean WriteToDebugConsole
 

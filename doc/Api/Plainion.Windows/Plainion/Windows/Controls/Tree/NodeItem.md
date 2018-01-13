@@ -38,6 +38,8 @@
 
 ## Methods
 
+### void OnApplyTemplate()
+
 ### System.Windows.DependencyObject GetContainerForItemOverride()
 
 ### System.Boolean IsItemItsOwnContainerOverride(System.Object item)

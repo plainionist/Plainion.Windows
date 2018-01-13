@@ -13,14 +13,14 @@
 
 ## Properties
 
-### System.Collections.Generic.IList`1[[Plainion.Windows.Controls.Text.AutoCorrection.UnicodeSymbolCorrection+Symbol, Plainion.Windows, Version=2.5.0.0, Culture=neutral, PublicKeyToken=null]] Symbols
+### System.Collections.Generic.IList`1[[Plainion.Windows.Controls.Text.AutoCorrection.UnicodeSymbolCorrection+Symbol, Plainion.Windows, Version=2.8.0.0, Culture=neutral, PublicKeyToken=null]] Symbols
 
 
 ## Methods
 
-### System.Boolean TryApply(System.Windows.Documents.TextRange range)
+### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionResult TryApply(Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionInput input)
 
-### System.Boolean TryUndo(System.Windows.Documents.TextPointer pos)
+### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionResult TryUndo(System.Windows.Documents.TextPointer pos)
 
 
 ## Nested types
