@@ -3,6 +3,7 @@
 - Markdown headlines only reverted when empty
 - RichTextEditor: fixed exception when selecting and overriding all text
 - RichTextEditor: scrollbar added
+- NotePad: when adding child to a document its content is only replicated as child if there really is content
 
 ## 2.7.0 - 2018-01-10
 

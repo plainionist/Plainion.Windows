@@ -109,16 +109,19 @@ namespace Plainion.Windows.Controls.Text
             parent.Entries.Insert(parent.Entries.IndexOf(model), folder);
             parent.Entries.Remove(model);
 
-            // add "old" document as first child
-            // we cannot modify the children collection from CollectionChanged event 
-            NavigationNodeFactory.Dispatcher.BeginInvoke(new Action(() =>
+            if (!string.IsNullOrWhiteSpace(model.Body.Content().Text))
             {
-                ((Folder)Model).Entries.Add(model);
+                // if the "old" document has content ad it as first child.
+                // we cannot modify the children collection from CollectionChanged event 
+                NavigationNodeFactory.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    ((Folder)Model).Entries.Add(model);
 
-                var child = myFactory.Create(model, this);
+                    var child = myFactory.Create(model, this);
 
-                Children.Insert(0, child);
-            }));
+                    Children.Insert(0, child);
+                }));
+            }
 
             // last update my model reference
             Model = folder;

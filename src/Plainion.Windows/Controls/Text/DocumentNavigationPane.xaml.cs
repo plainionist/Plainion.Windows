@@ -53,10 +53,7 @@ namespace Plainion.Windows.Controls.Text
 
         private void OnSelectionChanged(IStoreItem item)
         {
-            if (SelectionChanged != null)
-            {
-                SelectionChanged(this, item);
-            }
+            SelectionChanged?.Invoke(this, item);
         }
 
         public DocumentStore DocumentStore

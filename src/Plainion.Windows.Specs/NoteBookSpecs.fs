@@ -11,8 +11,7 @@ open Plainion.Windows.Specs.Controls.Text
 [<Apartment(ApartmentState.STA)>]
 [<Scenario>]
 module ``Given an empty NoteBook`` =
-
-    [<Test>]
+    [<When>]
     let ``<When> adding a DocumentStore with documents and folders <Then> navigation page is building a tree accordingly``() =
         let notebook = new NoteBook()
 
@@ -37,8 +36,9 @@ module ``Given a NoteBook with documents`` =
     open Plainion.Windows.Interactivity.DragDrop
     open System.Windows
     open System.Windows.Threading
+    open System.Windows.Documents
 
-    [<Test>]
+    [<When>]
     let ``<When> deleting a navigation node <Then> DocumentStore is updated accordingly``() =
         let notebook = new NoteBook()
 
@@ -56,7 +56,7 @@ module ``Given a NoteBook with documents`` =
 
         store.TryGet("/s1/d2") |> should be Null
 
-    [<Test>]
+    [<When>]
     let ``<When> selecting a navigation node <Then> respective document is shown in NotePad``() =
         let notebook = new NoteBook()
 
@@ -74,7 +74,7 @@ module ``Given a NoteBook with documents`` =
 
         notebook.myNotePad.Document |> should equal (store.Get("/s1/d2").Body)
 
-    [<Test>]
+    [<When>]
     let ``<When> searching in all documents <Then> all matching documents are shown in search results``() =
         let notebook = new NoteBook()
 
@@ -96,7 +96,7 @@ module ``Given a NoteBook with documents`` =
         searchResults |> should not' (contain (store.Get("/s1/d2")))
         searchResults |> should contain (store.Get("/s1/d3"))
 
-    [<Test>]
+    [<When>]
     let ``<When> dropping a document on a folder <Then> document is moved to the folder``() =
         let notebook = new NoteBook()
 
@@ -121,8 +121,8 @@ module ``Given a NoteBook with documents`` =
         s1.Entries.[0].Title |> should equal "d2"
         s1.Entries.[1].Title |> should equal "d1"
 
-    [<Test>]
-    let ``<When> dropping a document on a document <Then> target document is converted into folder and both documents are added``() =
+    [<When>]
+    let ``<When> dropping a document on an empty document <Then> target document is converted into folder and only new document is added as child``() =
         NavigationNodeFactory.Dispatcher <- Dispatcher.CurrentDispatcher
         let notebook = new NoteBook()
 
@@ -132,6 +132,33 @@ module ``Given a NoteBook with documents`` =
 
         store.Create("/d1") |> ignore
         store.Create("/d2") |> ignore
+
+        notebook.DocumentStore <- store
+
+        let request = new NodeDropRequest()
+        request.DroppedNode <- notebook.myNavigation.Root.Children.[0]
+        request.DropTarget <-  notebook.myNavigation.Root.Children.[1]
+        request.Location <- DropLocation.InPlace
+
+        notebook.myNavigation.DropCommand.Execute(request)
+        DoEventsSync()
+
+        store.TryGet("/d1") |> should be Null
+        let d2 = store.Root.Entries.[0] :?> Folder
+        d2.Entries |> should haveCount 1
+        d2.Entries.[0].Title |> should equal "d1"
+
+    [<When>]
+    let ``<When> dropping a document on a document with content <Then> target document is converted into folder and both documents are added as children``() =
+        NavigationNodeFactory.Dispatcher <- Dispatcher.CurrentDispatcher
+        let notebook = new NoteBook()
+
+        let fs = new FileSystemImpl()
+        let store = new FileSystemDocumentStore(fs.Directory("/x"))
+        store.Initialize()
+
+        store.Create("/d1").Body.Blocks.Add(new Paragraph(new Run("doc 1")))
+        store.Create("/d2").Body.Blocks.Add(new Paragraph(new Run("doc 2")))
 
         notebook.DocumentStore <- store
 
