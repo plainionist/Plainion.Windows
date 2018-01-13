@@ -16,6 +16,9 @@
       <Node Id="455d8bc1-86d5-4522-bbea-505bff5fc03d">
         <Caption><![CDATA[hyperlink in list item does not work]]></Caption>
       </Node>
+      <Node Id="71efb1ad-fa9c-46b0-a40f-147869acd07c">
+        <Caption><![CDATA[NotePad: let folders be documents with entries?]]></Caption>
+      </Node>
     </Node>
   </Node>
 </Tree>
