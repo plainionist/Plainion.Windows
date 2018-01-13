@@ -2,23 +2,5 @@
 <Tree>
   <Node Id="26be28af-6123-41cb-a07f-7dc796f573e0">
     <Caption><![CDATA[Planning]]></Caption>
-    <Node Id="53f59723-36c9-4281-a989-87e41d254cf2">
-      <Caption><![CDATA[NotePad]]></Caption>
-      <Node Id="dec9fe23-9244-4a90-a696-5182a8ef069b">
-        <Caption><![CDATA[document all the shortcuts]]></Caption>
-      </Node>
-      <Node Id="90f6d436-caeb-4dfb-bd63-5dfa30ee1698">
-        <Caption><![CDATA[promote on blog]]></Caption>
-      </Node>
-      <Node Id="91638c6f-d7a9-475d-8a53-c7648437c60d">
-        <Caption><![CDATA[auto link pages with wiki works]]></Caption>
-      </Node>
-      <Node Id="455d8bc1-86d5-4522-bbea-505bff5fc03d">
-        <Caption><![CDATA[hyperlink in list item does not work]]></Caption>
-      </Node>
-      <Node Id="71efb1ad-fa9c-46b0-a40f-147869acd07c">
-        <Caption><![CDATA[NotePad: let folders be documents with entries?]]></Caption>
-      </Node>
-    </Node>
   </Node>
 </Tree>

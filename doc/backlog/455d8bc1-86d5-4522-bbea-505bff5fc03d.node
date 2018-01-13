@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Node Id="455d8bc1-86d5-4522-bbea-505bff5fc03d" Created="636514472703362961" LastModified="636514482043747200">
+<Node Id="455d8bc1-86d5-4522-bbea-505bff5fc03d" Created="636514472703362961" LastModified="636514524604061511">
   <Caption><![CDATA[hyperlink in list item does not work]]></Caption>
   <Content><![CDATA[the problem is that we are not able to get a TextRange which des NOT 
 include the bullet and the separating tab

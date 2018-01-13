@@ -2,5 +2,17 @@
 <Tree>
   <Node Id="aae5ef4b-d3de-4241-9406-1907b9130e81">
     <Caption><![CDATA[Backlog]]></Caption>
+    <Node Id="6214afc0-5f75-44ef-8a52-11fc64725801">
+      <Caption><![CDATA[]]></Caption>
+      <Node Id="71efb1ad-fa9c-46b0-a40f-147869acd07c">
+        <Caption><![CDATA[NotePad: let folders be documents with entries?]]></Caption>
+      </Node>
+      <Node Id="455d8bc1-86d5-4522-bbea-505bff5fc03d">
+        <Caption><![CDATA[hyperlink in list item does not work]]></Caption>
+      </Node>
+      <Node Id="91638c6f-d7a9-475d-8a53-c7648437c60d">
+        <Caption><![CDATA[auto link pages with wiki works]]></Caption>
+      </Node>
+    </Node>
   </Node>
 </Tree>
