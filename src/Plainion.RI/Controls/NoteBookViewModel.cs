@@ -19,7 +19,7 @@ namespace Plainion.RI.Controls
             AutoCorrection = new AutoCorrectionTable();
             AutoCorrection.Corrections.Add(new SampleCorrection());
 
-            var fs = new Plainion.IO.MemoryFS.FileSystemImpl();
+            var fs = new Plainion.IO.RealFS.FileSystemImpl();
             var root = fs.Directory(RootPath);
             if(root.Exists)
             {

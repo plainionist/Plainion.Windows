@@ -7,7 +7,7 @@ open Plainion.Windows.Specs.Controls.Text
 open FsUnit
 
 [<Apartment(ApartmentState.STA)>]
-[<Spec>]
+[<Scenario>]
 module ``Given a RichtTextEditor with multiple occurences of a search text`` =
 
     let create() =
@@ -48,7 +48,7 @@ module ``Given a RichtTextEditor with multiple occurences of a search text`` =
         editor.Document |> shouldHighlight "f#" (at 1)
 
 [<Apartment(ApartmentState.STA)>]
-[<Spec>]
+[<Scenario>]
 module ``Given a RichtTextEditor with zero occurences of a search text`` =
 
     let create() =

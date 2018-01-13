@@ -7,7 +7,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
         public AutoCorrectionResult TryApply(AutoCorrectionInput input)
         {
             // add a new body Run if user hit enter after existing headline
-            if(input.Trigger == AutoCorrectionTrigger.Return && input.Range.End.Parent is Headline)
+            if (input.Trigger == AutoCorrectionTrigger.Return && input.Range.End.Parent is Headline)
             {
                 var body = new Body(string.Empty, input.Range.End);
                 return new AutoCorrectionResult(true, body.ContentStart);
@@ -19,15 +19,15 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             {
                 if (line.Text.StartsWith("# "))
                 {
-                    result = InsertHeadline(line, 0);
+                    result = InsertHeadline(line, 1);
                 }
                 else if (line.Text.StartsWith("## "))
                 {
-                    result = InsertHeadline(line, 1);
+                    result = InsertHeadline(line, 2);
                 }
                 else if (line.Text.StartsWith("### "))
                 {
-                    result = InsertHeadline(line, 2);
+                    result = InsertHeadline(line, 3);
                 }
             }
 
@@ -36,10 +36,10 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
         private AutoCorrectionResult InsertHeadline(TextRange line, int level)
         {
-            var text = line.Text.Substring(level + 1).Trim();
+            var text = line.Text.Substring(level).Trim();
             line.Text = string.Empty;
 
-            var headline = new Headline(text, line.Start, TextStyles.Headlines[level]);
+            var headline = new Headline(text, line.Start, level);
 
             if (string.IsNullOrEmpty(text))
             {
@@ -54,10 +54,10 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
         public AutoCorrectionResult TryUndo(TextPointer start)
         {
             var headline = start.Parent as Headline;
-            if (headline != null)
+            if (headline != null && string.IsNullOrEmpty(headline.Text))
             {
                 headline.SiblingInlines.Remove(headline);
-                var body = new Body(headline.Text, start);
+                var body = new Body("#".PadLeft(headline.Level, '#'), start);
                 return new AutoCorrectionResult(true, body.ContentEnd);
             }
 

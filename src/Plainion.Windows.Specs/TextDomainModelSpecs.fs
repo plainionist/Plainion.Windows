@@ -4,7 +4,7 @@ open NUnit.Framework
 open FsUnit
 open Plainion.Windows.Controls.Text
 
-[<Spec>]
+[<Scenario>]
 module ``Given a Document`` =
     open System.Windows.Documents
     open System

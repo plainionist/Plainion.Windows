@@ -9,7 +9,7 @@ open Plainion.Windows.Controls.Text
 open Plainion.Windows.Specs.Controls.Text
 
 [<Apartment(ApartmentState.STA)>]
-[<Spec>]
+[<Scenario>]
 module ``Given an empty NoteBook`` =
 
     [<Test>]
@@ -31,7 +31,7 @@ module ``Given an empty NoteBook`` =
         notebook.myNavigation.Root.Children.[2].Children |> should haveCount 1
 
 [<Apartment(ApartmentState.STA)>]
-[<Spec>]
+[<Scenario>]
 module ``Given a NoteBook with documents`` =
     open Plainion.Windows.Controls.Tree
     open Plainion.Windows.Interactivity.DragDrop

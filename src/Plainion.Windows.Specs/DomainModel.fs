@@ -8,8 +8,14 @@ open Plainion.Windows.Controls.Text
 open FsUnit
 open System.Windows.Threading
 
-type SpecAttribute() =
+type FeatureAttribute() =
+    inherit Attribute()
+
+type ScenarioAttribute() =
     inherit TestFixtureAttribute()
+
+type WhenAttribute() =
+    inherit TestAttribute()
 
 let equalsI (lhs:string) rhs = lhs.Equals(rhs, StringComparison.OrdinalIgnoreCase)
 

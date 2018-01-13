@@ -9,7 +9,7 @@ open Plainion.Windows.Controls.Text
 open Plainion.Windows.Specs.Controls.Text
 
 [<Apartment(ApartmentState.STA)>]
-[<Spec>]
+[<Scenario>]
 module ``Given any DocumentStore`` =
     let create (fs:IFileSystem) = 
         let store = new FileSystemDocumentStore(fs.Directory("/x"))
@@ -82,14 +82,14 @@ module ``Given any DocumentStore`` =
         
 
 [<Apartment(ApartmentState.STA)>]
-[<Spec>]
+[<Scenario>]
 module ``Given a DocumentStore from previous version`` =
     open System.Windows.Documents
     open System.IO
 
     [<Test>]
     let ``<When> was created with version 1 <Then> it will be converted during initialization``() =
-        let location = typeof<SpecAttribute>.Assembly.Location |> Path.GetDirectoryName
+        let location = typeof<ScenarioAttribute>.Assembly.Location |> Path.GetDirectoryName
         let file = Path.Combine(location, "TestData", "FileSystemDocumentStore.v1")
 
         let fs = 
@@ -108,7 +108,7 @@ module ``Given a DocumentStore from previous version`` =
 
     [<Test>]
     let ``<When> was created with version 2 <Then> it will be converted during initialization``() =
-        let location = typeof<SpecAttribute>.Assembly.Location |> Path.GetDirectoryName
+        let location = typeof<ScenarioAttribute>.Assembly.Location |> Path.GetDirectoryName
         let file = Path.Combine(location, "TestData", "FileSystemDocumentStore.v2")
 
         let fs = 

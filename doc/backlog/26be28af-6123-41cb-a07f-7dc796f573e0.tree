@@ -4,17 +4,20 @@
     <Caption><![CDATA[Planning]]></Caption>
     <Node Id="53f59723-36c9-4281-a989-87e41d254cf2">
       <Caption><![CDATA[NotePad]]></Caption>
-      <Node Id="91638c6f-d7a9-475d-8a53-c7648437c60d">
-        <Caption><![CDATA[auto link pages with wiki works]]></Caption>
+      <Node Id="bec5511a-c4e1-467b-b823-6c4a69881f39">
+        <Caption><![CDATA[copy links into lists does not work]]></Caption>
       </Node>
-      <Node Id="9eaf72eb-62d2-4cde-9256-b63447373765">
-        <Caption><![CDATA[disable backspace for headlines ]]></Caption>
+      <Node Id="ad99d4d9-98af-4c16-916b-eeb8e3856cd8">
+        <Caption><![CDATA[flowdoc has no scrollbar]]></Caption>
       </Node>
-      <Node Id="3bddeea2-1384-4024-a77d-30e45544abd8">
-        <Caption><![CDATA[directories show listing]]></Caption>
+      <Node Id="089050db-d256-4c46-97d3-032c84ba94a6">
+        <Caption><![CDATA[list start automatically upper case letter]]></Caption>
       </Node>
       <Node Id="7bf43a43-18c3-43bf-9403-5140105cb678">
         <Caption><![CDATA[when converting a doc into a folder ]]></Caption>
+      </Node>
+      <Node Id="3bddeea2-1384-4024-a77d-30e45544abd8">
+        <Caption><![CDATA[directories show listing]]></Caption>
       </Node>
       <Node Id="dec9fe23-9244-4a90-a696-5182a8ef069b">
         <Caption><![CDATA[document all the shortcuts]]></Caption>
@@ -22,17 +25,8 @@
       <Node Id="90f6d436-caeb-4dfb-bd63-5dfa30ee1698">
         <Caption><![CDATA[promote on blog]]></Caption>
       </Node>
-      <Node Id="2a7f58cf-07ff-4059-b2a9-f4b66d9b0cd4">
-        <Caption><![CDATA[enter on empty page creates exception]]></Caption>
-      </Node>
-      <Node Id="089050db-d256-4c46-97d3-032c84ba94a6">
-        <Caption><![CDATA[list start automatically upper case letter]]></Caption>
-      </Node>
-      <Node Id="ad99d4d9-98af-4c16-916b-eeb8e3856cd8">
-        <Caption><![CDATA[flowdoc has no scrollbar]]></Caption>
-      </Node>
-      <Node Id="bec5511a-c4e1-467b-b823-6c4a69881f39">
-        <Caption><![CDATA[copy links into lists does not work]]></Caption>
+      <Node Id="91638c6f-d7a9-475d-8a53-c7648437c60d">
+        <Caption><![CDATA[auto link pages with wiki works]]></Caption>
       </Node>
     </Node>
   </Node>
