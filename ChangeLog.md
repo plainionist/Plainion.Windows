@@ -1,8 +1,13 @@
-## 2.7.0 - 2018-01-17
+## 2.8.0 - 2018-01-13
+
+- Markdown headlines only reverted when empty
+- RichTextEditor: fixed exception when selecting and overriding all text
+
+## 2.7.0 - 2018-01-10
 
 - FileSystemDocumentStore: save unloaded documents fixed
 
-## 2.6.0 - 2018-01-17
+## 2.6.0 - 2018-01-07
 
 - Document: IsModified handling fixed for not loaded bodies
 - Plainion.Core updated (fix for File.Stream)

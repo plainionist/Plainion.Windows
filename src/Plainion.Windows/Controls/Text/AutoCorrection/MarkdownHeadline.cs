@@ -54,6 +54,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
         public AutoCorrectionResult TryUndo(TextPointer start)
         {
             var headline = start.Parent as Headline;
+
             if (headline != null && string.IsNullOrEmpty(headline.Text))
             {
                 headline.SiblingInlines.Remove(headline);

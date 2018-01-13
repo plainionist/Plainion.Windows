@@ -138,7 +138,13 @@ namespace Plainion.Windows.Controls.Text
 
             TextChanged -= OnTextChanged;
 
-            var input = new AutoCorrectionInput(new TextRange(Document.ContentStart.GetPositionAtOffset(mySelectionStartPosition), CaretPosition), myAutoCorrectionTrigger.Value);
+            var start = Document.ContentStart.GetPositionAtOffset(mySelectionStartPosition);
+            if (start == null)
+            {
+                start = Document.ContentEnd;
+            }
+
+            var input = new AutoCorrectionInput(new TextRange(start, CaretPosition), myAutoCorrectionTrigger.Value);
             input.Editor = this;
             var result = AutoCorrection.Apply(input);
 

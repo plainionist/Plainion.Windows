@@ -135,7 +135,7 @@ namespace Plainion.Windows.Controls.Text
                 position.GetTextInRun(wordBreakDirection, runBuffer, /*startIndex*/0, /*count*/1);
                 position.GetTextInRun(oppositeDirection, oppositeRunBuffer, /*startIndex*/0, /*count*/1);
 
-                if (runBuffer[0] == ' ' && !(oppositeRunBuffer[0] == ' '))
+                if ((runBuffer[0] == ' ' || runBuffer[0] == '\t') && oppositeRunBuffer[0] != ' ' && oppositeRunBuffer[0] != '\t')
                 {
                     isAtWordBoundary = true;
                 }
