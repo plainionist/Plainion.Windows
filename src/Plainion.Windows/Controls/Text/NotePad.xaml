@@ -58,7 +58,8 @@
                 </c:SearchTextBox>
             </ToolBar>
         </Grid>
-        <l:RichTextEditor x:Name="myEditor"  SelectionChanged="OnSelectionChanged" Background="White" AutoCorrection="{Binding AutoCorrection,ElementName=_this}">
+        <l:RichTextEditor x:Name="myEditor"  SelectionChanged="OnSelectionChanged" Background="White" AutoCorrection="{Binding AutoCorrection,ElementName=_this}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True">
             <l:RichTextEditor.Resources>
                 <Style TargetType="{x:Type Paragraph}">
                     <Setter Property="Margin" Value="0"/>

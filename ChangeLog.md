@@ -2,6 +2,7 @@
 
 - Markdown headlines only reverted when empty
 - RichTextEditor: fixed exception when selecting and overriding all text
+- RichTextEditor: scrollbar added
 
 ## 2.7.0 - 2018-01-10
 
