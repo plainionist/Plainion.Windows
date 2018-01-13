@@ -22,7 +22,7 @@ module ``Auto-correct hyperlinks`` =
             let run = hyperlink.Inlines |> Seq.cast<Run> |> Seq.head 
             run.Text
 
-        [<Test>]
+        [<When>]
         let ``<When> valid URI is entered <Then> URI is replaced with clickable hyperlink``([<Values("http://github.com/", "https://github.com/", "ftp://github.com/")>] url) =
             let document = new FlowDocument(new Paragraph(new Run("Some dummy " + url)))
 
@@ -37,7 +37,7 @@ module ``Auto-correct hyperlinks`` =
             hyperlink |> text |> should equal url
             hyperlink.NavigateUri.ToString() |> should equal url
 
-        [<Test>]
+        [<When>]
         let ``<When> invalid URI is entered <Then> no hyperlink is inserted`` () =
             let document = new FlowDocument(new Paragraph(new Run("Some dummy text")));
 
@@ -47,7 +47,7 @@ module ``Auto-correct hyperlinks`` =
 
             document |> getHyperlinks |> should be Empty
 
-        [<Test>]
+        [<When>]
         let ``<When> URI without protocol but with "www" is entered <Then> clickable hyperlink is created`` () =
             let document = new FlowDocument(new Paragraph(new Run("Some dummy www.host.org")));
 
@@ -65,7 +65,7 @@ module ``Auto-correct hyperlinks`` =
 
     [<Scenario>]
     module ``Given a Hyperlink`` =
-        [<Test>]
+        [<When>]
         let ``<When> BACKSPACE is entered <Then> clickable hyperlink is removed`` () =
             let document = new FlowDocument(new Paragraph(new Run("Some dummy http://github.org/")));
 
@@ -87,7 +87,7 @@ module ``Auto-correct Unicode symbols`` =
 
     [<Scenario>]
     module ``Given a known Ascii symbol`` =
-        [<Test>]
+        [<When>]
         let ``<When> "-->" is enteried <Then> it will be replaced by arrow symbol`` () =
             let document = new FlowDocument(new Paragraph(new Run("so -->")))
 
@@ -97,7 +97,7 @@ module ``Auto-correct Unicode symbols`` =
 
             document |> text |> should haveSubstring "\u2192"
 
-        [<Test>]
+        [<When>]
         let ``<When> "==>" is enteried <Then> it will be replaced by arrow symbol`` () =
             let document = new FlowDocument(new Paragraph(new Run("so ==>")))
 
@@ -109,7 +109,7 @@ module ``Auto-correct Unicode symbols`` =
 
     [<Scenario>]
     module ``Given an unknown Ascii symbol`` =
-        [<Test>]
+        [<When>]
         let ``<When> entered <Then> no symbol is inserted`` () =
             let document = new FlowDocument(new Paragraph(new Run("Some dummy text")));
 
@@ -121,7 +121,7 @@ module ``Auto-correct Unicode symbols`` =
 
     [<Scenario>]
     module ``Given a Unicode symbol`` =
-        [<Test>]
+        [<When>]
         let ``<When> BACKSPACE is entered <Then> symbol is removed`` () =
             let document = new FlowDocument(new Paragraph(new Run("we conclude ==>")))
 
@@ -141,7 +141,7 @@ module ``Auto-correct MarkDown headlines`` =
 
     [<Scenario>]
     module ``Given a text line with leading # characters`` =
-        [<Test>]
+        [<When>]
         let ``<When> SPACE is pressed after '#' character <Then> the line will be converted into a headline`` () =
             let doc = new FlowDocument(new Paragraph(new Run("# ")))
 
@@ -153,7 +153,7 @@ module ``Auto-correct MarkDown headlines`` =
             headline |> should not' (equal None)
             headline |> Option.map(fun x -> x.Text) |> should equal (Some(""))
 
-        [<Test>]
+        [<When>]
         let ``<When> RETURN is pressed after a headline <Then> a new body text block is started`` () =
             let doc = new FlowDocument(new Paragraph(new Headline("headline")))
 
@@ -172,7 +172,7 @@ module ``Auto-correct MarkDown headlines`` =
     module ``Given a headline`` =
         open System.Windows.Markup
 
-        [<Test>]
+        [<When>]
         let ``<When> BACKSPACE is pressed within headline <Then> headline is NOT removed`` () =
             let doc = new FlowDocument(new Paragraph(new Headline("headline")))
 
@@ -185,7 +185,7 @@ module ``Auto-correct MarkDown headlines`` =
 
             doc |> headline |> should not' (equal None)
 
-        [<Test>]
+        [<When>]
         let ``<When> last content of headline was removed <Then> headline is decoded into # characters again`` () =
             let doc = new FlowDocument(new Paragraph(new Headline("headline")))
 
@@ -199,7 +199,7 @@ module ``Auto-correct MarkDown headlines`` =
             doc |> headline |> should equal None
             doc |> text |> should equal "##\r\n"
 
-        [<Test>]
+        [<When>]
         let ``<When> headline was serialized <Then> level can still be reconstructed`` () =
             let doc = new FlowDocument(new Paragraph(new Run("### small")))
 
