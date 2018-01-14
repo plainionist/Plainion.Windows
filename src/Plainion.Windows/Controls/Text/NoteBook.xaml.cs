@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using Plainion.Windows.Controls.Text.AutoCorrection;
+using Plainion.Windows.Controls.Tree;
 
 namespace Plainion.Windows.Controls.Text
 {
@@ -77,18 +78,21 @@ namespace Plainion.Windows.Controls.Text
         }
 
         public static readonly DependencyProperty AutoCorrectionProperty = DependencyProperty.Register("AutoCorrection",
-          typeof(AutoCorrectionTable), typeof(NoteBook), new PropertyMetadata(new AutoCorrectionTable(), OnAutoCorrectionChanged));
-
-        private static void OnAutoCorrectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var self = (NoteBook)d;
-            self.myNotePad.AutoCorrection = self.AutoCorrection;
-        }
+            typeof(AutoCorrectionTable), typeof(NoteBook), new PropertyMetadata(new AutoCorrectionTable()));
 
         public AutoCorrectionTable AutoCorrection
         {
             get { return (AutoCorrectionTable)GetValue(AutoCorrectionProperty); }
             set { SetValue(AutoCorrectionProperty, value); }
+        }
+
+        public static readonly DependencyProperty ExpandAllOnStartupProperty = DependencyProperty.Register("ExpandAllOnStartup",
+            typeof(bool), typeof(NoteBook), null);
+
+        public bool ExpandAllOnStartup
+        {
+            get { return (bool)GetValue(ExpandAllOnStartupProperty); }
+            set { SetValue(ExpandAllOnStartupProperty, value); }
         }
     }
 }

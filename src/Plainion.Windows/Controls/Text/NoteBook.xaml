@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:Plainion.Windows.Controls.Text"
              mc:Ignorable="d" 
+             x:Name="_this"
              d:DesignHeight="300" d:DesignWidth="600">
     <Grid Margin="0">
         <Grid.ColumnDefinitions>
@@ -13,7 +14,8 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         
-        <controls:DocumentNavigationPane Grid.Column="0" x:Name="myNavigation" Margin="0,5,0,0"/>
+        <controls:DocumentNavigationPane Grid.Column="0" x:Name="myNavigation" Margin="0,5,0,0"
+                                         ExpandAllOnStartup="{Binding ExpandAllOnStartup, ElementName=_this}"/>
         
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 

@@ -14,6 +14,8 @@ NoteBook
 
 ### System.Windows.DependencyProperty AutoCorrectionProperty
 
+### System.Windows.DependencyProperty ExpandAllOnStartupProperty
+
 
 ## Constructors
 
@@ -25,6 +27,8 @@ NoteBook
 ### Plainion.Windows.Controls.Text.DocumentStore DocumentStore
 
 ### Plainion.Windows.Controls.Text.AutoCorrection.AutoCorrectionTable AutoCorrection
+
+### System.Boolean ExpandAllOnStartup
 
 
 ## Methods

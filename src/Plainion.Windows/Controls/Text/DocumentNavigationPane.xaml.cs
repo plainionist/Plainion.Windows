@@ -81,6 +81,7 @@ namespace Plainion.Windows.Controls.Text
                 {
                     var childNode = myNodeFactory.Create(child, node);
                     node.Children.Add(childNode);
+                    childNode.IsExpanded = ExpandAllOnStartup;
 
                     var childFolder = child as Folder;
                     if (childFolder != null)
@@ -138,6 +139,15 @@ namespace Plainion.Windows.Controls.Text
             {
                 OnSelectionChanged(item);
             }
+        }
+
+        public static readonly DependencyProperty ExpandAllOnStartupProperty = DependencyProperty.Register("ExpandAllOnStartup",
+            typeof(bool), typeof(DocumentNavigationPane), new PropertyMetadata(false));
+
+        public bool ExpandAllOnStartup
+        {
+            get { return (bool)GetValue(ExpandAllOnStartupProperty); }
+            set { SetValue(ExpandAllOnStartupProperty, value); }
         }
     }
 }

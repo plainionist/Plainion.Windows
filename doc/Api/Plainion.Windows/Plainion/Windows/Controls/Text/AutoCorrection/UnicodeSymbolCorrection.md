@@ -13,7 +13,7 @@
 
 ## Properties
 
-### System.Collections.Generic.IList`1[[Plainion.Windows.Controls.Text.AutoCorrection.UnicodeSymbolCorrection+Symbol, Plainion.Windows, Version=2.8.0.0, Culture=neutral, PublicKeyToken=null]] Symbols
+### System.Collections.Generic.IList`1[[Plainion.Windows.Controls.Text.AutoCorrection.UnicodeSymbolCorrection+Symbol, Plainion.Windows, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null]] Symbols
 
 
 ## Methods

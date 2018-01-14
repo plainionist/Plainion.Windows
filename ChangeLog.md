@@ -1,3 +1,7 @@
+## 2.9.0 - 2018-01-14
+
+- NoteBook: navigation pane can be configured to be expanded on startup
+
 ## 2.8.0 - 2018-01-13
 
 - Markdown headlines only reverted when empty
