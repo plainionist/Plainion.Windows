@@ -2,6 +2,7 @@
 
 - NoteBook: navigation pane can be configured to be expanded on startup
 - RichtTextEditor: indentation of bullets and numbering cleaned up
+- RichtTextEditor: markdown numbering added
 
 ## 2.8.0 - 2018-01-13
 

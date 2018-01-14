@@ -2,7 +2,7 @@
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
 {
-    public class BulletList : IAutoCorrection
+    public class Numbering : IAutoCorrection
     {
         public AutoCorrectionResult TryApply(AutoCorrectionInput input)
         {
@@ -10,20 +10,21 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
             foreach (var line in DocumentOperations.GetLines(input.Range))
             {
-                if (line.Text.StartsWith("- "))
+                if (line.Text.StartsWith("1. "))
                 {
-                    result = InsertBullet(input, line, 0);
+                    result = InsertNumbering(input, line, 0);
                 }
             }
 
             return result;
         }
 
-        private AutoCorrectionResult InsertBullet(AutoCorrectionInput input, TextRange line, int level)
+        private AutoCorrectionResult InsertNumbering(AutoCorrectionInput input, TextRange line, int level)
         {
-            line.Text = line.Text.Trim().Substring(1).Trim();
+            // remove "1."
+            line.Text = line.Text.Trim().Substring(2).Trim();
 
-            input.Editor.ToggleBulletsCommand.Execute(null);
+            input.Editor.ToggleNumberingommand.Execute(null);
 
             return new AutoCorrectionResult(true);
         }

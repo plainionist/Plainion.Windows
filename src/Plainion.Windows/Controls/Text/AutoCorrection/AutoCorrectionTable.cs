@@ -12,6 +12,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
             Corrections.Add(new UnicodeSymbolCorrection());
             Corrections.Add(new MarkdownHeadline());
             Corrections.Add(new BulletList());
+            Corrections.Add(new Numbering());
         }
 
         public IList<IAutoCorrection> Corrections { get; private set; }
