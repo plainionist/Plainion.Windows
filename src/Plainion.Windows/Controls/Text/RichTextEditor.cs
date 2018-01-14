@@ -55,6 +55,7 @@ namespace Plainion.Windows.Controls.Text
                 foreach (var list in visitor.Results.Cast<List>())
                 {
                     list.Margin = new Thickness(0, 0, 0, 0);
+                    list.Padding = new Thickness(30, 0, 0, 0);
                 }
             }));
         }

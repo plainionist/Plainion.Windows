@@ -34,7 +34,7 @@
                 <ToggleButton Command="{Binding ToggleBulletsCommand, ElementName=myEditor}" ToolTip="Bullets">
                     <Image Source="/Plainion.Windows;Component/Resources/Bullets.png" Width="17" Height="17"/>
                 </ToggleButton>
-                <ToggleButton Command="EditingCommands.ToggleNumbering" ToolTip="Numbering">
+                <ToggleButton Command="{Binding ToggleNumberingommand, ElementName=myEditor}" ToolTip="Numbering">
                     <Image Source="/Plainion.Windows;Component/Resources/Numbering.png" Width="17" Height="17"/>
                 </ToggleButton>
             </ToolBar>
