@@ -1,3 +1,7 @@
+## 2.10.0 - 2018-01-
+
+- RichtTextEditor: fixed autocorrection at beginning of list items
+
 ## 2.9.0 - 2018-01-14
 
 - NoteBook: navigation pane can be configured to be expanded on startup

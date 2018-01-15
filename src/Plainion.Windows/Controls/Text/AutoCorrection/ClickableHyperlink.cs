@@ -23,7 +23,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
             foreach (var wordRange in DocumentOperations.GetWords(input.Range))
             {
-                string wordText = wordRange.Text;
+                string wordText = wordRange.TextOnly();
                 var url = TryCreateUrl(wordText);
                 if (url != null && !IsInHyperlinkScope(wordRange.Start) && !IsInHyperlinkScope(wordRange.End))
                 {

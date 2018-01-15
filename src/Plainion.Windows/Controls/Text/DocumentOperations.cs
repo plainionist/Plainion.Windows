@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text
 {
     public static class DocumentOperations
     {
+        private static Lazy<MethodInfo> GetTextInternal = new Lazy<MethodInfo>(() =>
+        {
+            var textRangeBase = typeof(TextRange).Assembly.GetType("System.Windows.Documents.TextRangeBase");
+            return textRangeBase.GetMethod("GetTextInternal", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(TextPointer), typeof(TextPointer) }, null);
+        });
+
         /// <summary>
         /// Returns a TextRange from ContentStart to ContentEnd.
         /// </summary>
@@ -54,6 +61,27 @@ namespace Plainion.Windows.Controls.Text
             }
 
             return nextPointer;
+        }
+
+        /// <summary>
+        /// Returns only the text of the given range. Solves the problem described here:
+        /// https://stackoverflow.com/questions/48240020/wpf-get-textrange-from-listitem-content
+        /// ATTENTION: this method uses reflection. In case that fails it returns TextRange.Text.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static string TextOnly(this TextRange self)
+        {
+            Contract.RequiresNotNull(self, "self");
+
+            try
+            {
+                return (string)GetTextInternal.Value.Invoke(null, new[] { self.Start, self.End });
+            }
+            catch
+            {
+                return self.Text;
+            }
         }
 
         /// <summary>

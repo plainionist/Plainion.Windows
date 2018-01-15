@@ -92,15 +92,16 @@ namespace Plainion.Windows.Tests.Controls.Text.AutoCorrection
             Assert.That(DocumentOperations.GetWords(doc.Content()).Select(x => x.Text), Is.EquivalentTo(new[] { "a", "test", "with", "tabs" }));
         }
 
-        [Test,Ignore("https://stackoverflow.com/questions/48240020/wpf-get-textrange-from-listitem-content")]
-        public void GetWords_TextAfterBullet_ReturnsWordWithoutBullet()
+        [Test]
+        public void TextOnly_TextAfterBullet_ReturnsTextWithoutBullet()
         {
             var doc = new FlowDocument();
             doc.Blocks.Add(new System.Windows.Documents.List(new ListItem(new Paragraph(new Run("first bullet")))));
 
-            Assert.That(DocumentOperations.GetWords(doc.Content()).Select(x => x.Text), Is.EquivalentTo(new[] { "•", "first bullet" }));
+            Assert.That(doc.Content().Text, Is.EqualTo("•\tfirst bullet\r\n"));
+            Assert.That(doc.Content().TextOnly(), Is.EqualTo("first bullet\r\n"));
         }
-        
+
         [Test]
         public void GetLines_When_ReturnsAllLinesOfARange()
         {

@@ -33,7 +33,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
             foreach (var wordRange in DocumentOperations.GetWords(input.Range))
             {
-                var symbol = Symbols.FirstOrDefault(x => x.Ascii == wordRange.Text);
+                var symbol = Symbols.FirstOrDefault(x => x.Ascii == wordRange.TextOnly());
                 if (symbol != null)
                 {
                     wordRange.Text = symbol.UniCode;
@@ -48,7 +48,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
         public AutoCorrectionResult TryUndo(TextPointer pos)
         {
             var wordRange = DocumentOperations.GetWordAt(pos);
-            var symbol = Symbols.FirstOrDefault(x => x.UniCode == wordRange.Text);
+            var symbol = Symbols.FirstOrDefault(x => x.UniCode == wordRange.TextOnly());
             if (symbol != null)
             {
                 wordRange.Text = symbol.Ascii;
