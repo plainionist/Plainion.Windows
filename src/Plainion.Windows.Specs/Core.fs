@@ -5,14 +5,21 @@ open System
 open NUnit.Framework
 open System.Windows.Threading
 
-type FeatureAttribute() =
-    inherit Attribute()
+[<AutoOpen>]
+module BDDLite =
+    type FeatureAttribute() =
+        inherit Attribute()
 
-type ScenarioAttribute() =
-    inherit TestFixtureAttribute()
+        member val InOrderTo = "" with get, set
+        member val AsA = "" with get, set
+        member val IWantTo = "" with get, set
 
-type WhenAttribute() =
-    inherit TestAttribute()
+
+    type ScenarioAttribute() =
+        inherit TestFixtureAttribute()
+
+    type WhenAttribute() =
+        inherit TestAttribute()
 
 let DoEventsSync () =
     let exitFrame (frame:obj) =
