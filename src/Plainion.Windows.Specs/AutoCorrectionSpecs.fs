@@ -1,4 +1,4 @@
-﻿namespace Plainion.Windows.Specs.Controls.Text
+﻿namespace Plainion.Windows.Text
 
 open System.Windows.Documents
 open Plainion.Windows.Controls.Text
