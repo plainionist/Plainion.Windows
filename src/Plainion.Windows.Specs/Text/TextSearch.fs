@@ -2,8 +2,8 @@
 
 open System.Threading
 open NUnit.Framework
-open Plainion.Windows.Controls.Text
 open FsUnit
+open Plainion.Windows.Controls.Text
 
 [<Feature>]
 module ``Searching in a single document``=

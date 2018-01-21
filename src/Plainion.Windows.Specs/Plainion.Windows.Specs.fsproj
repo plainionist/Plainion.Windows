@@ -42,10 +42,12 @@
     </Content>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Core.fs" />
-    <Compile Include="AutoCorrectionSpecs.fs" />
-    <Compile Include="SearchingSpecs.fs" />
-    <Compile Include="OrganizingDocumentsSpecs.fs" />
-    <Compile Include="StoringDocumentsSpecs.fs" />
+    <None Include="Text\ReadMe.md" />
+    <Compile Include="Text\Core.fs" />
+    <Compile Include="Text\AutoCorrection.fs" />
+    <Compile Include="Text\TextSearch.fs" />
+    <Compile Include="Text\OrganizingDocuments.fs" />
+    <Compile Include="Text\StoringDocuments.fs" />
     <Content Include="packages.config" />
     <Content Include="app.config" />
   </ItemGroup>
@@ -72,8 +74,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Plainion.Windows\Plainion.Windows.csproj">
       <Name>Plainion.Windows</Name>
       <Project>{b76263b3-b4c6-4111-865d-1ce6b578d34a}</Project>

@@ -1,10 +1,10 @@
 ﻿namespace Plainion.Windows.Text
 
 open System.Windows.Documents
-open Plainion.Windows.Controls.Text
-open Plainion.Windows.Controls.Text.AutoCorrection
 open NUnit.Framework
 open FsUnit
+open Plainion.Windows.Controls.Text
+open Plainion.Windows.Controls.Text.AutoCorrection
 
 [<Feature>]
 module ``Auto-correct hyperlinks`` =
