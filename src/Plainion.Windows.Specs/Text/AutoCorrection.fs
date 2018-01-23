@@ -28,7 +28,7 @@ let headline (doc:FlowDocument) =
     visitor.Accept(doc)
     visitor.Results |> Seq.cast<Headline> |> Seq.tryHead
 
-[<Scenario>]
+[<Scenario(Caption="Auto-correct URLs")>]
 module ``Given a text in URI format`` =
     let text (hyperlink:Hyperlink) = 
         let run = hyperlink.Inlines |> Seq.cast<Run> |> Seq.head 
@@ -82,7 +82,7 @@ module ``Given a text in URI format`` =
         hyperlink |> text |> should equal "www.host.org"
         hyperlink.NavigateUri.ToString() |> should equal "http://www.host.org/"
 
-[<Scenario>]
+[<Scenario(Caption="Undo auto-corrected URLs")>]
 module ``Given a clickable hyperlink`` =
     [<When>]
     let ``<When> BACKSPACE is entered <Then> clickable hyperlink is removed`` () =
@@ -98,8 +98,8 @@ module ``Given a clickable hyperlink`` =
 
         doc |> getHyperlinks |> should be Empty
 
-[<Scenario>]
-module ``Given a known Ascii symbol`` =
+[<Scenario(Caption="Auto-correct Ascii symbols")>]
+module ``Given a character sequence`` =
     [<When>]
     let ``<When> "-->" is enteried <Then> it will be replaced by arrow symbol`` () =
         let doc = new FlowDocument(new Paragraph(new Run("so -->")))
@@ -124,10 +124,8 @@ module ``Given a known Ascii symbol`` =
 
         doc |> text |> should haveSubstring "\u2794"
 
-[<Scenario>]
-module ``Given an unknown Ascii symbol`` =
     [<When>]
-    let ``<When> entered <Then> no symbol is inserted`` () =
+    let ``<When> unknown sequence is entered <Then> no symbol is inserted`` () =
         let doc = new FlowDocument(new Paragraph(new Run("Some dummy text")));
 
         doc 
@@ -138,7 +136,7 @@ module ``Given an unknown Ascii symbol`` =
         
         doc |> text |> should equal "Some dummy text\r\n"
 
-[<Scenario>]
+[<Scenario(Caption="Undo auto-correct Ascii symbols")>]
 module ``Given a Unicode symbol`` =
     [<When>]
     let ``<When> BACKSPACE is entered <Then> symbol is removed`` () =
@@ -154,7 +152,7 @@ module ``Given a Unicode symbol`` =
 
         doc |> text |> should equal "we conclude ==>\r\n"
 
-[<Scenario>]
+[<Scenario(Caption="Auto-correct MarkDown headlines")>]
 module ``Given a text line with leading # characters`` =
     [<When>]
     let ``<When> SPACE is pressed after '#' character <Then> the line will be converted into a headline`` () =
@@ -187,7 +185,7 @@ module ``Given a text line with leading # characters`` =
         |> Seq.last
         |> should be instanceOfType<Body>
 
-[<Scenario>]
+[<Scenario(Caption="Undo auto-correct MarkDown headlines")>]
 module ``Given a headline`` =
     open System.Windows.Markup
 

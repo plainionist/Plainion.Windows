@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Node Id="5b00b036-8198-41d9-8bdc-0b90544c5435" Created="636522842145433752" LastModified="636522842973591120">
+  <Caption><![CDATA[templates]]></Caption>
+  <Content><![CDATA[- can we have s.th. like a template for form?
+- maybe a dedicated page type which gives certain structure to the page
+  e.g.: Q&A or key-value
+- if the template is changed the existing pages get adapted showing
+  that e.g. fields are not filled out
+]]></Content>
+</Node>

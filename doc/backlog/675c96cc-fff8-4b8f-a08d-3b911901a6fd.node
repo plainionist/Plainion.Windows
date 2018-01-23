@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Node Id="675c96cc-fff8-4b8f-a08d-3b911901a6fd" Created="636522841840716323" LastModified="636522844676928545">
+  <Caption><![CDATA[Text domain model]]></Caption>
+  <Content><![CDATA[- it si a about topics not documents. write specs with capabilities and 
+  features to rethink domain model. separating between editor and pad 
+  and bood are capabailties
+- even though WPF calls it FlowDocument esp in the context of the book
+  and the navigationpage it is about "topics". We want to present
+  one NoteBook as one structured "multi-page document"
+- maybe "page" is even better than "topic"?
+- if we name it "page" or "topic" of "section" in the book case
+  how does this fit into the pad and editor case?]]></Content>
+</Node>

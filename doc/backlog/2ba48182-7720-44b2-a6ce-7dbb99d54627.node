@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Node Id="2ba48182-7720-44b2-a6ce-7dbb99d54627" Created="636522841456234332" LastModified="636522841686127481">
+  <Caption><![CDATA[copying links fails]]></Caption>
+  <Content><![CDATA[- do we create a double link?
+- it is not clickable and when i do backspace i get an exception]]></Content>
+</Node>

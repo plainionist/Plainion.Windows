@@ -2,5 +2,14 @@
 <Tree>
   <Node Id="26be28af-6123-41cb-a07f-7dc796f573e0">
     <Caption><![CDATA[Planning]]></Caption>
+    <Node Id="2ba48182-7720-44b2-a6ce-7dbb99d54627">
+      <Caption><![CDATA[copying links fails]]></Caption>
+    </Node>
+    <Node Id="675c96cc-fff8-4b8f-a08d-3b911901a6fd">
+      <Caption><![CDATA[Text domain model]]></Caption>
+    </Node>
+    <Node Id="71efb1ad-fa9c-46b0-a40f-147869acd07c">
+      <Caption><![CDATA[NotePad: let folders be documents with entries?]]></Caption>
+    </Node>
   </Node>
 </Tree>

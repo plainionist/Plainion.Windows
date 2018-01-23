@@ -18,6 +18,14 @@ module BDDLite =
     type ScenarioAttribute() =
         inherit TestFixtureAttribute()
 
+        member val InOrderTo = "" with get, set
+        member val AsA = "" with get, set
+        member val IWantTo = "" with get, set
+
+        /// Use to briefly describe the scenario. Use "inOrderTo", "AsA" and "IWantTo" alternatively if you 
+        /// want to specify the scenario more precisely
+        member val Caption = "" with get, set
+
     type WhenAttribute() =
         inherit TestAttribute()
 
