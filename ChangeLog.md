@@ -2,7 +2,8 @@
 
 - RichtTextEditor: fixed AutoCorrection at beginning of list items
 - DocumentOperations.Search takes range instead of FlowDocument
-
+- AutoCorrection: performance improved
+ 
 ## 2.9.0 - 2018-01-14
 
 - NoteBook: navigation pane can be configured to be expanded on startup

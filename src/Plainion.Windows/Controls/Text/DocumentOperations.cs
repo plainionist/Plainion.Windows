@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Documents;
 
@@ -31,36 +32,7 @@ namespace Plainion.Windows.Controls.Text
             Contract.RequiresNotNull(range, "range");
             Contract.Requires(charOffset >= 0, "charOffset >= 0");
 
-            if (charOffset == 0)
-            {
-                return range.Start;
-            }
-
-            var navigator = range.Start;
-            var nextPointer = navigator;
-            int counter = 0;
-            while (nextPointer != null && counter < charOffset)
-            {
-                if (nextPointer.CompareTo(range.End) == 0)
-                {
-                    // If we reach to the end of range, return the EOF pointer.
-                    return nextPointer;
-                }
-
-                if (nextPointer.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text)
-                {
-                    nextPointer = nextPointer.GetNextInsertionPosition(LogicalDirection.Forward);
-                    counter++;
-                }
-                else
-                {
-                    // If the current pointer is not pointing at a character, we should move to next insertion point 
-                    // without incrementing the character counter.
-                    nextPointer = nextPointer.GetNextInsertionPosition(LogicalDirection.Forward);
-                }
-            }
-
-            return nextPointer;
+            return GetTextPointerAtOffset(range.Start, range.End, charOffset);
         }
 
         /// <summary>
@@ -172,10 +144,15 @@ namespace Plainion.Windows.Controls.Text
             return true;
         }
 
-        public static IEnumerable<TextRange> GetWords(TextRange range)
+        public static IReadOnlyCollection<TextRange> GetWords(TextRange range)
         {
             Contract.RequiresNotNull(range, "range");
 
+            return GetWordsInternal(range).ToList();
+        }
+
+        private static IEnumerable<TextRange> GetWordsInternal(TextRange range)
+        {
             var navigator = range.Start;
             while (navigator != null && navigator.CompareTo(range.End) <= 0)
             {
@@ -192,10 +169,15 @@ namespace Plainion.Windows.Controls.Text
             }
         }
 
-        public static IEnumerable<TextRange> GetLines(TextRange range)
+        public static IReadOnlyCollection<TextRange> GetLines(TextRange range)
         {
             Contract.RequiresNotNull(range, "range");
 
+            return GetLinesInternal(range).ToList();
+        }
+
+        private static IEnumerable<TextRange> GetLinesInternal(TextRange range)
+        {
             var navigator = range.Start;
             while (navigator != null && navigator.CompareTo(range.End) <= 0)
             {
@@ -211,52 +193,81 @@ namespace Plainion.Windows.Controls.Text
         {
             Contract.RequiresNotNull(pos, "pos");
 
-            var start = FindNewLine(pos, LogicalDirection.Backward);
-            var end = FindNewLine(pos, LogicalDirection.Forward);
+            var startOffset = new TextRange(pos.DocumentStart, pos).Text.LastIndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase);
+            var start = startOffset >= 0 ? GetTextPointerAtOffset(pos.DocumentStart, pos, startOffset) : pos.DocumentStart;
+
+            var endOffset = new TextRange(pos, pos.DocumentEnd).Text.IndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase);
+            var end = endOffset >= 0 ? GetTextPointerAtOffset(pos, pos.DocumentEnd, endOffset) : pos.DocumentEnd;
 
             var line = new TextRange(start, end);
 
-            if (line.Text.EndsWith(Environment.NewLine))
+            if (line.Text.StartsWith(Environment.NewLine))
             {
-                // this happens if this is the last line in the document
-                line = new TextRange(start, end.GetNextInsertionPosition(LogicalDirection.Backward));
+                line = new TextRange(start.GetNextInsertionPosition(LogicalDirection.Forward), end);
             }
 
             return line;
         }
 
-        private static TextPointer FindNewLine(TextPointer pos, LogicalDirection direction)
+        private static TextPointer GetTextPointerAtOffset(TextPointer start, TextPointer end, int offset)
         {
-            var range = new TextRange(pos, pos);
+            var navigator = start;
+            int cnt = 0;
 
-            var navigator = pos;
-            while (navigator != null && navigator.CompareTo(pos.DocumentStart) >= 0)
+            while (navigator.CompareTo(end) < 0)
             {
-                var next = navigator.GetNextInsertionPosition(direction);
-                if (next != null)
+                switch (navigator.GetPointerContext(LogicalDirection.Forward))
                 {
-                    range.Select(next, navigator);
-                    if (range.Text == Environment.NewLine)
-                    {
+                    case TextPointerContext.ElementStart:
                         break;
-                    }
-                }
-                navigator = next;
-            }
+                    case TextPointerContext.ElementEnd:
+                        if (navigator.GetAdjacentElement(LogicalDirection.Forward) is Paragraph)
+                        {
+                            cnt += 2;
+                        }
+                        break;
+                    case TextPointerContext.EmbeddedElement:
+                        // TODO: Find out what to do here?
+                        cnt++;
+                        break;
+                    case TextPointerContext.Text:
+                        int runLength = navigator.GetTextRunLength(LogicalDirection.Forward);
 
-            if (navigator == null)
-            {
-                navigator = direction == LogicalDirection.Backward ? pos.DocumentStart : pos.DocumentEnd;
+                        if (runLength > 0 && runLength + cnt < offset)
+                        {
+                            cnt += runLength;
+                            navigator = navigator.GetPositionAtOffset(runLength);
+                            if (cnt > offset)
+                            {
+                                break;
+                            }
+                            continue;
+                        }
+                        cnt++;
+                        break;
+                }
+
+                if (cnt > offset)
+                {
+                    break;
+                }
+
+                navigator = navigator.GetPositionAtOffset(1, LogicalDirection.Forward);
             }
 
             return navigator;
         }
 
         // https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo
-        public static IEnumerable<TextRange> Search(TextRange contentRange, TextPointer currentPosition, string searchText, SearchMode mode)
+        public static IReadOnlyCollection<TextRange> Search(TextRange contentRange, TextPointer currentPosition, string searchText, SearchMode mode)
         {
             Contract.RequiresNotNull(contentRange, "contentRange");
 
+            return SearchInternal(contentRange, currentPosition, searchText, mode).ToList();
+        }
+
+        private static IEnumerable<TextRange> SearchInternal(TextRange contentRange, TextPointer currentPosition, string searchText, SearchMode mode)
+        {
             TextRange searchRange;
             var direction = LogicalDirection.Forward;
 
@@ -305,6 +316,7 @@ namespace Plainion.Windows.Controls.Text
 
             var start = GetPositionAtOffset(searchRange, searchRange.Start, offset, LogicalDirection.Forward);
             var end = GetPositionAtOffset(searchRange, start, searchText.Length, LogicalDirection.Forward);
+
             return new TextRange(start, end);
         }
 
@@ -409,10 +421,11 @@ namespace Plainion.Windows.Controls.Text
         private static int GetOffsetInTextLength(TextPointer pointer1, TextPointer pointer2)
         {
             if (pointer1 == null || pointer2 == null)
+            {
                 return 0;
+            }
 
-            TextRange tr = new TextRange(pointer1, pointer2);
-
+            var tr = new TextRange(pointer1, pointer2);
             return tr.Text.Length;
         }
     }

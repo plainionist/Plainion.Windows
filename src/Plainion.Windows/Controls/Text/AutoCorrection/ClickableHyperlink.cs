@@ -21,7 +21,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
         {
             bool success = false;
 
-            foreach (var wordRange in DocumentOperations.GetWords(input.Range))
+            foreach (var wordRange in input.Context.GetWords())
             {
                 string wordText = wordRange.TextOnly();
                 var url = TryCreateUrl(wordText);

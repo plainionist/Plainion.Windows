@@ -15,7 +15,7 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
             var result = new AutoCorrectionResult(false);
 
-            foreach (var line in DocumentOperations.GetLines(input.Range))
+            foreach (var line in input.Context.GetLines())
             {
                 if (line.Text.StartsWith("# "))
                 {

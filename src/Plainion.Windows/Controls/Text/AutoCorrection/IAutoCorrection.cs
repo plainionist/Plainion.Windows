@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Documents;
 
 namespace Plainion.Windows.Controls.Text.AutoCorrection
@@ -24,13 +25,47 @@ namespace Plainion.Windows.Controls.Text.AutoCorrection
 
             Range = range;
             Trigger = trigger;
+            Context = new AutoCorrectionContext(range);
         }
 
         public TextRange Range { get; private set; }
 
         public AutoCorrectionTrigger Trigger { get; private set; }
 
+        public IAutoCorrectionContext Context { get; private set; }
+
         internal RichTextEditor Editor { get; set; }
+    }
+
+    public interface IAutoCorrectionContext
+    {
+        IReadOnlyCollection<TextRange> GetLines();
+        IReadOnlyCollection<TextRange> GetWords();
+    }
+
+    class AutoCorrectionContext : IAutoCorrectionContext
+    {
+        private TextRange myRange;
+        private Lazy<IReadOnlyCollection<TextRange>> myLines;
+        private Lazy<IReadOnlyCollection<TextRange>> myWords;
+
+        public AutoCorrectionContext(TextRange range)
+        {
+            myRange = range;
+
+            myLines = new Lazy<IReadOnlyCollection<TextRange>>(() => DocumentOperations.GetLines(range));
+            myWords = new Lazy<IReadOnlyCollection<TextRange>>(() => DocumentOperations.GetWords(range));
+        }
+
+        public IReadOnlyCollection<TextRange> GetLines()
+        {
+            return myLines.Value;
+        }
+
+        public IReadOnlyCollection<TextRange> GetWords()
+        {
+            return myWords.Value;
+        }
     }
 
     public class AutoCorrectionResult

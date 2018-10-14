@@ -39,7 +39,7 @@ namespace Plainion.Windows.Tests.Controls.Text.AutoCorrection
         public void GetPointerFromCharOffset_AtEndOfLine_ReturnsEndOfLine()
         {
             var pos = DocumentOperations.GetPointerFromCharOffset(myDocument.Content(), 33);
-            Assert.That(new TextRange(pos, pos.GetPositionAtOffset(9)).Text, Is.EqualTo("\r\na sec"));
+            Assert.That(new TextRange(pos, pos.GetPositionAtOffset(9)).Text, Is.EqualTo("\r\na seco"));
         }
 
         [Test]
