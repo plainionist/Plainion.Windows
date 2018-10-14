@@ -274,7 +274,7 @@ namespace Plainion.Windows.Controls.Text
                 searchRange = new TextRange(contentRange.Start, contentRange.End);
             }
 
-            var result = Search(contentRange, searchRange, searchText, direction);
+            var result = Search(searchRange, searchText, direction);
             if (result != null)
             {
                 yield return result;
@@ -284,7 +284,7 @@ namespace Plainion.Windows.Controls.Text
             {
                 while (result != null)
                 {
-                    result = Search(contentRange, new TextRange(result.End, contentRange.End), searchText, direction);
+                    result = Search(new TextRange(result.End, contentRange.End), searchText, direction);
                     if (result != null)
                     {
                         yield return result;
@@ -293,7 +293,7 @@ namespace Plainion.Windows.Controls.Text
             }
         }
 
-        private static TextRange Search(TextRange contentRange, TextRange searchRange, string searchText, LogicalDirection direction)
+        private static TextRange Search(TextRange searchRange, string searchText, LogicalDirection direction)
         {
             int offset = direction == LogicalDirection.Backward
                 ? searchRange.Text.LastIndexOf(searchText, StringComparison.OrdinalIgnoreCase)
@@ -303,8 +303,8 @@ namespace Plainion.Windows.Controls.Text
                 return null;
             }
 
-            var start = GetPositionAtOffset(contentRange, searchRange.Start, offset, LogicalDirection.Forward);
-            var end = GetPositionAtOffset(contentRange, start, searchText.Length, LogicalDirection.Forward);
+            var start = GetPositionAtOffset(searchRange, searchRange.Start, offset, LogicalDirection.Forward);
+            var end = GetPositionAtOffset(searchRange, start, searchText.Length, LogicalDirection.Forward);
             return new TextRange(start, end);
         }
 
@@ -354,7 +354,7 @@ namespace Plainion.Windows.Controls.Text
                     isFound = true;
                     resultTextPointer = binarySearchPoint1;
                 }
-                else  if (Math.Abs(offset2) == Math.Abs(offset))
+                else if (Math.Abs(offset2) == Math.Abs(offset))
                 {
                     isFound = true;
                     resultTextPointer = binarySearchPoint2;
