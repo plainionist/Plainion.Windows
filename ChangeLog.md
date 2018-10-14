@@ -1,6 +1,7 @@
-## 2.10.0 - 2018-01-
+## 2.10.0 - 2018-10-
 
-- RichtTextEditor: fixed autocorrection at beginning of list items
+- RichtTextEditor: fixed AutoCorrection at beginning of list items
+- DocumentOperations.Search takes range instead of FlowDocument
 
 ## 2.9.0 - 2018-01-14
 

@@ -227,14 +227,16 @@ namespace Plainion.Windows.Controls.Text
 
         private static TextPointer FindNewLine(TextPointer pos, LogicalDirection direction)
         {
+            var range = new TextRange(pos, pos);
+
             var navigator = pos;
             while (navigator != null && navigator.CompareTo(pos.DocumentStart) >= 0)
             {
                 var next = navigator.GetNextInsertionPosition(direction);
                 if (next != null)
                 {
-                    var text = new TextRange(next, navigator).Text;
-                    if (text == Environment.NewLine)
+                    range.Select(next, navigator);
+                    if (range.Text == Environment.NewLine)
                     {
                         break;
                     }
@@ -251,28 +253,28 @@ namespace Plainion.Windows.Controls.Text
         }
 
         // https://stackoverflow.com/questions/1756844/making-a-simple-search-function-making-the-cursor-jump-to-or-highlight-the-wo
-        public static IEnumerable<TextRange> Search(FlowDocument document, TextPointer currentPosition, string searchText, SearchMode mode)
+        public static IEnumerable<TextRange> Search(TextRange contentRange, TextPointer currentPosition, string searchText, SearchMode mode)
         {
-            Contract.RequiresNotNull(document, "document");
+            Contract.RequiresNotNull(contentRange, "contentRange");
 
             TextRange searchRange;
             var direction = LogicalDirection.Forward;
 
             if (mode == SearchMode.Next)
             {
-                searchRange = new TextRange(currentPosition.GetPositionAtOffset(1), document.ContentEnd);
+                searchRange = new TextRange(currentPosition.GetPositionAtOffset(1), contentRange.End);
             }
             else if (mode == SearchMode.Previous)
             {
-                searchRange = new TextRange(document.ContentStart, currentPosition);
+                searchRange = new TextRange(contentRange.Start, currentPosition);
                 direction = LogicalDirection.Backward;
             }
             else
             {
-                searchRange = new TextRange(document.ContentStart, document.ContentEnd);
+                searchRange = new TextRange(contentRange.Start, contentRange.End);
             }
 
-            var result = Search(document, searchRange, searchText, direction);
+            var result = Search(contentRange, searchRange, searchText, direction);
             if (result != null)
             {
                 yield return result;
@@ -282,7 +284,7 @@ namespace Plainion.Windows.Controls.Text
             {
                 while (result != null)
                 {
-                    result = Search(document, new TextRange(result.End, document.ContentEnd), searchText, direction);
+                    result = Search(contentRange, new TextRange(result.End, contentRange.End), searchText, direction);
                     if (result != null)
                     {
                         yield return result;
@@ -291,7 +293,7 @@ namespace Plainion.Windows.Controls.Text
             }
         }
 
-        private static TextRange Search(FlowDocument document, TextRange searchRange, string searchText, LogicalDirection direction)
+        private static TextRange Search(TextRange contentRange, TextRange searchRange, string searchText, LogicalDirection direction)
         {
             int offset = direction == LogicalDirection.Backward
                 ? searchRange.Text.LastIndexOf(searchText, StringComparison.OrdinalIgnoreCase)
@@ -301,13 +303,13 @@ namespace Plainion.Windows.Controls.Text
                 return null;
             }
 
-            var start = GetPositionAtOffset(document, searchRange.Start, offset, LogicalDirection.Forward);
-            var end = GetPositionAtOffset(document, start, searchText.Length, LogicalDirection.Forward);
+            var start = GetPositionAtOffset(contentRange, searchRange.Start, offset, LogicalDirection.Forward);
+            var end = GetPositionAtOffset(contentRange, start, searchText.Length, LogicalDirection.Forward);
             return new TextRange(start, end);
         }
 
         // https://www.codeproject.com/Articles/374721/A-Universal-WPF-Find-Replace-Dialog
-        private static TextPointer GetPositionAtOffset(FlowDocument document, TextPointer startingPoint, int offset, LogicalDirection direction)
+        private static TextPointer GetPositionAtOffset(TextRange contentRange, TextPointer startingPoint, int offset, LogicalDirection direction)
         {
             TextPointer binarySearchPoint1 = null;
             TextPointer binarySearchPoint2 = null;
@@ -315,7 +317,7 @@ namespace Plainion.Windows.Controls.Text
             // setup arguments appropriately
             if (direction == LogicalDirection.Forward)
             {
-                binarySearchPoint2 = document.ContentEnd;
+                binarySearchPoint2 = contentRange.End;
 
                 if (offset < 0)
                 {
@@ -325,7 +327,7 @@ namespace Plainion.Windows.Controls.Text
 
             if (direction == LogicalDirection.Backward)
             {
-                binarySearchPoint2 = document.ContentStart;
+                binarySearchPoint2 = contentRange.Start;
 
                 if (offset > 0)
                 {
@@ -352,8 +354,7 @@ namespace Plainion.Windows.Controls.Text
                     isFound = true;
                     resultTextPointer = binarySearchPoint1;
                 }
-                else
-                    if (Math.Abs(offset2) == Math.Abs(offset))
+                else  if (Math.Abs(offset2) == Math.Abs(offset))
                 {
                     isFound = true;
                     resultTextPointer = binarySearchPoint2;
@@ -382,7 +383,7 @@ namespace Plainion.Windows.Controls.Text
                             rtfOffsetMiddle = -rtfOffsetMiddle;
                         }
 
-                        TextPointer binarySearchPointMiddle = startingPoint.GetPositionAtOffset(rtfOffsetMiddle, direction);
+                        var binarySearchPointMiddle = startingPoint.GetPositionAtOffset(rtfOffsetMiddle, direction);
                         int offsetMiddle = GetOffsetInTextLength(startingPoint, binarySearchPointMiddle);
 
                         // two cases possible

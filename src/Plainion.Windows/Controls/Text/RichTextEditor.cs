@@ -73,6 +73,7 @@ namespace Plainion.Windows.Controls.Text
         {
             if (e.Key != Key.Back && e.Key != Key.Space && e.Key != Key.Return)
             {
+                myAutoCorrectionTrigger = null;
                 return;
             }
 
@@ -125,6 +126,7 @@ namespace Plainion.Windows.Controls.Text
             // auto correction detection will be done in OnTextChanged()
         }
 
+        // we apply auto-correction "on text changed" as only then "space" and other typed keys are part of the text already
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
             ApplyAutoCorrection();
@@ -168,7 +170,7 @@ namespace Plainion.Windows.Controls.Text
 
             ClearSearch();
 
-            var results = DocumentOperations.Search(Document, Selection.Start, searchText, mode).ToList();
+            var results = DocumentOperations.Search(Document.Content(), Selection.Start, searchText, mode).ToList();
 
             foreach (var result in results)
             {
