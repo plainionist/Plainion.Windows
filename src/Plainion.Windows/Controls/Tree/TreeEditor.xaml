@@ -41,7 +41,11 @@
             </tree:ExtendedTreeView.Resources>
 
             <i:Interaction.Behaviors>
+                <!--
+                When we use this here together with EditableTextBlock in the nodes we break
+                setting the cursor with click in the TextBox
                 <interactivity:FocusOnClickBehavior/>
+                -->
                 <dragDrop:FrameworkElementDropBehavior/>
             </i:Interaction.Behaviors>
 
