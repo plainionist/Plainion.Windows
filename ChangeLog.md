@@ -1,4 +1,8 @@
-## 2.10.0 - 2018-10-
+## 2.11.0 - 2018-10-21
+
+- DocumentNavigationPane: FontFamily and size aligned with text
+
+## 2.10.0 - 2018-10-14
 
 - RichtTextEditor: fixed AutoCorrection at beginning of list items
 - DocumentOperations.Search takes range instead of FlowDocument

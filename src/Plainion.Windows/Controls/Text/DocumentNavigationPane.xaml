@@ -66,6 +66,8 @@
                              Root="{Binding Root, ElementName=_this, Mode=OneTime}" FilterLabel="Filter by title"
                              CreateChildCommand="{Binding CreateChildCommand, ElementName=_this, Mode=OneTime}"
                              DeleteCommand="{Binding DeleteCommand, ElementName=_this, Mode=OneTime}"
+                             FontFamily="Calibri"
+                             FontSize="11pt"
                              DropCommand="{Binding DropCommand, ElementName=_this, Mode=OneTime}">
                 <tree:TreeEditor.NodeStyle>
                     <Style TargetType="{x:Type tree:NodeItem}" BasedOn="{StaticResource DefaultNodeStyle}">
