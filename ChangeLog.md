@@ -1,4 +1,4 @@
-## 2.11.0 - 2018-10-21
+## 2.11.0 - 2018-10-21 
 
 - DocumentNavigationPane: FontFamily and size aligned with text
 - FocusOnClickBehavior disabled in TreeEditor to fix setting cursor with click
