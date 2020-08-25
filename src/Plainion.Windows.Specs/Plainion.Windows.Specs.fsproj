@@ -26,6 +26,12 @@
     <Compile Include="Text\TextSearch.fs" />
     <Compile Include="Text\OrganizingDocuments.fs" />
     <Compile Include="Text\StoringDocuments.fs" />
+    <Content Include="TestData\FileSystemDocumentStore.v1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\FileSystemDocumentStore.v2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Text\ReadMe.md" />
   </ItemGroup>
 
