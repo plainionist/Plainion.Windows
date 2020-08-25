@@ -1,3 +1,7 @@
+## 3.0.0 - 2020-08-
+
+- Integrated Plainion.Xaml from Plainion.Core
+
 ## 2.11.0 - 2018-10-21 
 
 - DocumentNavigationPane: FontFamily and size aligned with text

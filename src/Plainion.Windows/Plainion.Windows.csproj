@@ -37,6 +37,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +149,8 @@
     <Compile Include="TaskExtensions.cs" />
     <Compile Include="UnhandledExceptionHook.cs" />
     <Compile Include="VisualTreeUtils.cs" />
+    <Compile Include="Xaml\IncludeExtension.cs" />
+    <Compile Include="Xaml\ValidatingXamlReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\CircularProgressIndicator.xaml">
@@ -199,6 +202,7 @@
     <None Include="Controls\Tree\ReadMe.md" />
     <None Include="packages.config" />
     <None Include="ReadMe.md" />
+    <None Include="Xaml\ReadMe.md" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Bold.png" />

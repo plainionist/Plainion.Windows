@@ -23,6 +23,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +40,8 @@
     <Compile Include="Fakes\ViewModelBase.cs" />
     <Compile Include="PropertyBindingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Xaml\IncludeTests.cs" />
+    <Compile Include="Xaml\Model.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
