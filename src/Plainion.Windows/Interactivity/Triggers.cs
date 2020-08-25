@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Interactivity;
+using Microsoft.Xaml.Behaviors;
 
 namespace Plainion.Windows.Interactivity
 {

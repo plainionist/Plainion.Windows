@@ -1,6 +1,9 @@
 ## 3.0.0 - 2020-08-
 
 - Integrated Plainion.Xaml from Plainion.Core
+- Migrated to .Net Core
+- migrated from Expression.Blend.Sdk to Microsoft.Xaml.Behaviors.Wpf
+  (see https://devblogs.microsoft.com/dotnet/open-sourcing-xaml-behaviors-for-wpf/)
 
 ## 2.11.0 - 2018-10-21 
 
