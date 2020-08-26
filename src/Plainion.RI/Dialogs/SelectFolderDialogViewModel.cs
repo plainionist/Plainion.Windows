@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.Composition;
-using System.Windows.Input;
-using Plainion.Windows.Controls;
+﻿using Plainion.Windows.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
+using System.Windows.Input;
 
 namespace Plainion.RI.Dialogs
 {
-    [Export]
     class SelectFolderDialogViewModel : BindableBase
     {
         private string mySelectedFolder;

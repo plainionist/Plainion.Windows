@@ -1,17 +1,12 @@
-﻿using System.ComponentModel.Composition;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Plainion.RI.Controls
 {
-    [Export]
     public partial class NoteBookView : UserControl
     {
-        [ImportingConstructor]
-        internal NoteBookView(NoteBookViewModel viewModel)
+        internal NoteBookView()
         {
             InitializeComponent();
-
-            DataContext = viewModel;
         }
     }
 }

@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.Composition;
-using System.Windows.Input;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
+using System.Windows.Input;
 
 namespace Plainion.RI.Controls
 {
-    [Export]
     class EditableTextBlockViewModel : BindableBase
     {
         private string myName;

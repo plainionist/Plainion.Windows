@@ -1,13 +1,11 @@
-﻿using System.ComponentModel.Composition;
-using System.Windows.Documents;
-using Plainion.Windows.Controls.Text;
+﻿using Plainion.Windows.Controls.Text;
 using Plainion.Windows.Controls.Text.AutoCorrection;
 using Prism.Commands;
 using Prism.Mvvm;
+using System.Windows.Documents;
 
 namespace Plainion.RI.Controls
 {
-    [Export]
     class NoteBookViewModel : BindableBase
     {
         private const string RootPath = "c:/temp/fs";

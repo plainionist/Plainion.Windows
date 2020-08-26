@@ -1,26 +1,27 @@
 ﻿using System.ComponentModel.Composition;
 using Plainion.RI.Controls;
 using Plainion.RI.Dialogs;
-using Prism.Mef.Modularity;
+using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 
 namespace Plainion.RI
 {
-    [ModuleExport( typeof( CoreModule ) )]
     class CoreModule : IModule
     {
-        [Import]
-        public IRegionManager RegionManager { get; private set; }
-
-        public void Initialize()
+        public void OnInitialized(IContainerProvider containerProvider)
         {
-            RegionManager.RegisterViewWithRegion( RegionNames.Dialogs, typeof( SelectFolderDialogView ) );
+            var regionManager = containerProvider.Resolve<IRegionManager>();
+            regionManager.RegisterViewWithRegion(RegionNames.Dialogs, typeof(SelectFolderDialogView));
 
-            RegionManager.RegisterViewWithRegion(RegionNames.Controls, typeof(NoteBookView));
-            RegionManager.RegisterViewWithRegion(RegionNames.Controls, typeof(EditableTextBlockView));
-            RegionManager.RegisterViewWithRegion( RegionNames.Controls, typeof( TreeEditorView ) );
-            RegionManager.RegisterViewWithRegion( RegionNames.Controls, typeof( NotePadView ) );
+            regionManager.RegisterViewWithRegion(RegionNames.Controls, typeof(NoteBookView));
+            regionManager.RegisterViewWithRegion(RegionNames.Controls, typeof(EditableTextBlockView));
+            regionManager.RegisterViewWithRegion(RegionNames.Controls, typeof(TreeEditorView));
+            regionManager.RegisterViewWithRegion(RegionNames.Controls, typeof(NotePadView));
+        }
+
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
         }
     }
 }

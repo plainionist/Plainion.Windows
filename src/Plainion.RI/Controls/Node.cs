@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Plainion.Windows.Controls.Tree;
+using Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Plainion.Windows.Controls.Tree;
-using Prism.Mvvm;
 
 namespace Plainion.RI.Controls
 {

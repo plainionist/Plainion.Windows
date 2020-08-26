@@ -1,17 +1,12 @@
-﻿using System.ComponentModel.Composition;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Plainion.RI.Controls
 {
-    [Export]
     public partial class EditableTextBlockView : UserControl
     {
-        [ImportingConstructor]
-        internal EditableTextBlockView( EditableTextBlockViewModel viewModel )
+        internal EditableTextBlockView()
         {
             InitializeComponent();
-
-            DataContext = viewModel;
         }
     }
 }

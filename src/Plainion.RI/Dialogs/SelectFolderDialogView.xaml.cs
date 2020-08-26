@@ -1,17 +1,12 @@
-﻿using System.ComponentModel.Composition;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Plainion.RI.Dialogs
 {
-    [Export]
     public partial class SelectFolderDialogView : UserControl
     {
-        [ImportingConstructor]
-        internal SelectFolderDialogView( SelectFolderDialogViewModel viewModel )
+        internal SelectFolderDialogView(   )
         {
             InitializeComponent();
-
-            DataContext = viewModel;
         }
     }
 }
