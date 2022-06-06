@@ -16,3 +16,4 @@
 .vs
 /packages/FSharp.Core.*
 /packages/FsUnit.*
+/build/targets.fsx.lock

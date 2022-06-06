@@ -1,3 +1,8 @@
+## 4.0.0 - 2022-06-06
+
+- Migrated to .Net 6
+- NuGet dependencies updated
+
 ## 3.0.0 - 2020-08-26
 
 - Integrated Plainion.Xaml from Plainion.Core
