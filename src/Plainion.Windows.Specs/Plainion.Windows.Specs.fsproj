@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591,8032</NoWarn>
     <WarningsNotAsErrors>CS0612,CS0618</WarningsNotAsErrors>
     <WarningLevel>4</WarningLevel>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
@@ -12,13 +12,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FsUnit" Version="4.0.1" />
-    <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="FsUnit" Version="5.0.0" />
+    <PackageReference Include="nunit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0-preview-20220426-02" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="AssemblyDefs.fs" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Core.fs" />
     <Compile Include="Text\Core.fs" />
@@ -37,6 +38,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Plainion.Windows\Plainion.Windows.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="6.0.4" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 using System.Windows;
 using System.Windows.Markup;
 
@@ -13,6 +14,8 @@ using System.Windows.Markup;
 // sn.exe -Tp <assembly>
 [assembly: InternalsVisibleTo("Plainion.Windows.Tests")]
 [assembly: InternalsVisibleTo("Plainion.Windows.Specs")]
+
+[assembly: SupportedOSPlatform("windows7.0")]
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located

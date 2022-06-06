@@ -5,7 +5,7 @@ open System.Reflection
 [<assembly: AssemblyTitleAttribute("Plainion.Windows.Specs")>]
 [<assembly: AssemblyProductAttribute("Plainion.Windows")>]
 [<assembly: AssemblyDescriptionAttribute("Plainion.Windows")>]
-[<assembly: AssemblyCopyrightAttribute("Copyright @ 2020")>]
+[<assembly: AssemblyCopyrightAttribute("Copyright @ 2022")>]
 [<assembly: AssemblyVersionAttribute("3.0.0")>]
 [<assembly: AssemblyFileVersionAttribute("3.0.0")>]
 do ()
@@ -14,6 +14,6 @@ module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyTitle = "Plainion.Windows.Specs"
     let [<Literal>] AssemblyProduct = "Plainion.Windows"
     let [<Literal>] AssemblyDescription = "Plainion.Windows"
-    let [<Literal>] AssemblyCopyright = "Copyright @ 2020"
+    let [<Literal>] AssemblyCopyright = "Copyright @ 2022"
     let [<Literal>] AssemblyVersion = "3.0.0"
     let [<Literal>] AssemblyFileVersion = "3.0.0"
