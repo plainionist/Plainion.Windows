@@ -1,3 +1,7 @@
+## 4.0.1 - 2022-06-08
+
+- nuget package structure fixed (net6)
+
 ## 4.0.0 - 2022-06-06
 
 - Migrated to .Net 6

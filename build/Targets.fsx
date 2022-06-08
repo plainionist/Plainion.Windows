@@ -21,7 +21,7 @@ Target.create "CreatePackage" (fun _ ->
     |> File.deleteAll
 
     [
-        ( projectName + ".*", Some "lib/netcoreapp3.1", None)
+        ( projectName + ".*", Some "lib/net6.0-windows", None)
     ]
     |> PNuGet.Pack (projectRoot </> "build" </> projectName + ".nuspec") (projectRoot </> "pkg")
 )
