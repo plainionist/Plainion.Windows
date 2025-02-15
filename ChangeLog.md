@@ -1,3 +1,8 @@
+## 5.0.0 - 2025-02-15
+
+- Migrated to .Net 8
+- NuGet dependencies updated
+
 ## 4.0.1 - 2022-06-08
 
 - nuget package structure fixed (net6)
