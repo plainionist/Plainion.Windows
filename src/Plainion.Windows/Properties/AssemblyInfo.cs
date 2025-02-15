@@ -5,16 +5,16 @@ using System.Reflection;
 [assembly: AssemblyTitle("Plainion.Windows")]
 [assembly: AssemblyProduct("Plainion.Windows")]
 [assembly: AssemblyDescription("Plainion.Windows")]
-[assembly: AssemblyCopyright("Copyright @ 2022")]
-[assembly: AssemblyVersion("4.0.1")]
-[assembly: AssemblyFileVersion("4.0.1")]
+[assembly: AssemblyCopyright("Copyright @ 2025")]
+[assembly: AssemblyVersion("5.0.0")]
+[assembly: AssemblyFileVersion("5.0.0")]
 namespace System {
     internal static class AssemblyVersionInformation {
         internal const System.String AssemblyTitle = "Plainion.Windows";
         internal const System.String AssemblyProduct = "Plainion.Windows";
         internal const System.String AssemblyDescription = "Plainion.Windows";
-        internal const System.String AssemblyCopyright = "Copyright @ 2022";
-        internal const System.String AssemblyVersion = "4.0.1";
-        internal const System.String AssemblyFileVersion = "4.0.1";
+        internal const System.String AssemblyCopyright = "Copyright @ 2025";
+        internal const System.String AssemblyVersion = "5.0.0";
+        internal const System.String AssemblyFileVersion = "5.0.0";
     }
 }

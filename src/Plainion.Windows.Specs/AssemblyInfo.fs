@@ -5,15 +5,15 @@ open System.Reflection
 [<assembly: AssemblyTitleAttribute("Plainion.Windows.Specs")>]
 [<assembly: AssemblyProductAttribute("Plainion.Windows")>]
 [<assembly: AssemblyDescriptionAttribute("Plainion.Windows")>]
-[<assembly: AssemblyCopyrightAttribute("Copyright @ 2022")>]
-[<assembly: AssemblyVersionAttribute("4.0.1")>]
-[<assembly: AssemblyFileVersionAttribute("4.0.1")>]
+[<assembly: AssemblyCopyrightAttribute("Copyright @ 2025")>]
+[<assembly: AssemblyVersionAttribute("5.0.0")>]
+[<assembly: AssemblyFileVersionAttribute("5.0.0")>]
 do ()
 
 module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyTitle = "Plainion.Windows.Specs"
     let [<Literal>] AssemblyProduct = "Plainion.Windows"
     let [<Literal>] AssemblyDescription = "Plainion.Windows"
-    let [<Literal>] AssemblyCopyright = "Copyright @ 2022"
-    let [<Literal>] AssemblyVersion = "4.0.1"
-    let [<Literal>] AssemblyFileVersion = "4.0.1"
+    let [<Literal>] AssemblyCopyright = "Copyright @ 2025"
+    let [<Literal>] AssemblyVersion = "5.0.0"
+    let [<Literal>] AssemblyFileVersion = "5.0.0"
