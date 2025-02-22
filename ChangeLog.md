@@ -1,3 +1,9 @@
+## 6.0.0 - 2025-02-22
+
+- Advanced controls removed not mature enough to maintain in this package
+  - Plainion.Windows.Controls.Tree namespace
+  - Plainion.Windows.Controls.Text namespace
+
 ## 5.0.0 - 2025-02-15
 
 - Migrated to .Net 8

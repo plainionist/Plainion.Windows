@@ -22,18 +22,6 @@
     <Compile Include="AssemblyDefs.fs" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Core.fs" />
-    <Compile Include="Text\Core.fs" />
-    <Compile Include="Text\AutoCorrection.fs" />
-    <Compile Include="Text\TextSearch.fs" />
-    <Compile Include="Text\OrganizingDocuments.fs" />
-    <Compile Include="Text\StoringDocuments.fs" />
-    <Content Include="TestData\FileSystemDocumentStore.v1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\FileSystemDocumentStore.v2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Text\ReadMe.md" />
   </ItemGroup>
 
   <ItemGroup>
